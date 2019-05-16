@@ -1,31 +1,15 @@
-import { first, map } from 'rxjs/operators';
 import { connected as c, sendMessage } from './connector';
 
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
 export const fetch: Feeles['fetch'] = name =>
-  sendMessage('fetch', name)
-    .pipe(
-      first(),
-      map(e => new Response(e.data.value))
-    )
-    .toPromise();
+  sendMessage('fetch', name).then(e => new Response(e.data.value));
 
 export const fetchDataURL: Feeles['fetchDataURL'] = name =>
-  sendMessage('fetchDataURL', name)
-    .pipe(
-      first(),
-      map(e => e.data.value as string)
-    )
-    .toPromise();
+  sendMessage('fetchDataURL', name).then(e => e.data.value as string);
 
 export const fetchText: Feeles['fetchText'] = name =>
-  sendMessage('fetchText', name)
-    .pipe(
-      first(),
-      map(e => e.data.value as string)
-    )
-    .toPromise();
+  sendMessage('fetchText', name).then(e => e.data.value as string);
 
 export const fetchArrayBuffer: Feeles['fetchArrayBuffer'] = () => {
   throw Error('nope');

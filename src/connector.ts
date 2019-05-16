@@ -1,4 +1,4 @@
-import { fromEvent, Observable } from 'rxjs';
+import { fromEvent } from 'rxjs';
 import { filter, first, map, mergeMap, share } from 'rxjs/operators';
 import { filterNotUndefined } from './utils';
 
@@ -23,6 +23,8 @@ export const message$ = port$.pipe(
   share()
 );
 
+message$.subscribe(); // like connect()
+
 export interface IMessagePayload<T> {
   id: string;
   query: string;
@@ -32,26 +34,24 @@ export interface IMessagePayload<T> {
 export function sendMessage<Input>(
   query: string,
   value: Input
-): Observable<MessageEvent> {
+): Promise<MessageEvent> {
   const message: IMessagePayload<Input> = {
     id: getUniqueId(),
     query,
     value
   };
   connected.then(ref => ref.port.postMessage(message));
-  return message$.pipe(
-    filter(e => e.data && e.data.id === message.id),
-    map(e => {
-      if (e.data && e.data.error) {
-        console.error(`Error in sendMessage:${query} (${value})`);
-        throw e.data.error;
-      }
-      return e;
-    })
-  );
-}
-
-export const resolve = (moduleName: string) =>
-  sendMessage('resolve', moduleName)
-    .pipe(map(e => e.data.value as string))
+  return message$
+    .pipe(
+      filter(e => e.data && e.data.id === message.id),
+      map(e => {
+        if (e.data && e.data.error) {
+          console.error(`Error in sendMessage:${query} (${value})`);
+          throw e.data.error;
+        }
+        return e;
+      }),
+      first()
+    )
     .toPromise();
+}

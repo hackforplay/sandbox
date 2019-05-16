@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "test": "tsc --outDir lib",
-    "start": "npx parcel compatible.html"
+    "start": "npx parcel compatible.html",
+    "build": "npx parcel build compatible.html",
+    "deploy": "npm run build && npx firebase deploy"
   },
   "author": "",
   "license": "MIT",

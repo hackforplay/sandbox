@@ -4,6 +4,8 @@ import { Editor } from './editor';
 interface AppProps {}
 
 export function App(props: AppProps) {
+  const [isEditorOpened, setIsEditorOpened] = React.useState(false);
+
   return (
     <div
       style={{
@@ -31,8 +33,18 @@ export function App(props: AppProps) {
             backgroundColor: 'black'
           }}
         />
-        <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }} />
-        <Editor open />
+        <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }}>
+          <button
+            onClick={() => setIsEditorOpened(!isEditorOpened)}
+            style={{ fontSize: 'x-large' }}
+          >
+            📖
+          </button>
+        </div>
+        <Editor
+          open={isEditorOpened}
+          onRequestClose={() => setIsEditorOpened(false)}
+        />
       </div>
       <div style={{ flex: 0, minHeight: 50, backgroundColor: 'green' }} />
     </div>

@@ -6,6 +6,7 @@ import { code$ } from '../sandbox-api';
 
 interface EditorProps {
   open: boolean;
+  onRequestClose: () => void;
 }
 
 export const initializeCode = `
@@ -71,21 +72,42 @@ export function Editor(props: EditorProps) {
         right: 0,
         top: 0,
         height: '100%',
-        width: 300,
+        width: props.open ? 300 : 0,
+        transition: 'width 100ms',
+        overflow: 'hidden',
         backgroundColor: 'white'
       }}
     >
-      <Root
-        node={ast}
-        kana={kana}
-        onUpdate={(prev, next) => {
-          const current = code$.getValue();
-          const updated =
-            current.slice(0, prev.start) + next.value + current.slice(prev.end);
-          // subscribe せずに、 Hack.code の値だけを変更する
-          (code$ as any)._value = updated;
+      <div
+        style={{
+          width: '100%',
+          height: '100%',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'flex-start',
+          alignItems: 'stretch'
         }}
-      />
+      >
+        <button
+          style={{ alignSelf: 'flex-end' }}
+          onClick={props.onRequestClose}
+        >
+          x
+        </button>
+        <Root
+          node={ast}
+          kana={kana}
+          onUpdate={(prev, next) => {
+            const current = code$.getValue();
+            const updated =
+              current.slice(0, prev.start) +
+              next.value +
+              current.slice(prev.end);
+            // subscribe せずに、 Hack.code の値だけを変更する
+            (code$ as any)._value = updated;
+          }}
+        />
+      </div>
     </div>
   );
 }

@@ -1,6 +1,9 @@
 import { sendMessage } from './connector';
 import './runtime';
 import * as sandboxApi from './sandbox-api';
+import { render } from 'react-dom';
+import { createElement } from 'react';
+import { App } from './components/app';
 
 const { requirejs, define } = require('./require');
 
@@ -51,6 +54,13 @@ requirejs.load = (context: any, moduleName: string) => {
   });
 };
 
-resolveFromIde('main').then(() => {
+const mainJsReady = resolveFromIde('main');
+
+const appRoot = document.getElementById('app');
+const appReady = new Promise(resolve =>
+  render(createElement(App), appRoot, resolve)
+);
+
+Promise.all([mainJsReady, appReady]).then(() => {
   requirejs(['main']); // start
 });

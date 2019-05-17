@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Editor } from './editor';
 
 interface AppProps {}
 
@@ -31,6 +32,7 @@ export function App(props: AppProps) {
           }}
         />
         <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }} />
+        <Editor open />
       </div>
       <div style={{ flex: 0, minHeight: 50, backgroundColor: 'green' }} />
     </div>

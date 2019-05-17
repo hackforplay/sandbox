@@ -1,4 +1,7 @@
 import { connected as c, sendMessage } from './connector';
+import { BehaviorSubject } from 'rxjs';
+
+export const code$ = new BehaviorSubject('');
 
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
@@ -106,6 +109,7 @@ const eval_: Feeles['eval'] = () => {
 export { eval_ as eval }; // avoid no 'eval' in strict mode
 
 export interface Feeles {
+  code: BehaviorSubject<string>;
   /**
    * Deprecated
    */

@@ -109,7 +109,7 @@ const eval_: Feeles['eval'] = () => {
 export { eval_ as eval }; // avoid no 'eval' in strict mode
 
 export interface Feeles {
-  code: BehaviorSubject<string>;
+  code$: BehaviorSubject<string>;
   /**
    * Deprecated
    */

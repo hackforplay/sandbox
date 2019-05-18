@@ -2,6 +2,7 @@ import { connected as c, sendMessage } from './connector';
 import { BehaviorSubject } from 'rxjs';
 
 export const code$ = new BehaviorSubject('');
+export const pause$ = new BehaviorSubject(false);
 
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
@@ -103,13 +104,18 @@ export const throwError: Feeles['throwError'] = error => {
 };
 
 // eval する
-const eval_: Feeles['eval'] = () => {
-  throw new Error('nope');
+const eval_: Feeles['eval'] = code => {
+  try {
+    return eval(code);
+  } catch (error) {
+    console.error(error);
+  }
 };
 export { eval_ as eval }; // avoid no 'eval' in strict mode
 
 export interface Feeles {
   code$: BehaviorSubject<string>;
+  pause$: BehaviorSubject<boolean>;
   /**
    * Deprecated
    */

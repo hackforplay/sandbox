@@ -1,10 +1,18 @@
 import * as React from 'react';
 import { Editor } from './editor';
+import { pause$, eval, code$ } from '../sandbox-api';
 
 interface AppProps {}
 
 export function App(props: AppProps) {
-  const [isEditorOpened, setIsEditorOpened] = React.useState(false);
+  const [isEditorOpened, _setEditorOpened] = React.useState(false);
+
+  const setEditorOpened = (open: boolean) => {
+    if (open && pause$.value === false) {
+      pause$.next(true); // ゲームを PAUSE する
+    }
+    _setEditorOpened(open);
+  };
 
   return (
     <div
@@ -32,10 +40,19 @@ export function App(props: AppProps) {
             width: 600,
             backgroundColor: 'black'
           }}
+          onClick={() => {
+            if (isEditorOpened && pause$.value === true) {
+              pause$.next(false); // PAUSE を解除する
+              if (isEditorOpened) {
+                eval && eval(code$.value);
+                setEditorOpened(false);
+              }
+            }
+          }}
         />
         <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }}>
           <button
-            onClick={() => setIsEditorOpened(!isEditorOpened)}
+            onClick={() => setEditorOpened(!isEditorOpened)}
             style={{ fontSize: 'x-large' }}
           >
             📖
@@ -43,7 +60,7 @@ export function App(props: AppProps) {
         </div>
         <Editor
           open={isEditorOpened}
-          onRequestClose={() => setIsEditorOpened(false)}
+          onRequestClose={() => setEditorOpened(false)}
         />
       </div>
       <div style={{ flex: 0, minHeight: 50, backgroundColor: 'green' }} />

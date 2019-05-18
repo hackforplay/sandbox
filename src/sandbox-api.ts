@@ -1,5 +1,5 @@
-import { connected as c, sendMessage } from './connector';
 import { BehaviorSubject } from 'rxjs';
+import { connected as c, sendMessage } from './connector';
 
 export const code$ = new BehaviorSubject('');
 export const pause$ = new BehaviorSubject(false);

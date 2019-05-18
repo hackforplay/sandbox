@@ -1,6 +1,15 @@
 import * as React from 'react';
+import { fromEvent, merge } from 'rxjs';
+import { debounceTime, map, share } from 'rxjs/operators';
+import { code$, eval, pause$ } from '../sandbox-api';
 import { Editor } from './editor';
-import { pause$, eval, code$ } from '../sandbox-api';
+
+const hasFocus$ = merge(
+  fromEvent(window, 'focus').pipe(map(() => false)),
+  fromEvent(window, 'blur').pipe(map(() => true))
+).pipe(
+  debounceTime(100) // for stability
+);
 
 interface AppProps {}
 
@@ -8,11 +17,16 @@ export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
 
   const setEditorOpened = (open: boolean) => {
-    if (open && pause$.value === false) {
-      pause$.next(true); // ゲームを PAUSE する
-    }
+    pause$.next(open); // Pause when editor is open
     _setEditorOpened(open);
   };
+
+  React.useEffect(() => {
+    if (isEditorOpened) return; // ignore event while editor is opened
+    // Update pause$ via window focus
+    const subscription = hasFocus$.subscribe(pause$);
+    return () => subscription.unsubscribe();
+  }, [isEditorOpened]);
 
   return (
     <div

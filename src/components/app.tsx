@@ -16,6 +16,7 @@ interface AppProps {}
 
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
+  const [runtimeError, setRuntimeError] = React.useState<Error>();
 
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open
@@ -50,6 +51,7 @@ export function App(props: AppProps) {
         <Game
           isEditorOpened={isEditorOpened}
           setEditorOpened={setEditorOpened}
+          setRuntimeError={setRuntimeError}
         />
         <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }}>
           <button
@@ -64,7 +66,11 @@ export function App(props: AppProps) {
           onRequestClose={() => setEditorOpened(false)}
         />
       </div>
-      <div style={{ flex: 0, minHeight: 50, backgroundColor: 'green' }} />
+      {runtimeError && runtimeError.stack ? (
+        <span style={{ flex: 1, color: 'red', minHeight: '1em' }}>
+          {runtimeError.stack.split('\n')[0]}
+        </span>
+      ) : null}
     </div>
   );
 }

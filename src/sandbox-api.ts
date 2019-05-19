@@ -104,13 +104,7 @@ export const throwError: Feeles['throwError'] = error => {
 };
 
 // eval する
-const eval_: Feeles['eval'] = code => {
-  try {
-    return eval(code);
-  } catch (error) {
-    console.error(error);
-  }
-};
+const eval_: Feeles['eval'] = code => eval(code);
 export { eval_ as eval }; // avoid no 'eval' in strict mode
 
 export interface Feeles {

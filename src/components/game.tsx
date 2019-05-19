@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { pause$, code$ } from '../sandbox-api';
+import { code$, eval, pause$ } from '../sandbox-api';
 
 interface GameProps {
   isEditorOpened: boolean;
   setEditorOpened: (open: boolean) => void;
+  setRuntimeError: (error?: Error) => void;
 }
 
 export function Game(props: GameProps) {
@@ -19,9 +20,14 @@ export function Game(props: GameProps) {
       onClick={() => {
         if (props.isEditorOpened && pause$.value === true) {
           pause$.next(false); // PAUSE を解除する
+          props.setEditorOpened(false);
           if (props.isEditorOpened) {
-            eval && eval(code$.value);
-            props.setEditorOpened(false);
+            try {
+              eval && eval(code$.value);
+              props.setRuntimeError();
+            } catch (error) {
+              props.setRuntimeError(error);
+            }
           }
         }
       }}

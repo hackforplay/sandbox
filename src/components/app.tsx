@@ -1,8 +1,9 @@
 import * as React from 'react';
 import { fromEvent, merge } from 'rxjs';
-import { debounceTime, map, share } from 'rxjs/operators';
-import { code$, eval, pause$ } from '../sandbox-api';
+import { debounceTime, map } from 'rxjs/operators';
+import { pause$ } from '../sandbox-api';
 import { Editor } from './editor';
+import { Game } from './game';
 
 const hasFocus$ = merge(
   fromEvent(window, 'focus').pipe(map(() => false)),
@@ -46,23 +47,9 @@ export function App(props: AppProps) {
         style={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}
       >
         <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }} />
-        <div
-          id="enchant-stage"
-          style={{
-            flexBasis: 600,
-            height: 400,
-            width: 600,
-            backgroundColor: 'black'
-          }}
-          onClick={() => {
-            if (isEditorOpened && pause$.value === true) {
-              pause$.next(false); // PAUSE を解除する
-              if (isEditorOpened) {
-                eval && eval(code$.value);
-                setEditorOpened(false);
-              }
-            }
-          }}
+        <Game
+          isEditorOpened={isEditorOpened}
+          setEditorOpened={setEditorOpened}
         />
         <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }}>
           <button

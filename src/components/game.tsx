@@ -36,20 +36,6 @@ export function Game(props: GameProps) {
           height: '100%', // will be re-define by enchantjs core.
           backgroundColor: 'red'
         }}
-        onClick={() => {
-          if (props.isEditorOpened && pause$.value === true) {
-            pause$.next(false); // PAUSE を解除する
-            props.setEditorOpened(false);
-            if (props.isEditorOpened) {
-              try {
-                eval && eval(code$.value);
-                props.setRuntimeError();
-              } catch (error) {
-                props.setRuntimeError(error);
-              }
-            }
-          }
-        }}
       />
       {paused ? (
         <div
@@ -62,6 +48,20 @@ export function Game(props: GameProps) {
             flexDirection: 'column',
             justifyContent: 'center',
             textAlign: 'center'
+          }}
+          onClick={() => {
+            if (props.isEditorOpened) {
+              pause$.next(false); // PAUSE を解除する
+              props.setEditorOpened(false);
+              if (props.isEditorOpened) {
+                try {
+                  eval && eval(code$.value);
+                  props.setRuntimeError();
+                } catch (error) {
+                  props.setRuntimeError(error);
+                }
+              }
+            }
           }}
         >
           <span style={{ color: 'white', fontSize: 'xx-large' }}>▶︎</span>

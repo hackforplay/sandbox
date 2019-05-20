@@ -58,7 +58,35 @@ export function App(props: AppProps) {
         minWidth: sideBarMinWidth,
         backgroundColor: 'blue'
       }}
-    />
+    >
+      <svg
+        fill="white"
+        style={{
+          cursor: 'pointer',
+          height: '10vh',
+          maxHeight: 60,
+          minHeight: 24
+        }}
+        viewBox="0 0 24 24"
+        onClick={() => {
+          if (isFullScreen) {
+            document
+              .exitFullscreen()
+              .then(() => setIsFullScreen(false))
+              .catch(console.error);
+          } else {
+            if (rootRef.current) {
+              rootRef.current
+                .requestFullscreen()
+                .then(() => setIsFullScreen(true))
+                .catch(console.error);
+            }
+          }
+        }}
+      >
+        <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+      </svg>
+    </div>
   );
 
   const right = (
@@ -116,34 +144,6 @@ export function App(props: AppProps) {
           open={isEditorOpened}
           onRequestClose={() => setEditorOpened(false)}
         />
-      </div>
-      <div style={{ flex: 0, backgroundColor: 'green' }}>
-        <svg
-          fill="white"
-          style={{
-            cursor: 'pointer',
-            height: '10vh',
-            minHeight: 24
-          }}
-          viewBox="0 0 24 24"
-          onClick={() => {
-            if (isFullScreen) {
-              document
-                .exitFullscreen()
-                .then(() => setIsFullScreen(false))
-                .catch(console.error);
-            } else {
-              if (rootRef.current) {
-                rootRef.current
-                  .requestFullscreen()
-                  .then(() => setIsFullScreen(true))
-                  .catch(console.error);
-              }
-            }
-          }}
-        >
-          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
-        </svg>
       </div>
       {isLandscape ? null : (
         <div

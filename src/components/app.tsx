@@ -1,4 +1,5 @@
 import * as React from 'react';
+import ResizeObserver from 'resize-observer-polyfill';
 import { fromEvent, merge } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
@@ -12,12 +13,16 @@ const hasFocus$ = merge(
   debounceTime(100) // for stability
 );
 
+const sideBarMinWidth = 100;
+const sideBarMinHeight = 160;
+
 interface AppProps {}
 
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
   const [runtimeError, setRuntimeError] = React.useState<Error>();
   const [isFullScreen, setIsFullScreen] = React.useState(false);
+  const [isLandscape, setIsLandscape] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
 
   const setEditorOpened = (open: boolean) => {
@@ -31,6 +36,47 @@ export function App(props: AppProps) {
     const subscription = hasFocus$.subscribe(pause$);
     return () => subscription.unsubscribe();
   }, [isEditorOpened]);
+
+  React.useEffect(() => {
+    const rootObserver = new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const { height, width } = entry.contentRect;
+        const isLandscape = height - (width * 2) / 3 < sideBarMinHeight;
+        setIsLandscape(isLandscape);
+      }
+    });
+    if (rootRef.current) {
+      rootObserver.observe(rootRef.current);
+    }
+    return () => rootObserver.disconnect();
+  }, []);
+
+  const left = (
+    <div
+      style={{
+        flex: 0,
+        minWidth: sideBarMinWidth,
+        backgroundColor: 'blue'
+      }}
+    />
+  );
+
+  const right = (
+    <div
+      style={{
+        flex: 0,
+        minWidth: sideBarMinWidth,
+        backgroundColor: 'blue'
+      }}
+    >
+      <button
+        onClick={() => setEditorOpened(!isEditorOpened)}
+        style={{ fontSize: 'x-large' }}
+      >
+        📖
+      </button>
+    </div>
+  );
 
   return (
     <div
@@ -59,20 +105,13 @@ export function App(props: AppProps) {
           alignItems: 'stretch'
         }}
       >
-        <div style={{ flex: 0, minWidth: 100, backgroundColor: 'blue' }} />
+        {isLandscape ? left : null}
         <Game
           isEditorOpened={isEditorOpened}
           setEditorOpened={setEditorOpened}
           setRuntimeError={setRuntimeError}
         />
-        <div style={{ flex: 0, minWidth: 100, backgroundColor: 'blue' }}>
-          <button
-            onClick={() => setEditorOpened(!isEditorOpened)}
-            style={{ fontSize: 'x-large' }}
-          >
-            📖
-          </button>
-        </div>
+        {isLandscape ? right : null}
         <Editor
           open={isEditorOpened}
           onRequestClose={() => setEditorOpened(false)}
@@ -106,6 +145,21 @@ export function App(props: AppProps) {
           <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
         </svg>
       </div>
+      {isLandscape ? null : (
+        <div
+          style={{
+            flex: 0,
+            display: 'flex',
+            alignItems: 'stretch',
+            backgroundColor: 'pink',
+            minHeight: sideBarMinHeight
+          }}
+        >
+          {left}
+          <div style={{ flex: 1 }} />
+          {right}
+        </div>
+      )}
     </div>
   );
 }

@@ -17,6 +17,8 @@ interface AppProps {}
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
   const [runtimeError, setRuntimeError] = React.useState<Error>();
+  const [isFullScreen, setIsFullScreen] = React.useState(false);
+  const rootRef = React.useRef<HTMLDivElement>(null);
 
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open
@@ -42,8 +44,13 @@ export function App(props: AppProps) {
         flexDirection: 'column',
         justifyContent: 'space-between'
       }}
+      ref={rootRef}
     >
-      <div style={{ flex: 0, minHeight: 50, backgroundColor: 'green' }} />
+      {runtimeError && runtimeError.stack ? (
+        <span style={{ flex: 1, color: 'red', minHeight: '1em' }}>
+          {runtimeError.stack.split('\n')[0]}
+        </span>
+      ) : null}
       <div
         style={{
           flex: 1,
@@ -71,11 +78,34 @@ export function App(props: AppProps) {
           onRequestClose={() => setEditorOpened(false)}
         />
       </div>
-      {runtimeError && runtimeError.stack ? (
-        <span style={{ flex: 1, color: 'red', minHeight: '1em' }}>
-          {runtimeError.stack.split('\n')[0]}
-        </span>
-      ) : null}
+      <div style={{ flex: 0, backgroundColor: 'green' }}>
+        <svg
+          fill="white"
+          style={{
+            cursor: 'pointer',
+            height: '10vh',
+            minHeight: 24
+          }}
+          viewBox="0 0 24 24"
+          onClick={() => {
+            if (isFullScreen) {
+              document
+                .exitFullscreen()
+                .then(() => setIsFullScreen(false))
+                .catch(console.error);
+            } else {
+              if (rootRef.current) {
+                rootRef.current
+                  .requestFullscreen()
+                  .then(() => setIsFullScreen(true))
+                  .catch(console.error);
+              }
+            }
+          }}
+        >
+          <path d="M5 16h3v3h2v-5H5v2zm3-8H5v2h5V5H8v3zm6 11h2v-3h3v-2h-5v5zm2-11V5h-2v5h5V8h-3z" />
+        </svg>
+      </div>
     </div>
   );
 }

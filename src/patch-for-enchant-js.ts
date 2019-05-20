@@ -1,4 +1,5 @@
 import ResizeObserver from 'resize-observer-polyfill';
+import { pause$ } from './sandbox-api';
 
 let hasCalled = false;
 export function patchForEnchantJs(enchant: any) {
@@ -17,4 +18,26 @@ export function patchForEnchantJs(enchant: any) {
     }
   });
   observer.observe(game._element.parentNode);
+
+  // stop world
+  game.rootScene.addEventListener(enchant.Event.CHILD_ADDED, function handler(
+    event: any
+  ) {
+    const group = event.node;
+    if (group.name === 'World') {
+      game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
+      let pauseByGame = Boolean(group._stop);
+      group.stop = () => (pauseByGame = true);
+      group.resume = () => (pauseByGame = false);
+      Object.defineProperty(group, '_stop', {
+        enumerable: true,
+        get() {
+          return Boolean(pause$.value || pauseByGame);
+        },
+        set(value: boolean) {
+          pauseByGame = value;
+        }
+      });
+    }
+  });
 }

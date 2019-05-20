@@ -15,6 +15,10 @@ export function patchForEnchantJs(enchant: any) {
       const sHeight = entry.contentRect.height;
       const scale = Math.min(sWidth / game.width, sHeight / game.height);
       game.scale = scale; // resize all scene
+      // update offset (for mouse/touch event)
+      const rect = game._element.getBoundingClientRect();
+      game._pageX = rect.left;
+      game._pageY = rect.top;
     }
   });
   observer.observe(game._element.parentNode);

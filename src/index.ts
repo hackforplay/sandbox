@@ -4,6 +4,7 @@ import * as sandboxApi from './sandbox-api';
 import { render } from 'react-dom';
 import { createElement } from 'react';
 import { App } from './components/app';
+import { patchForEnchantJs } from './patch-for-enchant-js';
 
 const { requirejs, define } = require('./require');
 
@@ -62,5 +63,10 @@ const appReady = new Promise(resolve =>
 );
 
 Promise.all([mainJsReady, appReady]).then(() => {
-  requirejs(['main']); // start
+  requirejs(['main'], () => {
+    const enchant = (window as any).enchant;
+    if (enchant) {
+      patchForEnchantJs(enchant);
+    }
+  });
 });

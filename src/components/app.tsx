@@ -49,7 +49,7 @@ export function App(props: AppProps) {
       rootObserver.observe(rootRef.current);
     }
     return () => rootObserver.disconnect();
-  }, []);
+  }, [rootRef.current]);
 
   const left = (
     <div

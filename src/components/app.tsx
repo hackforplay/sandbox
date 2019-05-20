@@ -45,15 +45,20 @@ export function App(props: AppProps) {
     >
       <div style={{ flex: 0, minHeight: 50, backgroundColor: 'green' }} />
       <div
-        style={{ flex: 1, display: 'flex', justifyContent: 'space-between' }}
+        style={{
+          flex: 1,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'stretch'
+        }}
       >
-        <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }} />
+        <div style={{ flex: 0, minWidth: 100, backgroundColor: 'blue' }} />
         <Game
           isEditorOpened={isEditorOpened}
           setEditorOpened={setEditorOpened}
           setRuntimeError={setRuntimeError}
         />
-        <div style={{ flex: 1, minWidth: 100, backgroundColor: 'blue' }}>
+        <div style={{ flex: 0, minWidth: 100, backgroundColor: 'blue' }}>
           <button
             onClick={() => setEditorOpened(!isEditorOpened)}
             style={{ fontSize: 'x-large' }}

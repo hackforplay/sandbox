@@ -8,12 +8,24 @@ interface GameProps {
 }
 
 export function Game(props: GameProps) {
+  const [paused, setPaused] = React.useState(pause$.value);
+
+  React.useEffect(() => {
+    const subscription = pause$.subscribe(setPaused);
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
   return (
     <div
       style={{
         flex: 1,
         backgroundColor: 'black',
         position: 'relative',
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
         overflow: 'hidden' // belongs to flex container
       }}
     >
@@ -39,6 +51,22 @@ export function Game(props: GameProps) {
           }
         }}
       />
+      {paused ? (
+        <div
+          style={{
+            position: 'absolute',
+            width: '100%',
+            height: '100%',
+            backgroundColor: 'rgba(0,0,0,0.5)',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            textAlign: 'center'
+          }}
+        >
+          <span style={{ color: 'white', fontSize: 'xx-large' }}>▶︎</span>
+        </div>
+      ) : null}
     </div>
   );
 }

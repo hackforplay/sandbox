@@ -1,7 +1,7 @@
-import * as React from 'react';
-import { Root } from '@hackforplay/react-ast-mutator-components';
 import { parse } from '@babel/parser';
 import * as t from '@babel/types';
+import { Root } from '@hackforplay/react-ast-mutator-components';
+import * as React from 'react';
 import { code$ } from '../sandbox-api';
 
 interface EditorProps {
@@ -10,15 +10,17 @@ interface EditorProps {
 }
 
 export const initializeCode = `
-スライム.hp = 999;
-イモムシ.hp = 9999;
-プレイヤー.atk = 1;
-プレイヤー.locate(7, 2);
-コウモリ.locate(11, 6);
-プレイヤー.hp = 99;
+player.hp += 1
+// スライム.hp = 999;
+// イモムシ.hp = 9999;
+// プレイヤー.atk = 1;
+// プレイヤー.locate(7, 2);
+// コウモリ.locate(11, 6);
+// プレイヤー.hp = 99;
 `.trim();
 
 const kana = {
+  'player.hp': 'プレイヤーのたいりょく',
   'スライム.hp': 'スライムのたいりょく',
   'イモムシ.hp': 'イモムシのたいりょく',
   'プレイヤー.atk': 'プレイヤーのこうげきりょく',

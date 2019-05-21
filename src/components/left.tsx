@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Subject } from 'rxjs';
-import { distinctUntilChanged, map } from 'rxjs/operators';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
 import { Fullscreen, FullscreenExit, Refresh } from './icons';
 
@@ -80,11 +80,13 @@ function Pad() {
   const size = 100;
   const imgRef = React.useRef<HTMLImageElement>(null);
   const [pressed$] = React.useState(() => new Subject<InputDir>());
+  const [pressed, setPressed] = React.useState<InputDir>();
 
   React.useEffect(() => {
     const subscription = pressed$
       .pipe(
         distinctUntilChanged(),
+        tap(dir => setPressed(dir)),
         map(dir =>
           dir
             ? { ...input$.value, ...initDir, [dir]: true }
@@ -105,10 +107,24 @@ function Pad() {
   return (
     <img
       ref={imgRef}
-      src={require('../resources/pad.png')}
+      src={
+        pressed
+          ? require('../resources/pad_pressed.png')
+          : require('../resources/pad.png')
+      }
       width={size}
       height={size}
       alt=""
+      style={{
+        transform:
+          pressed === 'right'
+            ? 'rotate(90deg)'
+            : pressed === 'down'
+            ? 'rotate(180deg)'
+            : pressed === 'left'
+            ? 'rotate(270deg)'
+            : undefined
+      }}
       onContextMenu={e => e.preventDefault()}
       onTouchStart={onTouch}
       onTouchMove={onTouch}

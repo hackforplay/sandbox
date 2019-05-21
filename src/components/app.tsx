@@ -5,7 +5,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
 import { Editor } from './editor';
 import { Game } from './game';
-import { FullscreenExit, Refresh } from './icons';
+import { Fullscreen, FullscreenExit, Refresh } from './icons';
 
 const hasFocus$ = merge(
   fromEvent(window, 'focus').pipe(map(() => false)),
@@ -60,29 +60,40 @@ export function App(props: AppProps) {
         backgroundColor: 'blue'
       }}
     >
-      <FullscreenExit
-        style={{
-          cursor: 'pointer',
-          height: '10vh',
-          maxHeight: 60,
-          minHeight: 24
-        }}
-        onClick={() => {
-          if (isFullScreen) {
+      {isFullScreen ? (
+        <FullscreenExit
+          style={{
+            cursor: 'pointer',
+            height: '10vh',
+            maxHeight: 60,
+            minHeight: 24
+          }}
+          onClick={() => {
             document
               .exitFullscreen()
               .then(() => setIsFullScreen(false))
               .catch(console.error);
-          } else {
+          }}
+        />
+      ) : (
+        <Fullscreen
+          style={{
+            cursor: 'pointer',
+            height: '10vh',
+            maxHeight: 60,
+            minHeight: 24
+          }}
+          onClick={() => {
             if (rootRef.current) {
               rootRef.current
                 .requestFullscreen()
                 .then(() => setIsFullScreen(true))
                 .catch(console.error);
             }
-          }
-        }}
-      />
+          }}
+        />
+      )}
+
       <Refresh
         style={{
           cursor: 'pointer',

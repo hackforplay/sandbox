@@ -6,6 +6,7 @@ import { pause$ } from '../sandbox-api';
 import { Editor } from './editor';
 import { Game } from './game';
 import { Left } from './left';
+import { Right } from './right';
 
 const hasFocus$ = merge(
   fromEvent(window, 'focus').pipe(map(() => false)),
@@ -51,22 +52,6 @@ export function App(props: AppProps) {
     return () => rootObserver.disconnect();
   }, [rootRef.current]);
 
-  const right = (
-    <div
-      style={{
-        flex: 0,
-        minWidth: sideBarMinWidth
-      }}
-    >
-      <button
-        onClick={() => setEditorOpened(!isEditorOpened)}
-        style={{ fontSize: 'x-large' }}
-      >
-        📖
-      </button>
-    </div>
-  );
-
   return (
     <div
       style={{
@@ -105,7 +90,13 @@ export function App(props: AppProps) {
           setEditorOpened={setEditorOpened}
           setRuntimeError={setRuntimeError}
         />
-        {isLandscape ? right : null}
+        {isLandscape ? (
+          <Right
+            isEditorOpened={isEditorOpened}
+            setEditorOpened={setEditorOpened}
+            style={{ flex: 0, minWidth: sideBarMinWidth }}
+          />
+        ) : null}
         <Editor
           open={isEditorOpened}
           onRequestClose={() => setEditorOpened(false)}
@@ -120,9 +111,13 @@ export function App(props: AppProps) {
             minHeight: sideBarMinHeight
           }}
         >
-          {<Left rootRef={rootRef} style={{ minWidth: sideBarMinWidth }} />}
+          <Left rootRef={rootRef} style={{ minWidth: sideBarMinWidth }} />
           <div style={{ flex: 1 }} />
-          {right}
+          <Right
+            isEditorOpened={isEditorOpened}
+            setEditorOpened={setEditorOpened}
+            style={{ minWidth: sideBarMinWidth }}
+          />
         </div>
       )}
     </div>

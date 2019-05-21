@@ -61,8 +61,6 @@ export function Editor(props: EditorProps) {
     return <span style={{ color: 'red' }}>{error.message}</span>;
   }
 
-  console.log(ast);
-
   if (!ast) {
     return null;
   }

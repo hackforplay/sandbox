@@ -5,7 +5,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
 import { Editor } from './editor';
 import { Game } from './game';
-import { Fullscreen, FullscreenExit, Refresh } from './icons';
+import { Left } from './left';
 
 const hasFocus$ = merge(
   fromEvent(window, 'focus').pipe(map(() => false)),
@@ -22,7 +22,6 @@ interface AppProps {}
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
   const [runtimeError, setRuntimeError] = React.useState<Error>();
-  const [isFullScreen, setIsFullScreen] = React.useState(false);
   const [isLandscape, setIsLandscape] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
 
@@ -51,62 +50,6 @@ export function App(props: AppProps) {
     }
     return () => rootObserver.disconnect();
   }, [rootRef.current]);
-
-  const left = (
-    <div
-      style={{
-        flex: 0,
-        minWidth: sideBarMinWidth,
-        backgroundColor: 'blue'
-      }}
-    >
-      {isFullScreen ? (
-        <FullscreenExit
-          style={{
-            cursor: 'pointer',
-            height: '10vh',
-            maxHeight: 60,
-            minHeight: 24
-          }}
-          onClick={() => {
-            document
-              .exitFullscreen()
-              .then(() => setIsFullScreen(false))
-              .catch(console.error);
-          }}
-        />
-      ) : (
-        <Fullscreen
-          style={{
-            cursor: 'pointer',
-            height: '10vh',
-            maxHeight: 60,
-            minHeight: 24
-          }}
-          onClick={() => {
-            if (rootRef.current) {
-              rootRef.current
-                .requestFullscreen()
-                .then(() => setIsFullScreen(true))
-                .catch(console.error);
-            }
-          }}
-        />
-      )}
-
-      <Refresh
-        style={{
-          cursor: 'pointer',
-          height: '10vh',
-          maxHeight: 60,
-          minHeight: 24
-        }}
-        onClick={() => {
-          window.location.reload();
-        }}
-      />
-    </div>
-  );
 
   const right = (
     <div
@@ -152,7 +95,9 @@ export function App(props: AppProps) {
           alignItems: 'stretch'
         }}
       >
-        {isLandscape ? left : null}
+        {isLandscape ? (
+          <Left width={sideBarMinWidth} rootRef={rootRef} />
+        ) : null}
         <Game
           isEditorOpened={isEditorOpened}
           setEditorOpened={setEditorOpened}
@@ -174,7 +119,7 @@ export function App(props: AppProps) {
             minHeight: sideBarMinHeight
           }}
         >
-          {left}
+          {<Left width={sideBarMinWidth} rootRef={rootRef} />}
           <div style={{ flex: 1 }} />
           {right}
         </div>

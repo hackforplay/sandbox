@@ -4,6 +4,21 @@ import { connected as c, sendMessage } from './connector';
 export const code$ = new BehaviorSubject('');
 export const pause$ = new BehaviorSubject(false);
 
+export interface IButtonInput {
+  up: boolean;
+  right: boolean;
+  down: boolean;
+  left: boolean;
+  a: boolean;
+}
+export const input$ = new BehaviorSubject<IButtonInput>({
+  up: false,
+  right: false,
+  down: false,
+  left: false,
+  a: false
+});
+
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
 export const fetch: Feeles['fetch'] = name =>

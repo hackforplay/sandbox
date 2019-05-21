@@ -1,10 +1,11 @@
-import { sendMessage } from './connector';
+import { createElement } from 'react';
+import { render } from 'react-dom';
+import { filter, first } from 'rxjs/operators';
+import { App } from './components/app';
+import { message$, sendMessage } from './connector';
+import { patchForEnchantJs } from './patch-for-enchant-js';
 import './runtime';
 import * as sandboxApi from './sandbox-api';
-import { render } from 'react-dom';
-import { createElement } from 'react';
-import { App } from './components/app';
-import { patchForEnchantJs } from './patch-for-enchant-js';
 
 const { requirejs, define } = require('./require');
 
@@ -57,18 +58,33 @@ requirejs.load = (context: any, moduleName: string) => {
   });
 };
 
-const mainJsReady = resolveFromIde('main');
+const entryPointIsReady = message$
+  .pipe(
+    filter(event => event.data && event.data.query === 'entry'),
+    first()
+  )
+  .toPromise()
+  .then(event => {
+    const value = event.data && event.data.value;
+    if (!Array.isArray(value)) {
+      throw Error('error: invalid entry point');
+    }
+    for (const item of value) {
+      defineCode(item.name, item.code);
+    }
+    return value.map(item => item.name);
+  });
 
 const appRoot = document.getElementById('app');
-const appReady = new Promise(resolve =>
-  render(createElement(App), appRoot, resolve)
-);
 
-Promise.all([mainJsReady, appReady]).then(() => {
-  requirejs(['main'], () => {
-    const enchant = (window as any).enchant;
-    if (enchant) {
-      patchForEnchantJs(enchant);
-    }
+render(createElement(App), appRoot, () => {
+  entryPointIsReady.then(entryPoints => {
+    console.log('entryPoints', entryPoints);
+    requirejs(entryPoints, () => {
+      const enchant = (window as any).enchant;
+      if (enchant) {
+        patchForEnchantJs(enchant);
+      }
+    });
   });
 });

@@ -27,9 +27,8 @@ export const saveAs: Feeles['saveAs'] = () => {
 export const reload: Feeles['reload'] = () => {
   throw Error('nope');
 };
-export const replace: Feeles['replace'] = () => {
-  throw Error('nope');
-};
+export const replace: Feeles['replace'] = url => sendMessage('replace', url);
+
 export const openReadme: Feeles['openReadme'] = () => {
   throw Error('nope');
 };

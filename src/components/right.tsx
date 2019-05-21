@@ -10,15 +10,23 @@ export function Right(props: RightProps) {
   return (
     <div
       style={{
-        ...props.style
+        ...props.style,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'space-between'
       }}
     >
-      <button
-        onClick={() => props.setEditorOpened(!props.isEditorOpened)}
-        style={{ fontSize: 'x-large' }}
-      >
-        📖
-      </button>
+      <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>
+        <img
+          src={require('../resources/enchantbook.png')}
+          style={{
+            cursor: 'pointer',
+            height: '100%'
+          }}
+          onClick={() => props.setEditorOpened(!props.isEditorOpened)}
+          alt=""
+        />
+      </div>
     </div>
   );
 }

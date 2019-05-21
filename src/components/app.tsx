@@ -5,7 +5,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
 import { Editor } from './editor';
 import { Game } from './game';
-import { FullscreenExit } from './icons';
+import { FullscreenExit, Refresh } from './icons';
 
 const hasFocus$ = merge(
   fromEvent(window, 'focus').pipe(map(() => false)),
@@ -81,6 +81,17 @@ export function App(props: AppProps) {
                 .catch(console.error);
             }
           }
+        }}
+      />
+      <Refresh
+        style={{
+          cursor: 'pointer',
+          height: '10vh',
+          maxHeight: 60,
+          minHeight: 24
+        }}
+        onClick={() => {
+          window.location.reload();
         }}
       />
     </div>

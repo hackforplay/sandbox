@@ -79,7 +79,6 @@ const appRoot = document.getElementById('app');
 
 render(createElement(App), appRoot, () => {
   entryPointIsReady.then(entryPoints => {
-    console.log('entryPoints', entryPoints);
     requirejs(entryPoints, () => {
       const enchant = (window as any).enchant;
       if (enchant) {

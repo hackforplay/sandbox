@@ -55,8 +55,7 @@ export function App(props: AppProps) {
     <div
       style={{
         flex: 0,
-        minWidth: sideBarMinWidth,
-        backgroundColor: 'blue'
+        minWidth: sideBarMinWidth
       }}
     >
       <button
@@ -118,7 +117,6 @@ export function App(props: AppProps) {
             flex: 1,
             display: 'flex',
             alignItems: 'stretch',
-            backgroundColor: 'pink',
             minHeight: sideBarMinHeight
           }}
         >

@@ -17,8 +17,7 @@ export function Left(props: LeftProps) {
         ...props.style,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between',
-        backgroundColor: 'blue'
+        justifyContent: 'space-between'
       }}
     >
       <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>

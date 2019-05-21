@@ -18,6 +18,26 @@ define('sandbox-api', function(require: any, exports: any, module: any) {
   module.exports = sandboxApi;
 });
 
+const defineCode = (moduleName: string, text: string) => {
+  if (
+    text.indexOf('define(function') === 0 || // AMD
+    text.indexOf('(function(root, factory)') === 0 // UMD
+  ) {
+    // すでに AMD になっている
+    eval(text);
+    return;
+  }
+
+  // Unicode エスケープ文字がある場合, Babel が \u を \\u にしてしまうので, ここで直す
+  const code = text.replace(/\\u(\w{4})/g, (match, hex) => {
+    // e.g. hex === '7D2B'
+    const charCode = parseInt(hex, 16);
+    return String.fromCharCode(charCode);
+  });
+  // JavaScript を AMD として define
+  define(moduleName, new Function('require, exports, module', code));
+};
+
 // module resolver by feeles
 const resolveFromIde = (moduleName: string) =>
   sendMessage('resolve', moduleName).then(({ data }) => {
@@ -27,25 +47,7 @@ const resolveFromIde = (moduleName: string) =>
       define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
       return;
     }
-
-    const text: string = data.value;
-    if (
-      text.indexOf('define(function') === 0 || // AMD
-      text.indexOf('(function(root, factory)') === 0 // UMD
-    ) {
-      // すでに AMD になっている
-      eval(text);
-      return;
-    }
-
-    // Unicode エスケープ文字がある場合, Babel が \u を \\u にしてしまうので, ここで直す
-    const code = text.replace(/\\u(\w{4})/g, (match, hex) => {
-      // e.g. hex === '7D2B'
-      const charCode = parseInt(hex, 16);
-      return String.fromCharCode(charCode);
-    });
-    // JavaScript を AMD として define
-    define(moduleName, new Function('require, exports, module', code));
+    defineCode(moduleName, data.value);
   });
 
 // Override require()

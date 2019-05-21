@@ -96,7 +96,10 @@ export function App(props: AppProps) {
         }}
       >
         {isLandscape ? (
-          <Left width={sideBarMinWidth} rootRef={rootRef} />
+          <Left
+            rootRef={rootRef}
+            style={{ flex: 0, minWidth: sideBarMinWidth }}
+          />
         ) : null}
         <Game
           isEditorOpened={isEditorOpened}
@@ -112,14 +115,14 @@ export function App(props: AppProps) {
       {isLandscape ? null : (
         <div
           style={{
-            flex: 0,
+            flex: 1,
             display: 'flex',
             alignItems: 'stretch',
             backgroundColor: 'pink',
             minHeight: sideBarMinHeight
           }}
         >
-          {<Left width={sideBarMinWidth} rootRef={rootRef} />}
+          {<Left rootRef={rootRef} style={{ minWidth: sideBarMinWidth }} />}
           <div style={{ flex: 1 }} />
           {right}
         </div>

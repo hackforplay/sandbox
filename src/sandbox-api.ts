@@ -58,9 +58,8 @@ export const closeEditor: Feeles['closeEditor'] = () => {
 export const runCode: Feeles['runCode'] = () => {
   throw Error('nope');
 };
-export const install: Feeles['install'] = () => {
-  throw Error('nope');
-};
+export const install: Feeles['install'] = name => sendMessage('install', name);
+
 export const ipcRenderer: Feeles['ipcRenderer'] = null;
 
 export const setTimeout: Feeles['setTimeout'] = window.setTimeout.bind(window);

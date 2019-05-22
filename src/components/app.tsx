@@ -26,7 +26,7 @@ export function App(props: AppProps) {
   const [runtimeError, setRuntimeError] = React.useState<Error>();
   const [isLandscape, setIsLandscape] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
-  const [maxHeight, setMaxHeight] = React.useState<number | void>();
+  const [maxHeight, setMaxHeight] = React.useState<number>(window.innerHeight);
 
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open
@@ -50,7 +50,7 @@ export function App(props: AppProps) {
         if (!isLandscape) {
           setMaxHeight((width / 3) * 2);
         } else {
-          setMaxHeight(); // reset
+          setMaxHeight(window.innerHeight); // no constraint
         }
       }
     });

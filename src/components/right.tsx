@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { input$ } from '../sandbox-api';
+import { isTouchEnabled } from '../utils';
 
 interface RightProps {
   style: React.CSSProperties;
@@ -29,7 +30,7 @@ export function Right(props: RightProps) {
         />
       </div>
       <div style={{ flex: 1 }} />
-      <AButton />
+      {isTouchEnabled ? <AButton /> : null}
     </div>
   );
 }

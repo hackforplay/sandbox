@@ -12,3 +12,9 @@ export const keys = <T>(obj: T) => {
   }
   return result;
 };
+
+export const isTouchEnabled = (() => {
+  const div = document.createElement('div');
+  div.setAttribute('ontouchstart', 'return');
+  return typeof div.ontouchstart === 'function';
+})();

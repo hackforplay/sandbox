@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
+import { isTouchEnabled } from '../utils';
 import { Fullscreen, FullscreenExit, Refresh } from './icons';
 
 interface LeftProps {
@@ -61,7 +62,7 @@ export function Left(props: LeftProps) {
         />
       </div>
       <div style={{ flex: 1 }} />
-      <Pad />
+      {isTouchEnabled ? <Pad /> : null}
     </div>
   );
 }

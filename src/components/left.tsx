@@ -3,7 +3,6 @@ import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
 import { isTouchEnabled } from '../utils';
-import { Fullscreen, FullscreenExit, Refresh } from './icons';
 
 interface LeftProps {
   style: React.CSSProperties;

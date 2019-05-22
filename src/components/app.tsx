@@ -3,6 +3,7 @@ import ResizeObserver from 'resize-observer-polyfill';
 import { fromEvent, merge } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
+import { isTouchEnabled } from '../utils';
 import { Editor } from './editor';
 import { Game } from './game';
 import { Left } from './left';
@@ -15,8 +16,8 @@ const hasFocus$ = merge(
   debounceTime(100) // for stability
 );
 
-const sideBarMinWidth = 100;
-const sideBarMinHeight = 160;
+const sideBarMinWidth = 120;
+const sideBarMinHeight = isTouchEnabled ? 160 : 60;
 
 interface AppProps {}
 
@@ -25,6 +26,7 @@ export function App(props: AppProps) {
   const [runtimeError, setRuntimeError] = React.useState<Error>();
   const [isLandscape, setIsLandscape] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
+  const [maxHeight, setMaxHeight] = React.useState<number | void>();
 
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open
@@ -44,6 +46,12 @@ export function App(props: AppProps) {
         const { height, width } = entry.contentRect;
         const isLandscape = height - (width * 2) / 3 < sideBarMinHeight;
         setIsLandscape(isLandscape);
+        // game screen is 3:2
+        if (!isLandscape) {
+          setMaxHeight((width / 3) * 2);
+        } else {
+          setMaxHeight(); // reset
+        }
       }
     });
     if (rootRef.current) {
@@ -73,10 +81,11 @@ export function App(props: AppProps) {
       ) : null}
       <div
         style={{
-          flex: 1,
+          flex: 4,
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'stretch'
+          alignItems: 'stretch',
+          maxHeight
         }}
       >
         {isLandscape ? (

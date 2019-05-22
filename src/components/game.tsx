@@ -21,7 +21,6 @@ export function Game(props: GameProps) {
     <div
       style={{
         flex: 1,
-        backgroundColor: 'black',
         position: 'relative',
         display: 'flex',
         flexDirection: 'column',
@@ -35,8 +34,7 @@ export function Game(props: GameProps) {
           width: '100%', //  This size is used for initialization.
           height: '100%', // will be re-define by enchantjs core.
           marginLeft: 'auto',
-          marginRight: 'auto',
-          backgroundColor: 'red'
+          marginRight: 'auto'
         }}
       />
       {paused ? (

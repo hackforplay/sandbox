@@ -23,6 +23,16 @@ export function patchForEnchantJs(enchant: any) {
   });
   observer.observe(game._element.parentNode);
 
+  // disable stop-on-blur mod
+  if (Array.isArray(game._listeners.awake)) {
+    for (const handler of game._listeners.awake) {
+      console.log({ ...handler });
+      if (handler.name === 'stopOnBlur') {
+        game.removeEventListener('awake', handler);
+      }
+    }
+  }
+
   // stop world
   game.rootScene.addEventListener(enchant.Event.CHILD_ADDED, function handler(
     event: any

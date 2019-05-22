@@ -34,6 +34,8 @@ export function Game(props: GameProps) {
         style={{
           width: '100%', //  This size is used for initialization.
           height: '100%', // will be re-define by enchantjs core.
+          marginLeft: 'auto',
+          marginRight: 'auto',
           backgroundColor: 'red'
         }}
       />

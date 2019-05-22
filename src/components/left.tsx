@@ -15,15 +15,21 @@ export function Left(props: LeftProps) {
   return (
     <div
       style={{
-        ...props.style,
+        overflow: 'visible',
+        zIndex: 2,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        padding: 8,
+        paddingBottom: 60,
+        ...props.style
       }}
     >
       <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>
         {isFullScreen ? (
-          <FullscreenExit
+          <img
+            src={require('../resources/8bit_fullscreen_exit.png')}
+            alt=""
             style={{
               cursor: 'pointer',
               height: '100%'
@@ -36,7 +42,9 @@ export function Left(props: LeftProps) {
             }}
           />
         ) : (
-          <Fullscreen
+          <img
+            src={require('../resources/8bit_fullscreen.png')}
+            alt=""
             style={{
               cursor: 'pointer',
               height: '100%'
@@ -51,7 +59,9 @@ export function Left(props: LeftProps) {
             }}
           />
         )}
-        <Refresh
+        <img
+          src={require('../resources/8bit_reload.png')}
+          alt=""
           style={{
             cursor: 'pointer',
             height: '100%'

@@ -22,23 +22,35 @@ export function Right(props: RightProps) {
   return (
     <div
       style={{
-        ...props.style,
+        overflow: 'visible',
+        zIndex: 1,
         display: 'flex',
         flexDirection: 'column',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        alignItems: 'flex-end',
+        padding: 8,
+        paddingBottom: 60,
+        ...props.style
       }}
     >
-      <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>
+      <div
+        style={{
+          flex: 1,
+          height: '10vh',
+          minHeight: 24,
+          maxHeight: 60,
+          width: '100%',
+          textAlign: 'right'
+        }}
+      >
         <img
           src={require('../resources/enchantbook.png')}
           style={{
             cursor: 'pointer',
             height: '100%',
-            marginTop: 30,
             transition: 'all 250ms'
           }}
           className={isEmphasized ? 'hackforplay-emphasize-animation' : ''}
-          width={60}
           height={60}
           onClick={() => {
             props.setEditorOpened(!props.isEditorOpened);
@@ -47,7 +59,6 @@ export function Right(props: RightProps) {
           alt=""
         />
       </div>
-      <div style={{ flex: 1 }} />
       {isTouchEnabled ? <AButton /> : null}
     </div>
   );

@@ -75,6 +75,7 @@ export function Editor(props: EditorProps) {
         width: props.open ? 300 : 0,
         transition: 'width 100ms',
         overflow: 'hidden',
+        zIndex: 3,
         backgroundColor: 'white'
       }}
     >

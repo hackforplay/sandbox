@@ -16,7 +16,7 @@ const hasFocus$ = merge(
   debounceTime(100) // for stability
 );
 
-const sideBarMinWidth = 120;
+const sideBarMinWidth = 60;
 const sideBarMinHeight = isTouchEnabled ? 160 : 60;
 
 interface AppProps {}
@@ -67,7 +67,8 @@ export function App(props: AppProps) {
         height: '100%',
         position: 'relative',
         overflow: 'hidden',
-        backgroundColor: 'gray',
+        backgroundImage: `url(${require('../resources/background.png')})`,
+        backgroundRepeat: 'repeat',
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between'

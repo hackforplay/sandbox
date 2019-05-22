@@ -1,5 +1,6 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { pause$ } from './sandbox-api';
+import { input$, pause$ } from './sandbox-api';
+import { keys } from './utils';
 
 let hasCalled = false;
 export function patchForEnchantJs(enchant: any) {
@@ -7,6 +8,7 @@ export function patchForEnchantJs(enchant: any) {
   hasCalled = true;
 
   const game = enchant.Core.instance;
+  const Hack = (window as any).Hack;
 
   // auto resizing
   const observer = new ResizeObserver(entries => {
@@ -50,6 +52,49 @@ export function patchForEnchantJs(enchant: any) {
         },
         set(value: boolean) {
           pauseByGame = value;
+        }
+      });
+    }
+  });
+
+  // disable Hack.focusOnClick
+  Hack && (Hack.focusOnClick = false);
+
+  // input
+  game.rootScene.addEventListener(enchant.Event.CHILD_ADDED, function handler(
+    event: any
+  ) {
+    const group = event.node;
+    if (group.name === 'ControllerGroup') {
+      game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
+      const previousInput = { ...input$.value };
+      let lastUpdateAge = -1;
+      input$.subscribe({
+        next(input) {
+          const age = game.rootScene.age + 1;
+
+          for (let button of keys(input)) {
+            if (previousInput[button] !== input[button]) {
+              if (input[button]) {
+                // synchronize frame speed
+                if (game.rootScene.age > lastUpdateAge) {
+                  game.changeButtonState(button, true);
+                  previousInput[button] = true;
+                  lastUpdateAge = age;
+                }
+              } else {
+                // synchronize frame speed
+                game.on('enterframe', function handler() {
+                  if (game.rootScene.age > age) {
+                    game.removeEventListener('enterframe', handler);
+                    game.changeButtonState(button, false);
+                  }
+                });
+                previousInput[button] = false;
+                lastUpdateAge = age + 1;
+              }
+            }
+          }
         }
       });
     }

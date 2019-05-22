@@ -28,7 +28,6 @@ export function patchForEnchantJs(enchant: any) {
   // disable stop-on-blur mod
   if (Array.isArray(game._listeners.awake)) {
     for (const handler of game._listeners.awake) {
-      console.log({ ...handler });
       if (handler.name === 'stopOnBlur') {
         game.removeEventListener('awake', handler);
       }

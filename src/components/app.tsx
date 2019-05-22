@@ -121,12 +121,15 @@ export function App(props: AppProps) {
             minHeight: sideBarMinHeight
           }}
         >
-          <Left rootRef={rootRef} style={{ minWidth: sideBarMinWidth }} />
+          <Left
+            rootRef={rootRef}
+            style={{ minWidth: sideBarMinWidth, paddingBottom: 60 }}
+          />
           <div style={{ flex: 1 }} />
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}
-            style={{ minWidth: sideBarMinWidth }}
+            style={{ minWidth: sideBarMinWidth, paddingBottom: 60 }}
           />
         </div>
       )}

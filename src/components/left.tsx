@@ -21,7 +21,6 @@ export function Left(props: LeftProps) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 8,
-        paddingBottom: 60,
         ...props.style
       }}
     >

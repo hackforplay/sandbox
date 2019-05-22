@@ -29,7 +29,6 @@ export function Right(props: RightProps) {
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         padding: 8,
-        paddingBottom: 60,
         ...props.style
       }}
     >

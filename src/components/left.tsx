@@ -123,7 +123,11 @@ function Pad() {
             ? 'rotate(180deg)'
             : pressed === 'left'
             ? 'rotate(270deg)'
-            : undefined
+            : undefined,
+        // disable callout
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        userSelect: 'none'
       }}
       onContextMenu={e => e.preventDefault()}
       onTouchStart={onTouch}

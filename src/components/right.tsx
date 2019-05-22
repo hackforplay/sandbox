@@ -86,6 +86,12 @@ function AButton() {
       onTouchMove={onTouch}
       onTouchEnd={() => setA(false)}
       onTouchCancel={() => setA(false)}
+      style={{
+        // disable callout
+        WebkitTouchCallout: 'none',
+        WebkitUserSelect: 'none',
+        userSelect: 'none'
+      }}
     />
   );
 }

@@ -2,6 +2,13 @@ import * as React from 'react';
 import { input$ } from '../sandbox-api';
 import { isTouchEnabled } from '../utils';
 
+let _dispatcher: React.Dispatch<React.SetStateAction<boolean>> | void;
+export const internalEmphasizeDispatcher = () => {
+  if (_dispatcher) {
+    _dispatcher(true);
+  }
+};
+
 interface RightProps {
   style: React.CSSProperties;
   setEditorOpened: (open: boolean) => void;
@@ -9,6 +16,9 @@ interface RightProps {
 }
 
 export function Right(props: RightProps) {
+  const [isEmphasized, setIsEmphasized] = React.useState(false);
+  _dispatcher = setIsEmphasized;
+
   return (
     <div
       style={{
@@ -23,9 +33,17 @@ export function Right(props: RightProps) {
           src={require('../resources/enchantbook.png')}
           style={{
             cursor: 'pointer',
-            height: '100%'
+            height: '100%',
+            marginTop: 30,
+            transition: 'all 250ms'
           }}
-          onClick={() => props.setEditorOpened(!props.isEditorOpened)}
+          className={isEmphasized ? 'hackforplay-emphasize-animation' : ''}
+          width={60}
+          height={60}
+          onClick={() => {
+            props.setEditorOpened(!props.isEditorOpened);
+            setIsEmphasized(false);
+          }}
           alt=""
         />
       </div>

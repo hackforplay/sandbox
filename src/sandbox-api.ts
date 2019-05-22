@@ -1,4 +1,5 @@
 import { BehaviorSubject } from 'rxjs';
+import { internalEmphasizeDispatcher } from './components/right';
 import { connected as c, sendMessage } from './connector';
 
 export const code$ = new BehaviorSubject('');
@@ -21,6 +22,8 @@ export const input$ = new BehaviorSubject<IButtonInput>({
 
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
+export const emphasizeEditor = internalEmphasizeDispatcher;
+
 export const fetch: Feeles['fetch'] = name =>
   sendMessage('fetch', name).then(e => new Response(e.data.value));
 
@@ -56,16 +59,22 @@ export const openMedia: Feeles['openMedia'] = () => {
 export const closeMedia: Feeles['closeMedia'] = () => {
   throw Error('nope');
 };
-export const openCode: Feeles['openCode'] = () => {
-  throw Error('nope');
-};
-export const closeCode: Feeles['closeCode'] = () => {
-  throw Error('nope');
-};
+
+export const openCode: Feeles['openCode'] = (fileName: string) =>
+  sendMessage('fetchText', fileName).then(e => {
+    code$.next(e.data.value);
+    internalEmphasizeDispatcher();
+  });
+
+export const closeCode: Feeles['closeCode'] = () => Promise.resolve(); // nope
+
 export const openEditor: Feeles['openEditor'] = () => {
   throw Error('nope');
 };
-export const setAlias: Feeles['setAlias'] = () => Promise.resolve();
+export const setAlias: Feeles['setAlias'] = (name, ref) => {
+  (window as any)[name] = ref;
+  return Promise.resolve();
+};
 
 export const closeEditor: Feeles['closeEditor'] = () => {
   throw Error('nope');
@@ -123,6 +132,7 @@ export { eval_ as eval }; // avoid no 'eval' in strict mode
 export interface Feeles {
   code$: BehaviorSubject<string>;
   pause$: BehaviorSubject<boolean>;
+  emphasizeEditor: () => void;
   /**
    * Deprecated
    */

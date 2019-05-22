@@ -75,7 +75,7 @@ export function App(props: AppProps) {
       ref={rootRef}
     >
       {runtimeError && runtimeError.stack ? (
-        <span style={{ flex: 1, color: 'red', minHeight: '1em' }}>
+        <span style={{ flex: 0, color: 'red' }}>
           {runtimeError.stack.split('\n')[0]}
         </span>
       ) : null}

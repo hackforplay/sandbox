@@ -60,13 +60,21 @@ export function patchForEnchantJs(enchant: any) {
   // disable Hack.focusOnClick
   Hack && (Hack.focusOnClick = false);
 
-  // input
+  // use dom button instead of virtual pads
   game.rootScene.addEventListener(enchant.Event.CHILD_ADDED, function handler(
     event: any
   ) {
     const group = event.node;
     if (group.name === 'ControllerGroup') {
       game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
+      // remove pad
+      game.on('awake', () => {
+        for (const node of [...group.childNodes]) {
+          node.remove();
+        }
+      });
+
+      // observe input$
       const previousInput = { ...input$.value };
       let lastUpdateAge = -1;
       input$.subscribe({

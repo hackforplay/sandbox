@@ -77,7 +77,7 @@ const initDir = {
 };
 
 function Pad() {
-  const size = 100;
+  const size = 120;
   const imgRef = React.useRef<HTMLImageElement>(null);
   const [pressed$] = React.useState(() => new Subject<InputDir>());
   const [pressed, setPressed] = React.useState<InputDir>();

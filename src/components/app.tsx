@@ -5,6 +5,7 @@ import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
 import { isTouchEnabled } from '../utils';
 import { Editor } from './editor';
+import { ErrorView } from './error-view';
 import { Game } from './game';
 import { Left } from './left';
 import { Right } from './right';
@@ -75,11 +76,7 @@ export function App(props: AppProps) {
       }}
       ref={rootRef}
     >
-      {runtimeError && runtimeError.stack ? (
-        <span style={{ flex: 0, color: 'red' }}>
-          {runtimeError.stack.split('\n')[0]}
-        </span>
-      ) : null}
+      <ErrorView />
       <div
         style={{
           flex: 4,

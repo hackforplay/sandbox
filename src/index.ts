@@ -2,6 +2,7 @@ import { createElement } from 'react';
 import { render } from 'react-dom';
 import { filter, first } from 'rxjs/operators';
 import { App } from './components/app';
+import { runtimeError$ } from './components/error-view';
 import { message$, sendMessage } from './connector';
 import { patchForEnchantJs } from './patch-for-enchant-js';
 import './runtime';
@@ -41,15 +42,20 @@ const defineCode = (moduleName: string, text: string) => {
 
 // module resolver by feeles
 const resolveFromIde = (moduleName: string) =>
-  sendMessage('resolve', moduleName).then(({ data }) => {
-    if (data.error) {
-      console.error(moduleName + ' is not found');
-      // JavaScript を AMD として define
-      define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
-      return;
-    }
-    defineCode(moduleName, data.value);
-  });
+  sendMessage('resolve', moduleName)
+    .then(({ data }) => {
+      if (data.error) {
+        console.error(moduleName + ' is not found');
+        // JavaScript を AMD として define
+        define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
+        return;
+      }
+      defineCode(moduleName, data.value);
+    })
+    .catch(error => {
+      console.error(error);
+      runtimeError$.next(error);
+    });
 
 // Override require()
 requirejs.load = (context: any, moduleName: string) => {

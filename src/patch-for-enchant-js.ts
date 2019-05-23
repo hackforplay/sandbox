@@ -1,5 +1,5 @@
 import ResizeObserver from 'resize-observer-polyfill';
-import { input$, pause$ } from './sandbox-api';
+import { audioContextReady, input$, pause$ } from './sandbox-api';
 import { keys } from './utils';
 
 let hasCalled = false;
@@ -106,4 +106,17 @@ export function patchForEnchantJs(enchant: any) {
       });
     }
   });
+
+  // resume AudioContext from user gesture and skip "TOUCH TO START" scene
+  if (enchant.ENV.USE_TOUCH_TO_START_SCENE) {
+    const touchToStartScene = game._scenes[game._scenes.length - 1];
+    if (touchToStartScene) {
+      game.removeScene(touchToStartScene);
+    }
+    audioContextReady.then(audioContext => {
+      enchant.WebAudioSound.audioContext = audioContext;
+      enchant.WebAudioSound.destination = audioContext.destination;
+      game.start();
+    });
+  }
 }

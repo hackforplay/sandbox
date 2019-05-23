@@ -1,4 +1,4 @@
-import { BehaviorSubject } from 'rxjs';
+import { BehaviorSubject, fromEvent, merge } from 'rxjs';
 import { internalEmphasizeDispatcher } from './components/right';
 import { connected as c, sendMessage } from './connector';
 
@@ -23,6 +23,42 @@ export const input$ = new BehaviorSubject<IButtonInput>({
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
 export const emphasizeEditor = internalEmphasizeDispatcher;
+
+export const audioContextReady: Feeles['audioContextReady'] = new Promise(
+  resolve => {
+    const context = new AudioContext();
+    if (context.state === 'running') {
+      return resolve(context);
+    }
+    // wait for use action
+    const subscription = merge(
+      fromEvent(window, 'touchend'),
+      fromEvent(window, 'mouseup'),
+      fromEvent(window, 'keyup')
+    ).subscribe(() => {
+      // for iOS
+      const buffer = context.createBuffer(1, 1, context.sampleRate);
+      const source = context.createBufferSource();
+      source.buffer = buffer;
+      source.connect(context.destination);
+      source.start(0);
+      // resume
+      if (context.resume) {
+        context.resume().then(() => {
+          if (context.state === 'running') {
+            resolve(context);
+            subscription.unsubscribe();
+          }
+        });
+      } else {
+        if (context.state === 'running') {
+          resolve(context);
+          subscription.unsubscribe();
+        }
+      }
+    });
+  }
+);
 
 export const fetch: Feeles['fetch'] = name =>
   sendMessage('fetch', name).then(e => new Response(e.data.value));
@@ -133,6 +169,7 @@ export interface Feeles {
   code$: BehaviorSubject<string>;
   pause$: BehaviorSubject<boolean>;
   emphasizeEditor: () => void;
+  audioContextReady: Promise<AudioContext>;
   /**
    * Deprecated
    */

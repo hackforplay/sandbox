@@ -28,6 +28,7 @@ export function Left(props: LeftProps) {
           <img
             src={require('../resources/8bit_fullscreen_exit.png')}
             alt=""
+            draggable={false}
             style={{
               cursor: 'pointer',
               height: '100%'
@@ -40,6 +41,7 @@ export function Left(props: LeftProps) {
           <img
             src={require('../resources/8bit_fullscreen.png')}
             alt=""
+            draggable={false}
             style={{
               cursor: 'pointer',
               height: '100%'
@@ -54,6 +56,7 @@ export function Left(props: LeftProps) {
         <img
           src={require('../resources/8bit_reload.png')}
           alt=""
+          draggable={false}
           style={{
             cursor: 'pointer',
             height: '100%'
@@ -117,6 +120,7 @@ function Pad() {
       width={size}
       height={size}
       alt=""
+      draggable={false}
       style={{
         transform:
           pressed === 'right'

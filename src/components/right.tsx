@@ -44,6 +44,7 @@ export function Right(props: RightProps) {
       >
         <img
           src={require('../resources/enchantbook.png')}
+          draggable={false}
           style={{
             cursor: 'pointer',
             height: '100%',
@@ -91,6 +92,7 @@ function AButton() {
       width={size}
       height={size}
       alt=""
+      draggable={false}
       onContextMenu={e => e.preventDefault()}
       onTouchStart={onTouch}
       onTouchMove={onTouch}

@@ -110,6 +110,7 @@ export function App(props: AppProps) {
         <Editor
           open={isEditorOpened}
           onRequestClose={() => setEditorOpened(false)}
+          isLandscape={isLandscape}
         />
       </div>
       {isLandscape ? null : (

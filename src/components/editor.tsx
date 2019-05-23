@@ -7,6 +7,7 @@ import { code$ } from '../sandbox-api';
 interface EditorProps {
   open: boolean;
   onRequestClose: () => void;
+  isLandscape: boolean;
 }
 
 export const initializeCode = `
@@ -65,18 +66,28 @@ export function Editor(props: EditorProps) {
     return null;
   }
 
+  const trans: React.CSSProperties = props.isLandscape
+    ? {
+        top: 0,
+        height: '100%',
+        width: props.open ? 300 : 0
+      }
+    : {
+        bottom: 0,
+        width: '100%',
+        height: props.open ? 300 : 0
+      };
+
   return (
     <div
       style={{
         position: 'absolute',
         right: 0,
-        top: 0,
-        height: '100%',
-        width: props.open ? 300 : 0,
-        transition: 'width 100ms',
+        transition: 'width,height 100ms',
         overflow: 'hidden',
         zIndex: 3,
-        backgroundColor: 'white'
+        backgroundColor: 'white',
+        ...trans
       }}
     >
       <div

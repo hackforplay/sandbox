@@ -24,7 +24,6 @@ interface AppProps {}
 
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
-  const [runtimeError, setRuntimeError] = React.useState<Error>();
   const [isLandscape, setIsLandscape] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
   const [maxHeight, setMaxHeight] = React.useState<number>(window.innerHeight);
@@ -95,7 +94,6 @@ export function App(props: AppProps) {
         <Game
           isEditorOpened={isEditorOpened}
           setEditorOpened={setEditorOpened}
-          setRuntimeError={setRuntimeError}
         />
         {isLandscape ? (
           <Right

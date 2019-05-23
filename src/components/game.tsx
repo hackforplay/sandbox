@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { code$, eval, pause$ } from '../sandbox-api';
+import { runtimeError$ } from './error-view';
 
 interface GameProps {
   isEditorOpened: boolean;
   setEditorOpened: (open: boolean) => void;
-  setRuntimeError: (error?: Error) => void;
 }
 
 export function Game(props: GameProps) {
@@ -56,9 +56,8 @@ export function Game(props: GameProps) {
               if (props.isEditorOpened) {
                 try {
                   eval && eval(code$.value);
-                  props.setRuntimeError();
                 } catch (error) {
-                  props.setRuntimeError(error);
+                  runtimeError$.next(error);
                 }
               }
             }

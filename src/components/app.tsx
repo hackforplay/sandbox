@@ -7,6 +7,7 @@ import { isTouchEnabled } from '../utils';
 import { Editor } from './editor';
 import { ErrorView } from './error-view';
 import { Game } from './game';
+import { GestureView } from './gesture-view';
 import { Left } from './left';
 import { Right } from './right';
 
@@ -129,6 +130,7 @@ export function App(props: AppProps) {
           />
         </div>
       )}
+      <GestureView />
     </div>
   );
 }

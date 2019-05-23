@@ -82,14 +82,17 @@ const entryPointIsReady = message$
   });
 
 const appRoot = document.getElementById('app');
+const domReady = new Promise(resolve => {
+  render(createElement(App), appRoot, resolve);
+});
 
-render(createElement(App), appRoot, () => {
-  entryPointIsReady.then(entryPoints => {
+Promise.all([entryPointIsReady, sandboxApi.audioContextReady, domReady]).then(
+  ([entryPoints]) => {
     requirejs(entryPoints, () => {
       const enchant = (window as any).enchant;
       if (enchant) {
         patchForEnchantJs(enchant);
       }
     });
-  });
-});
+  }
+);

@@ -112,11 +112,12 @@ export function patchForEnchantJs(enchant: any) {
     const touchToStartScene = game._scenes[game._scenes.length - 1];
     if (touchToStartScene) {
       game.removeScene(touchToStartScene);
+      // wait for use gesture
+      audioContextReady.then(audioContext => {
+        enchant.WebAudioSound.audioContext = audioContext;
+        enchant.WebAudioSound.destination = audioContext.destination;
+        game.start();
+      });
     }
-    audioContextReady.then(audioContext => {
-      enchant.WebAudioSound.audioContext = audioContext;
-      enchant.WebAudioSound.destination = audioContext.destination;
-      game.start();
-    });
   }
 }

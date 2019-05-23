@@ -9,7 +9,7 @@ interface LeftProps {
   rootRef: React.RefObject<HTMLDivElement>;
 }
 export function Left(props: LeftProps) {
-  const [isFullScreen, setIsFullScreen] = React.useState(false);
+  const [fullScreen, setFullScreen] = React.useState(false);
 
   return (
     <div
@@ -24,7 +24,7 @@ export function Left(props: LeftProps) {
       }}
     >
       <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>
-        {isFullScreen ? (
+        {fullScreen ? (
           <img
             src={require('../resources/8bit_fullscreen_exit.png')}
             alt=""
@@ -35,7 +35,7 @@ export function Left(props: LeftProps) {
             onClick={() => {
               document
                 .exitFullscreen()
-                .then(() => setIsFullScreen(false))
+                .then(() => setFullScreen(false))
                 .catch(console.error);
             }}
           />
@@ -51,7 +51,7 @@ export function Left(props: LeftProps) {
               if (props.rootRef.current) {
                 props.rootRef.current
                   .requestFullscreen()
-                  .then(() => setIsFullScreen(true))
+                  .then(() => setFullScreen(true))
                   .catch(console.error);
               }
             }}

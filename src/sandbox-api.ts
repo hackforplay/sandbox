@@ -26,7 +26,8 @@ export const emphasizeEditor = internalEmphasizeDispatcher;
 
 export const audioContextReady: Feeles['audioContextReady'] = new Promise(
   resolve => {
-    const context = new AudioContext();
+    const { AudioContext, webkitAudioContext } = window as any;
+    const context: AudioContext = new (AudioContext || webkitAudioContext)();
     if (context.state === 'running') {
       return resolve(context);
     }

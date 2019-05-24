@@ -116,7 +116,6 @@ export function patchForEnchantJs(enchant: any) {
       audioContextReady.then(audioContext => {
         enchant.WebAudioSound.audioContext = audioContext;
         enchant.WebAudioSound.destination = audioContext.destination;
-        game.start();
       });
     }
   }

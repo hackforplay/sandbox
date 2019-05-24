@@ -9,7 +9,9 @@ interface LeftProps {
   rootRef: React.RefObject<HTMLDivElement>;
 }
 export function Left(props: LeftProps) {
-  const isFullScreen = Boolean(window.document.fullscreenElement);
+  const fullScreenEnabled = 'fullscreenElement' in window.document;
+  const isFullScreen =
+    fullScreenEnabled && Boolean(window.document.fullscreenElement);
 
   return (
     <div
@@ -24,35 +26,39 @@ export function Left(props: LeftProps) {
       }}
     >
       <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>
-        {isFullScreen ? (
-          <img
-            src={require('../resources/8bit_fullscreen_exit.png')}
-            alt=""
-            draggable={false}
-            style={{
-              cursor: 'pointer',
-              height: '100%'
-            }}
-            onClick={() => {
-              document.exitFullscreen().catch(console.error);
-            }}
-          />
-        ) : (
-          <img
-            src={require('../resources/8bit_fullscreen.png')}
-            alt=""
-            draggable={false}
-            style={{
-              cursor: 'pointer',
-              height: '100%'
-            }}
-            onClick={() => {
-              if (props.rootRef.current) {
-                props.rootRef.current.requestFullscreen().catch(console.error);
-              }
-            }}
-          />
-        )}
+        {fullScreenEnabled ? (
+          isFullScreen ? (
+            <img
+              src={require('../resources/8bit_fullscreen_exit.png')}
+              alt=""
+              draggable={false}
+              style={{
+                cursor: 'pointer',
+                height: '100%'
+              }}
+              onClick={() => {
+                document.exitFullscreen().catch(console.error);
+              }}
+            />
+          ) : (
+            <img
+              src={require('../resources/8bit_fullscreen.png')}
+              alt=""
+              draggable={false}
+              style={{
+                cursor: 'pointer',
+                height: '100%'
+              }}
+              onClick={() => {
+                if (props.rootRef.current) {
+                  props.rootRef.current
+                    .requestFullscreen()
+                    .catch(console.error);
+                }
+              }}
+            />
+          )
+        ) : null}
         <img
           src={require('../resources/8bit_reload.png')}
           alt=""

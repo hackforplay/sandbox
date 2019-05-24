@@ -61,6 +61,8 @@ export const audioContextReady: Feeles['audioContextReady'] = new Promise(
   }
 );
 
+const nope = () => {};
+
 export const fetch: Feeles['fetch'] = name =>
   sendMessage('fetch', name).then(e => new Response(e.data.value));
 
@@ -70,32 +72,31 @@ export const fetchDataURL: Feeles['fetchDataURL'] = name =>
 export const fetchText: Feeles['fetchText'] = name =>
   sendMessage('fetchText', name).then(e => e.data.value as string);
 
-export const fetchArrayBuffer: Feeles['fetchArrayBuffer'] = () => {
-  throw Error('nope');
-};
-export const resolve: Feeles['resolve'] = () => {
-  throw Error('nope');
-};
-export const saveAs: Feeles['saveAs'] = () => {
-  throw Error('nope');
-};
-export const reload: Feeles['reload'] = () => {
-  throw Error('nope');
-};
-export const replace: Feeles['replace'] = url => sendMessage('replace', url);
+export const fetchArrayBuffer: Feeles['fetchArrayBuffer'] = name =>
+  sendMessage('fetchArrayBuffer', name).then(e => e.data.value as ArrayBuffer);
 
-export const openReadme: Feeles['openReadme'] = () => {
-  throw Error('nope');
-};
-export const closeReadme: Feeles['closeReadme'] = () => {
-  throw Error('nope');
-};
-export const openMedia: Feeles['openMedia'] = () => {
-  throw Error('nope');
-};
-export const closeMedia: Feeles['closeMedia'] = () => {
-  throw Error('nope');
-};
+export const resolve: Feeles['resolve'] = name =>
+  sendMessage('resolve', name).then(e => e.data.value as string);
+
+export const saveAs: Feeles['saveAs'] = (blob, name) =>
+  sendMessage('saveAs', [blob, name]).then(nope);
+
+export const reload: Feeles['reload'] = () => window.location.reload();
+
+export const replace: Feeles['replace'] = url =>
+  sendMessage('replace', url).then(nope);
+
+export const openReadme: Feeles['openReadme'] = fileName =>
+  sendMessage('readme', fileName).then(nope);
+
+export const closeReadme: Feeles['closeReadme'] = () =>
+  sendMessage('readme', null).then(nope);
+
+export const openMedia: Feeles['openMedia'] = params =>
+  sendMessage('media', params).then(nope);
+
+export const closeMedia: Feeles['closeMedia'] = () =>
+  sendMessage('media', null).then(nope);
 
 export const openCode: Feeles['openCode'] = (fileName: string) =>
   sendMessage('fetchText', fileName).then(e => {
@@ -105,21 +106,24 @@ export const openCode: Feeles['openCode'] = (fileName: string) =>
 
 export const closeCode: Feeles['closeCode'] = () => Promise.resolve(); // nope
 
-export const openEditor: Feeles['openEditor'] = () => {
-  throw Error('nope');
-};
+export const openEditor: Feeles['openEditor'] = fileName =>
+  sendMessage('editor', fileName).then(nope);
+
+export const closeEditor: Feeles['closeEditor'] = () =>
+  sendMessage('editor', null).then(nope);
+
 export const setAlias: Feeles['setAlias'] = (name, ref) => {
   (window as any)[name] = ref;
   return Promise.resolve();
 };
 
-export const closeEditor: Feeles['closeEditor'] = () => {
-  throw Error('nope');
-};
 export const runCode: Feeles['runCode'] = () => {
-  throw Error('nope');
+  eval(code$.value);
+  return Promise.resolve();
 };
-export const install: Feeles['install'] = name => sendMessage('install', name);
+
+export const install: Feeles['install'] = name =>
+  sendMessage('install', name).then(nope);
 
 export const ipcRenderer: Feeles['ipcRenderer'] = null;
 
@@ -135,13 +139,17 @@ export const clearInterval: Feeles['clearInterval'] = window.clearInterval.bind(
 );
 
 // Feeles の onMessage を dispatch する
-export const dispatchOnMessage: Feeles['dispatchOnMessage'] = () => {
-  throw new Error('nope');
-};
+export const dispatchOnMessage: Feeles['dispatchOnMessage'] = data =>
+  sendMessage('dispatchOnMessage', data).then(nope);
+
 // 親ウィンドウで URL (Same Domain) を window.open する
-export const openWindow: Feeles['openWindow'] = () => {
-  throw new Error('nope');
-};
+export const openWindow: Feeles['openWindow'] = (
+  url,
+  target,
+  features,
+  replace
+) => sendMessage('openWindow', { url, target, features, replace }).then(nope);
+
 // error を IDE に投げる
 const cloneError = (error: Error) => {
   const keys = [
@@ -179,28 +187,28 @@ export interface Feeles {
     VERSION_UUID: string;
   };
   connected: Promise<{ port: MessagePort }>;
-  fetch?: (name: string) => Promise<any>;
-  fetchDataURL?: (name: string) => Promise<any>;
-  fetchText?: (name: string) => Promise<any>;
-  fetchArrayBuffer?: (name: string) => Promise<any>;
-  resolve?: (name: string) => Promise<any>;
-  saveAs?: (blob: Blob, name: string) => Promise<any>;
-  reload?: () => Promise<any>;
-  replace?: (url: string) => Promise<any>;
-  openReadme?: (fileName: string) => Promise<any>;
-  closeReadme?: () => Promise<any>;
-  openMedia?: (params: any) => Promise<any>;
-  closeMedia?: () => Promise<any>;
-  openCode?: (fileName: string) => Promise<any>;
-  closeCode?: () => Promise<any>;
-  openEditor?: (fileName: string) => Promise<any>;
-  closeEditor?: () => Promise<any>;
+  fetch?: (name: string) => Promise<Response>;
+  fetchDataURL?: (name: string) => Promise<string>;
+  fetchText?: (name: string) => Promise<string>;
+  fetchArrayBuffer?: (name: string) => Promise<ArrayBuffer>;
+  resolve?: (name: string) => Promise<string>;
+  saveAs?: (blob: Blob, name: string) => Promise<void>;
+  reload?: () => void;
+  replace?: (url: string) => Promise<void>;
+  openReadme?: (fileName: string) => Promise<void>;
+  closeReadme?: () => Promise<void>;
+  openMedia?: (params: void) => Promise<void>;
+  closeMedia?: () => Promise<void>;
+  openCode?: (fileName: string) => Promise<void>;
+  closeCode?: () => Promise<void>;
+  openEditor?: (fileName: string) => Promise<void>;
+  closeEditor?: () => Promise<void>;
   /**
    * Deprecated
    */
-  setAlias?: (name: string, ref: any) => Promise<any>;
-  runCode?: () => Promise<any>;
-  install?: (name: string) => Promise<any>;
+  setAlias?: (name: string, ref: any) => Promise<void>;
+  runCode?: () => Promise<void>;
+  install?: (name: string) => Promise<void>;
   /**
    * Deprecated
    */

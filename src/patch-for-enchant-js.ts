@@ -109,13 +109,20 @@ export function patchForEnchantJs(enchant: any) {
 
   // resume AudioContext from user gesture and skip "TOUCH TO START" scene
   if (enchant.ENV.USE_TOUCH_TO_START_SCENE) {
-    const touchToStartScene = game._scenes[game._scenes.length - 1];
+    const touchToStartScene = (game._scenes as any[]).find(scene => {
+      if (scene === game.loadingScene) return false;
+      if (scene === game.rootScene) return false;
+      const [firstNode]: any[] = scene.childNodes || [];
+      if (!firstNode) return false;
+      return firstNode.text === 'Touch to Start';
+    });
     if (touchToStartScene) {
       game.removeScene(touchToStartScene);
       // wait for use gesture
       audioContextReady.then(audioContext => {
         enchant.WebAudioSound.audioContext = audioContext;
         enchant.WebAudioSound.destination = audioContext.destination;
+        game.start();
       });
     }
   }

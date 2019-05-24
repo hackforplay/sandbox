@@ -22,7 +22,7 @@ export const input$ = new BehaviorSubject<IButtonInput>({
 
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
-export const emphasizeEditor = internalEmphasizeDispatcher;
+export const emphasizeEditor: Feeles['emphasizeEditor'] = internalEmphasizeDispatcher;
 
 export interface KanaConfig {
   members: {
@@ -185,6 +185,7 @@ export { eval_ as eval }; // avoid no 'eval' in strict mode
 export interface Feeles {
   code$: BehaviorSubject<string>;
   pause$: BehaviorSubject<boolean>;
+  input$: BehaviorSubject<IButtonInput>;
   emphasizeEditor: () => void;
   audioContextReady: Promise<AudioContext>;
   /**

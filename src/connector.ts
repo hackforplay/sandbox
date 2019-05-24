@@ -35,7 +35,6 @@ export function sendMessage<Input>(
       filter(e => e.data && e.data.id === message.id),
       map(e => {
         if (e.data && e.data.error) {
-          console.error(`Error in sendMessage:${query} (${value})`);
           throw e.data.error;
         }
         return e;

@@ -50,20 +50,16 @@ export function Editor(props: EditorProps) {
     return <span style={{ color: 'red' }}>{error.message}</span>;
   }
 
-  if (!ast) {
-    return null;
-  }
-
   const trans: React.CSSProperties = props.isLandscape
     ? {
         top: 0,
         height: '100%',
-        width: props.open ? 300 : 0
+        width: props.open ? '50%' : 0
       }
     : {
         bottom: 0,
         width: '100%',
-        height: props.open ? 300 : 0
+        height: props.open ? '50%' : 0
       };
 
   return (
@@ -94,19 +90,21 @@ export function Editor(props: EditorProps) {
         >
           x
         </button>
-        <Root
-          node={ast}
-          kana={kana}
-          onUpdate={(prev, next) => {
-            const current = code$.getValue();
-            const updated =
-              current.slice(0, prev.start) +
-              next.value +
-              current.slice(prev.end);
-            // subscribe せずに、 Hack.code の値だけを変更する
-            (code$ as any)._value = updated;
-          }}
-        />
+        {ast ? (
+          <Root
+            node={ast}
+            kana={kana}
+            onUpdate={(prev, next) => {
+              const current = code$.getValue();
+              const updated =
+                current.slice(0, prev.start) +
+                next.value +
+                current.slice(prev.end);
+              // subscribe せずに、 Hack.code の値だけを変更する
+              (code$ as any)._value = updated;
+            }}
+          />
+        ) : null}
       </div>
     </div>
   );

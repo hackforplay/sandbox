@@ -25,7 +25,15 @@ export function Left(props: LeftProps) {
         ...props.style
       }}
     >
-      <div style={{ flex: 1, height: '10vh', minHeight: 24, maxHeight: 60 }}>
+      <div
+        style={{
+          flex: 1,
+          height: '10vh',
+          minHeight: 24,
+          maxHeight: 60,
+          zIndex: 1
+        }}
+      >
         {fullScreenEnabled ? (
           isFullScreen ? (
             <img
@@ -72,7 +80,6 @@ export function Left(props: LeftProps) {
           }}
         />
       </div>
-      <div style={{ flex: 1 }} />
       {isTouchEnabled ? <Pad /> : null}
     </div>
   );

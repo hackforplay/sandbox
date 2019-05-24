@@ -96,3 +96,17 @@ Promise.all([entryPointIsReady, sandboxApi.audioContextReady, domReady]).then(
     });
   }
 );
+
+// Load feeles/kana.json as default kana
+sandboxApi.fetchText &&
+  sandboxApi
+    .fetchText('feeles/kana.json')
+    .then(json => {
+      try {
+        const kana = JSON.parse(json);
+        if (typeof kana.members === 'object') {
+          sandboxApi.kana$.next(kana);
+        }
+      } catch (error) {}
+    })
+    .catch(() => {});

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+import { Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 export const isNotUndefined = <T>(t: T | undefined): t is T => t !== undefined;
@@ -18,3 +20,15 @@ export const isTouchEnabled = (() => {
   div.setAttribute('ontouchstart', 'return');
   return typeof div.ontouchstart === 'function';
 })();
+
+export const useObservable = <T>(observable: Observable<T>) => {
+  const [value, setValue] = useState<T>();
+  useEffect(() => {
+    const subscription = observable.subscribe(value => setValue(value));
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+
+  return value;
+};

@@ -24,6 +24,14 @@ export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
 export const emphasizeEditor = internalEmphasizeDispatcher;
 
+export interface KanaConfig {
+  members: {
+    [memberName: string]: string;
+  };
+}
+
+export const kana$ = new BehaviorSubject<KanaConfig>({ members: {} });
+
 export const audioContextReady: Feeles['audioContextReady'] = new Promise(
   resolve => {
     const { AudioContext, webkitAudioContext } = window as any;

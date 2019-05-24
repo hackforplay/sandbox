@@ -2,7 +2,8 @@ import { parse } from '@babel/parser';
 import * as t from '@babel/types';
 import { Root } from '@hackforplay/react-ast-mutator-components';
 import * as React from 'react';
-import { code$ } from '../sandbox-api';
+import { code$, kana$ } from '../sandbox-api';
+import { useObservable } from '../utils';
 
 interface EditorProps {
   open: boolean;
@@ -10,19 +11,10 @@ interface EditorProps {
   isLandscape: boolean;
 }
 
-const kana = {
-  'player.hp': 'プレイヤーのたいりょく',
-  'スライム.hp': 'スライムのたいりょく',
-  'イモムシ.hp': 'イモムシのたいりょく',
-  'プレイヤー.atk': 'プレイヤーのこうげきりょく',
-  'プレイヤー.locate': 'プレイヤーをうごかす',
-  'コウモリ.locate': 'コウモリをうごかす',
-  'プレイヤー.hp': 'プレイヤーのたいりょく'
-};
-
 export function Editor(props: EditorProps) {
   const [ast, setAst] = React.useState<t.File>();
   const [error, setError] = React.useState<Error>();
+  const kana = useObservable(kana$);
 
   React.useEffect(() => {
     const subscription = code$.subscribe({
@@ -93,7 +85,7 @@ export function Editor(props: EditorProps) {
         {ast ? (
           <Root
             node={ast}
-            kana={kana}
+            kana={kana ? kana.members : {}}
             onUpdate={(prev, next) => {
               const current = code$.getValue();
               const updated =

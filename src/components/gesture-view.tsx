@@ -1,10 +1,12 @@
 import * as React from 'react';
 import { audioContextReady } from '../sandbox-api';
+import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
 import { Keyboard, TouchApp } from './icons';
 
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
+  const [t] = useLocale();
 
   React.useEffect(() => {
     audioContextReady.then(() => setOpen(false));
@@ -34,7 +36,7 @@ export function GestureView() {
       }}
     >
       {isTouchEnabled ? <TouchApp /> : <Keyboard />}
-      <span>{isTouchEnabled ? 'TOUCH TO START' : 'PRESS ANY KEY'}</span>
+      <span>{isTouchEnabled ? t['Touch to start'] : t['Press any key']}</span>
     </div>
   ) : null;
 }

@@ -22,7 +22,7 @@
     "@babel/parser": "^7.4.4",
     "@babel/runtime": "^7.4.4",
     "@babel/types": "^7.4.4",
-    "@hackforplay/react-ast-mutator-components": "^1.1.0",
+    "@hackforplay/react-ast-mutator-components": "^1.1.1",
     "@types/react": "^16.8.17",
     "@types/react-dom": "^16.8.4",
     "react": "^16.8.6",

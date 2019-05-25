@@ -32,3 +32,19 @@ export const useObservable = <T>(observable: Observable<T>) => {
 
   return value;
 };
+
+export const useEvent = <T>(
+  target: EventTarget,
+  key: string,
+  getter: () => T
+) => {
+  const [value, setValue] = useState<T>(getter);
+  useEffect(() => {
+    const handler = () => setValue(getter());
+    target.addEventListener(key, handler, { passive: true });
+    return () => {
+      target.removeEventListener(key, handler);
+    };
+  }, []);
+  return value;
+};

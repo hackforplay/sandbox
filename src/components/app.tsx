@@ -1,9 +1,9 @@
+import { orientation } from 'o9n';
 import * as React from 'react';
-import ResizeObserver from 'resize-observer-polyfill';
 import { fromEvent, merge } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
-import { isTouchEnabled } from '../utils';
+import { isTouchEnabled, useEvent } from '../utils';
 import { Editor } from './editor';
 import { ErrorView } from './error-view';
 import { Game } from './game';
@@ -25,9 +25,10 @@ interface AppProps {}
 
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
-  const [isLandscape, setIsLandscape] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
-  const [maxHeight, setMaxHeight] = React.useState<number>(window.innerHeight);
+  const isLandscape = useEvent(orientation, 'change', () =>
+    orientation.type.startsWith('landscape')
+  );
 
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open
@@ -40,26 +41,6 @@ export function App(props: AppProps) {
     const subscription = hasFocus$.subscribe(pause$);
     return () => subscription.unsubscribe();
   }, [isEditorOpened]);
-
-  React.useEffect(() => {
-    const rootObserver = new ResizeObserver(entries => {
-      for (const entry of entries) {
-        const { height, width } = entry.contentRect;
-        const isLandscape = height - (width * 2) / 3 < sideBarMinHeight;
-        setIsLandscape(isLandscape);
-        // game screen is 3:2
-        if (!isLandscape) {
-          setMaxHeight((width / 3) * 2);
-        } else {
-          setMaxHeight(window.innerHeight); // no constraint
-        }
-      }
-    });
-    if (rootRef.current) {
-      rootObserver.observe(rootRef.current);
-    }
-    return () => rootObserver.disconnect();
-  }, [rootRef.current]);
 
   return (
     <div
@@ -83,7 +64,7 @@ export function App(props: AppProps) {
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'stretch',
-          maxHeight
+          maxHeight: isLandscape ? innerHeight : (innerWidth / 3) * 2
         }}
       >
         {isLandscape ? (

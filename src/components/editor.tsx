@@ -13,7 +13,7 @@ interface EditorProps {
 export function Editor(props: EditorProps) {
   const [ast, setAst] = React.useState<t.File>();
   const [error, setError] = React.useState<Error>();
-  const kana = useObservable(kana$);
+  const kana = (useObservable(kana$), kana$.value);
 
   React.useEffect(() => {
     const subscription = code$.subscribe({
@@ -80,7 +80,7 @@ export function Editor(props: EditorProps) {
         {ast ? (
           <Root
             node={ast}
-            kana={kana ? kana.members : {}}
+            kana={kana.members}
             onUpdate={(prev, next) => {
               const current = code$.getValue();
               const updated =

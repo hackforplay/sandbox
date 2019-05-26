@@ -81,6 +81,9 @@ export function Editor(props: EditorProps) {
           <Root
             node={ast}
             kana={kana.members}
+            style={{
+              height: '100%'
+            }}
             onUpdate={(prev, next) => {
               const current = code$.getValue();
               const updated =

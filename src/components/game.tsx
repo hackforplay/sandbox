@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { code$, eval, pause$ } from '../sandbox-api';
+import { useObservable } from '../utils';
 import { runtimeError$ } from './error-view';
 
 interface GameProps {
@@ -8,14 +9,7 @@ interface GameProps {
 }
 
 export function Game(props: GameProps) {
-  const [paused, setPaused] = React.useState(pause$.value);
-
-  React.useEffect(() => {
-    const subscription = pause$.subscribe(setPaused);
-    return () => {
-      subscription.unsubscribe();
-    };
-  }, []);
+  const paused = (useObservable(pause$), pause$.value);
 
   return (
     <div

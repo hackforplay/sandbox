@@ -84,11 +84,7 @@ export function App(props: AppProps) {
             style={{ flex: 0, minWidth: sideBarMinWidth }}
           />
         ) : null}
-        <Editor
-          open={isEditorOpened}
-          onRequestClose={() => setEditorOpened(false)}
-          isLandscape={isLandscape}
-        />
+        <Editor open={isEditorOpened} isLandscape={isLandscape} />
       </div>
       {isLandscape ? null : (
         <div

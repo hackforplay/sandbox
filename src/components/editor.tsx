@@ -7,7 +7,6 @@ import { useObservable } from '../utils';
 
 interface EditorProps {
   open: boolean;
-  onRequestClose: () => void;
   isLandscape: boolean;
 }
 
@@ -76,12 +75,6 @@ export function Editor(props: EditorProps) {
           alignItems: 'stretch'
         }}
       >
-        <button
-          style={{ alignSelf: 'flex-end' }}
-          onClick={props.onRequestClose}
-        >
-          x
-        </button>
         {ast ? (
           <Root
             node={ast}

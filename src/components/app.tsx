@@ -26,9 +26,15 @@ interface AppProps {}
 export function App(props: AppProps) {
   const [isEditorOpened, _setEditorOpened] = React.useState(false);
   const rootRef = React.useRef<HTMLDivElement>(null);
-  const isLandscape = useEvent(orientation, 'change', () =>
-    orientation.type.startsWith('landscape')
-  );
+  const isLandscape = isTouchEnabled
+    ? useEvent(orientation, 'change', () =>
+        orientation.type.startsWith('landscape')
+      )
+    : useEvent(
+        window,
+        'resize',
+        () => innerHeight <= (2 / 3) * (innerWidth - sideBarMinWidth * 2)
+      );
 
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open

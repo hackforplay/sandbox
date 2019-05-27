@@ -18,7 +18,7 @@ const hasFocus$ = merge(
   debounceTime(100) // for stability
 );
 
-const sideBarMinWidth = 60;
+const sideBarMinWidth = 114;
 const sideBarMinHeight = isTouchEnabled ? 160 : 60;
 
 interface AppProps {}
@@ -69,6 +69,7 @@ export function App(props: AppProps) {
       >
         {isLandscape ? (
           <Left
+            isLandscape
             rootRef={rootRef}
             style={{ flex: 0, minWidth: sideBarMinWidth }}
           />
@@ -96,14 +97,15 @@ export function App(props: AppProps) {
           }}
         >
           <Left
+            isLandscape={false}
             rootRef={rootRef}
-            style={{ minWidth: sideBarMinWidth, paddingBottom: 60 }}
+            style={{ minWidth: sideBarMinWidth }}
           />
           <div style={{ flex: 1 }} />
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}
-            style={{ minWidth: sideBarMinWidth, paddingBottom: 60 }}
+            style={{ minWidth: sideBarMinWidth }}
           />
         </div>
       )}

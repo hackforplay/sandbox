@@ -3,8 +3,10 @@ import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
 import { isTouchEnabled } from '../utils';
+import { MenuButton } from './menu-button';
 
 interface LeftProps {
+  isLandscape: boolean;
   style: React.CSSProperties;
   rootRef: React.RefObject<HTMLDivElement>;
 }
@@ -16,47 +18,38 @@ export function Left(props: LeftProps) {
   return (
     <div
       style={{
+        flex: 1,
         overflow: 'visible',
         zIndex: 2,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
-        padding: 8,
+        paddingTop: 8,
+        paddingBottom: '16%',
         ...props.style
       }}
     >
       <div
         style={{
           flex: 1,
-          height: '10vh',
-          minHeight: 24,
-          maxHeight: 60,
-          zIndex: 1
+          zIndex: 1,
+          display: 'flex',
+          flexDirection: props.isLandscape ? 'column' : 'row'
         }}
       >
         {fullScreenEnabled ? (
           isFullScreen ? (
-            <img
+            <MenuButton
               src={require('../resources/8bit_fullscreen_exit.png')}
-              alt=""
-              draggable={false}
-              style={{
-                cursor: 'pointer',
-                height: '100%'
-              }}
+              label={'Exit'}
               onClick={() => {
                 document.exitFullscreen().catch(console.error);
               }}
             />
           ) : (
-            <img
+            <MenuButton
               src={require('../resources/8bit_fullscreen.png')}
-              alt=""
-              draggable={false}
-              style={{
-                cursor: 'pointer',
-                height: '100%'
-              }}
+              label={'Full'}
               onClick={() => {
                 if (props.rootRef.current) {
                   props.rootRef.current
@@ -67,18 +60,20 @@ export function Left(props: LeftProps) {
             />
           )
         ) : null}
-        <img
+        <MenuButton
           src={require('../resources/8bit_reload.png')}
-          alt=""
-          draggable={false}
-          style={{
-            cursor: 'pointer',
-            height: '100%'
-          }}
+          label={'Reload'}
           onClick={() => {
             window.location.reload();
           }}
         />
+        {isTouchEnabled ? null : (
+          <MenuButton
+            src={require('../resources/8bit_videogame.png')}
+            label={'How to Play'}
+            onClick={() => setHowToPlay(true)}
+          />
+        )}
       </div>
       {isTouchEnabled ? <Pad /> : null}
     </div>

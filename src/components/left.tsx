@@ -2,6 +2,7 @@ import * as React from 'react';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
+import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
 import { MenuButton } from './menu-button';
 
@@ -11,6 +12,8 @@ interface LeftProps {
   rootRef: React.RefObject<HTMLDivElement>;
 }
 export function Left(props: LeftProps) {
+  const [t] = useLocale();
+
   const fullScreenEnabled = 'fullscreenElement' in window.document;
   const isFullScreen =
     fullScreenEnabled && Boolean(window.document.fullscreenElement);
@@ -41,7 +44,7 @@ export function Left(props: LeftProps) {
           isFullScreen ? (
             <MenuButton
               src={require('../resources/8bit_fullscreen_exit.png')}
-              label={'Exit'}
+              label={t['Full Screen']}
               onClick={() => {
                 document.exitFullscreen().catch(console.error);
               }}
@@ -49,7 +52,7 @@ export function Left(props: LeftProps) {
           ) : (
             <MenuButton
               src={require('../resources/8bit_fullscreen.png')}
-              label={'Full'}
+              label={t['Full Screen']}
               onClick={() => {
                 if (props.rootRef.current) {
                   props.rootRef.current
@@ -62,7 +65,7 @@ export function Left(props: LeftProps) {
         ) : null}
         <MenuButton
           src={require('../resources/8bit_reload.png')}
-          label={'Reload'}
+          label={t['Reload']}
           onClick={() => {
             window.location.reload();
           }}
@@ -70,7 +73,7 @@ export function Left(props: LeftProps) {
         {isTouchEnabled ? null : (
           <MenuButton
             src={require('../resources/8bit_videogame.png')}
-            label={'How to Play'}
+            label={t['How to Play']}
             onClick={() => setHowToPlay(true)}
           />
         )}

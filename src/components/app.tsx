@@ -18,7 +18,7 @@ const hasFocus$ = merge(
   debounceTime(100) // for stability
 );
 
-const sideBarMinWidth = 114;
+const sideBarMinWidth = 86;
 const sideBarMinHeight = isTouchEnabled ? 160 : 60;
 
 interface AppProps {}

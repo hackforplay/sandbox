@@ -41,61 +41,35 @@ export function Editor(props: EditorProps) {
     return <span style={{ color: 'red' }}>{error.message}</span>;
   }
 
-  const trans: React.CSSProperties = props.isLandscape
-    ? {
-        top: 0,
-        height: '100%',
-        width: props.open ? '50%' : 0
-      }
-    : {
-        bottom: 0,
-        width: '100%',
-        height: props.open ? '50%' : 0
-      };
-
   return (
     <div
       style={{
-        position: 'absolute',
-        right: 0,
-        transition: 'width,height 100ms',
+        flex: 0,
+        flexBasis: props.open ? 300 : 0,
+        transition: 'flex-basis 100ms',
         overflow: 'hidden',
-        zIndex: 3,
-        backgroundColor: 'white',
-        ...trans
+        backgroundColor: 'rgb(255,255,255)'
       }}
     >
-      <div
-        style={{
-          width: '100%',
-          height: '100%',
-          boxSizing: 'border-box',
-          padding: 8,
-          display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'flex-start',
-          alignItems: 'stretch'
-        }}
-      >
-        {ast ? (
-          <Root
-            node={ast}
-            kana={kana.members}
-            style={{
-              height: '100%'
-            }}
-            onUpdate={(prev, next) => {
-              const current = code$.getValue();
-              const updated =
-                current.slice(0, prev.start) +
-                next.value +
-                current.slice(prev.end);
-              // subscribe せずに、 Hack.code の値だけを変更する
-              (code$ as any)._value = updated;
-            }}
-          />
-        ) : null}
-      </div>
+      {ast ? (
+        <Root
+          node={ast}
+          kana={kana.members}
+          style={{
+            height: '100%',
+            padding: 8
+          }}
+          onUpdate={(prev, next) => {
+            const current = code$.getValue();
+            const updated =
+              current.slice(0, prev.start) +
+              next.value +
+              current.slice(prev.end);
+            // subscribe せずに、 Hack.code の値だけを変更する
+            (code$ as any)._value = updated;
+          }}
+        />
+      ) : null}
     </div>
   );
 }

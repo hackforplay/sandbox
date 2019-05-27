@@ -4,11 +4,11 @@ import { fromEvent, merge } from 'rxjs';
 import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
 import { isTouchEnabled, useEvent } from '../utils';
-import { Editor } from './editor';
 import { ErrorView } from './error-view';
 import { Game } from './game';
 import { GestureView } from './gesture-view';
 import { Left } from './left';
+import { OverlayView } from './overlay-view';
 import { Right } from './right';
 
 const hasFocus$ = merge(
@@ -80,10 +80,7 @@ export function App(props: AppProps) {
             style={{ flex: 0, minWidth: sideBarMinWidth }}
           />
         ) : null}
-        <Game
-          isEditorOpened={isEditorOpened}
-          setEditorOpened={setEditorOpened}
-        />
+        <Game />
         {isLandscape ? (
           <Right
             isEditorOpened={isEditorOpened}
@@ -91,7 +88,6 @@ export function App(props: AppProps) {
             style={{ flex: 0, minWidth: sideBarMinWidth }}
           />
         ) : null}
-        <Editor open={isEditorOpened} isLandscape={isLandscape} />
       </div>
       {isLandscape ? null : (
         <div
@@ -116,6 +112,11 @@ export function App(props: AppProps) {
         </div>
       )}
       <GestureView />
+      <OverlayView
+        isLandscape={isLandscape}
+        isEditorOpened={isEditorOpened}
+        setEditorOpened={setEditorOpened}
+      />
     </div>
   );
 }

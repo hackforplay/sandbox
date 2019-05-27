@@ -29,6 +29,7 @@ export function Right(props: RightProps) {
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         padding: 8,
+        paddingBottom: '16%',
         ...props.style
       }}
     >
@@ -36,7 +37,6 @@ export function Right(props: RightProps) {
         style={{
           flex: 1,
           height: '10vh',
-          minHeight: 24,
           maxHeight: 60,
           width: '100%',
           textAlign: 'right'

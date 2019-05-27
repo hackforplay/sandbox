@@ -33,7 +33,11 @@ export function MenuButton(props: MenuButtonProps) {
           whiteSpace: 'nowrap',
           textOverflow: 'ellipsis',
           color: 'white',
-          overflow: 'hidden'
+          overflow: 'hidden',
+          paddingLeft: 2,
+          paddingRight: 2,
+          paddingBottom: 4,
+          fontSize: 'x-small'
         }}
       >
         {props.label}

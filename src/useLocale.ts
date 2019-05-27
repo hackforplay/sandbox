@@ -2,7 +2,9 @@ import { useEffect, useState } from 'react';
 import { BehaviorSubject } from 'rxjs';
 
 export type LocaleKeys =
-  | 'Press any key'
+  | 'Attack'
+  | 'Move'
+  | 'Press Attack key'
   | 'Touch to start'
   | 'Full Screen'
   | 'Reload'
@@ -13,14 +15,18 @@ const localeMap: {
   [locale: string]: Locale;
 } = {
   en: {
-    'Press any key': 'Press any key',
+    Attack: 'Attack',
+    Move: 'Move',
+    'Press Attack key': 'Press Attack key',
     'Touch to start': 'Touch to start',
     'Full Screen': 'Full Screen',
     Reload: 'Reload',
     'How to Play': 'How to Play'
   },
   ja: {
-    'Press any key': 'キーを押してください',
+    Attack: 'こうげき',
+    Move: 'いどう',
+    'Press Attack key': 'こうげき キーを 押してください',
     'Touch to start': 'タッチしてください',
     'Full Screen': 'フルスクリーン',
     Reload: 'さいよみこみ',

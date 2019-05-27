@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { audioContextReady } from '../sandbox-api';
 import { useLocale } from '../useLocale';
-import { isTouchEnabled } from '../utils';
-import { Keyboard, TouchApp } from './icons';
+import { isTouchEnabled, useEvent } from '../utils';
+import { TouchApp } from './icons';
 
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
@@ -36,7 +36,47 @@ export function GestureView() {
       }}
     >
       {isTouchEnabled ? <TouchApp /> : <Keyboard />}
-      <span>{isTouchEnabled ? t['Touch to start'] : t['Press any key']}</span>
+      <span>
+        {isTouchEnabled ? t['Touch to start'] : t['Press Attack key']}
+      </span>
     </div>
   ) : null;
+}
+
+function Keyboard() {
+  const scale = useEvent(window, 'resize', () =>
+    Math.min(1, window.innerWidth / 796)
+  );
+  const [t] = useLocale();
+
+  return (
+    <div
+      style={{
+        position: 'relative',
+        width: 796,
+        height: 360,
+        transform: `scale(${scale})`
+      }}
+    >
+      <img
+        src={require('../resources/keyboard_normal.png')}
+        alt=""
+        draggable={false}
+        style={{ position: 'absolute' }}
+      />
+      <img
+        src={require('../resources/keyboard_bright.png')}
+        className="hackforplay-keyboard-animation"
+        alt=""
+        draggable={false}
+        style={{ position: 'absolute', zIndex: 1 }}
+      />
+      <span style={{ position: 'absolute', left: 325, top: 336, zIndex: 2 }}>
+        {t['Attack']}
+      </span>
+      <span style={{ position: 'absolute', left: 676, top: 336, zIndex: 2 }}>
+        {t['Move']}
+      </span>
+    </div>
+  );
 }

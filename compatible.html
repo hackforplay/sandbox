@@ -36,6 +36,20 @@
         transform: scale(2);
         transform-origin: right top;
       }
+      @keyframes hackforplay-keyboard-animation {
+        0% {
+          opacity: 0;
+        }
+        100% {
+          opacity: 1;
+        }
+      }
+      .hackforplay-keyboard-animation {
+        animation-name: hackforplay-keyboard-animation;
+        animation-duration: 500ms;
+        animation-iteration-count: infinite;
+        animation-direction: alternate;
+      }
     </style>
   </head>
   <body>

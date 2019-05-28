@@ -8,6 +8,9 @@ import { TouchApp } from './icons';
 let _openGestureView = () => {};
 export const internalOpenGestureView = () => _openGestureView();
 
+const storageKey = 'already-done-gesture';
+let alreadyDoneGesture = sessionStorage.getItem(storageKey) !== null;
+
 const input$ = isTouchEnabled
   ? fromEvent(window, 'touchend').pipe(first())
   : merge(
@@ -20,7 +23,7 @@ const input$ = isTouchEnabled
     );
 
 export function GestureView() {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(!alreadyDoneGesture);
   _openGestureView = () => setOpen(true);
 
   const [t] = useLocale();
@@ -28,7 +31,13 @@ export function GestureView() {
   React.useEffect(() => {
     if (!open) return;
 
-    const subscription = input$.subscribe(e => setOpen(false));
+    const subscription = input$.subscribe(e => {
+      setOpen(false);
+      if (!alreadyDoneGesture) {
+        sessionStorage.setItem(storageKey, 'done');
+        alreadyDoneGesture = true;
+      }
+    });
     if (!isTouchEnabled) {
       // Enable keyboard input
       if (!document.hasFocus()) {

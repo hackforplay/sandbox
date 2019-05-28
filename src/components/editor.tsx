@@ -48,7 +48,8 @@ export function Editor(props: EditorProps) {
         flexBasis: props.open ? 300 : 0,
         transition: 'flex-basis 100ms',
         overflow: 'hidden',
-        backgroundColor: 'rgb(255,255,255)'
+        backgroundColor: 'rgb(255,255,255)',
+        pointerEvents: 'initial'
       }}
     >
       {ast ? (

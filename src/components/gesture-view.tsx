@@ -1,22 +1,42 @@
 import * as React from 'react';
-import { audioContextReady } from '../sandbox-api';
+import { fromEvent, merge } from 'rxjs';
+import { filter, first, tap } from 'rxjs/operators';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled, useEvent } from '../utils';
 import { TouchApp } from './icons';
 
+let _openGestureView = () => {};
+export const internalOpenGestureView = () => _openGestureView();
+
+const input$ = isTouchEnabled
+  ? fromEvent(window, 'touchend').pipe(first())
+  : merge(
+      fromEvent<KeyboardEvent>(window, 'keydown', { capture: true }),
+      fromEvent<KeyboardEvent>(window, 'keyup', { capture: true })
+    ).pipe(
+      tap(e => e.stopPropagation()),
+      filter(e => e.key === ' '),
+      first()
+    );
+
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
+  _openGestureView = () => setOpen(true);
+
   const [t] = useLocale();
 
   React.useEffect(() => {
-    audioContextReady.then(() => setOpen(false));
+    if (!open) return;
+
+    const subscription = input$.subscribe(e => setOpen(false));
     if (!isTouchEnabled) {
+      // Enable keyboard input
       if (!document.hasFocus()) {
         focus();
       }
     }
-    return () => {};
-  }, []);
+    return () => subscription.unsubscribe();
+  }, [open]);
 
   return open ? (
     <div

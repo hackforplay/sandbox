@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { fromEvent, merge } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
+import { audioContextReady } from '../sandbox-api';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled, useEvent } from '../utils';
 import { TouchApp } from './icons';
@@ -8,8 +9,7 @@ import { TouchApp } from './icons';
 let _openGestureView = () => {};
 export const internalOpenGestureView = () => _openGestureView();
 
-const storageKey = 'already-done-gesture';
-let alreadyDoneGesture = sessionStorage.getItem(storageKey) !== null;
+const alreadyDoneGesture = 'already-done-gesture';
 
 const input$ = isTouchEnabled
   ? fromEvent(window, 'touchend').pipe(first())
@@ -23,8 +23,10 @@ const input$ = isTouchEnabled
     );
 
 export function GestureView() {
-  const [open, setOpen] = React.useState(!alreadyDoneGesture);
+  const [open, setOpen] = React.useState(true);
   _openGestureView = () => setOpen(true);
+
+  console.log('GestureView open', open);
 
   const [t] = useLocale();
 
@@ -33,10 +35,7 @@ export function GestureView() {
 
     const subscription = input$.subscribe(e => {
       setOpen(false);
-      if (!alreadyDoneGesture) {
-        sessionStorage.setItem(storageKey, 'done');
-        alreadyDoneGesture = true;
-      }
+      sessionStorage.setItem(alreadyDoneGesture, 'done');
     });
     if (!isTouchEnabled) {
       // Enable keyboard input
@@ -46,6 +45,14 @@ export function GestureView() {
     }
     return () => subscription.unsubscribe();
   }, [open]);
+
+  React.useEffect(() => {
+    audioContextReady.then(() => {
+      if (sessionStorage.getItem(alreadyDoneGesture) !== null) {
+        setOpen(true); // Skip waiting gesture (without how-to-play button pressed)
+      }
+    });
+  }, []);
 
   return open ? (
     <div

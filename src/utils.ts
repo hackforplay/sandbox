@@ -21,8 +21,11 @@ export const isTouchEnabled = (() => {
   return typeof div.ontouchstart === 'function';
 })();
 
-export const useObservable = <T>(observable: Observable<T>) => {
-  const [value, setValue] = useState<T>();
+export const useObservable = <T>(
+  observable: Observable<T>,
+  defaultValue: T
+) => {
+  const [value, setValue] = useState<T>(defaultValue);
   useEffect(() => {
     const subscription = observable.subscribe(value => setValue(value));
     return () => {

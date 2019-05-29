@@ -11,7 +11,7 @@ interface OverlayViewProps {
 }
 
 export function OverlayView(props: OverlayViewProps) {
-  const paused = (useObservable(pause$), pause$.value);
+  const paused = useObservable(pause$, pause$.value);
 
   return (
     <div

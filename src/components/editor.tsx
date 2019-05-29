@@ -17,7 +17,7 @@ const initHeight = window.innerHeight / 2;
 export function Editor(props: EditorProps) {
   const [ast, setAst] = React.useState<t.File>();
   const [error, setError] = React.useState<Error>();
-  const kana = (useObservable(kana$), kana$.value);
+  const kana = useObservable(kana$, kana$.value);
   const [width, setWidth] = React.useState(initWidth);
   const [height, setHeight] = React.useState(initHeight);
 

@@ -14,6 +14,7 @@ interface LeftProps {
 }
 export function Left(props: LeftProps) {
   const [t] = useLocale();
+  const [, forceUpdate] = React.useState({});
 
   const fullScreenEnabled = 'fullscreenElement' in window.document;
   const isFullScreen =
@@ -47,7 +48,10 @@ export function Left(props: LeftProps) {
               src={require('../resources/8bit_fullscreen_exit.png')}
               label={t['Full Screen']}
               onClick={() => {
-                document.exitFullscreen().catch(console.error);
+                document
+                  .exitFullscreen()
+                  .then(() => forceUpdate({}))
+                  .catch(console.error);
               }}
             />
           ) : (
@@ -58,6 +62,7 @@ export function Left(props: LeftProps) {
                 if (props.rootRef.current) {
                   props.rootRef.current
                     .requestFullscreen()
+                    .then(() => forceUpdate({}))
                     .catch(console.error);
                 }
               }}

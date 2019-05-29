@@ -49,7 +49,7 @@ export function GestureView() {
   React.useEffect(() => {
     audioContextReady.then(() => {
       if (sessionStorage.getItem(alreadyDoneGesture) !== null) {
-        setOpen(true); // Skip waiting gesture (without how-to-play button pressed)
+        setOpen(false); // Skip waiting gesture (without how-to-play button pressed)
       }
     });
   }, []);

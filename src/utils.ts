@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { BehaviorSubject, Observable } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { BehaviorSubject, fromEvent, merge, Observable } from 'rxjs';
+import { debounceTime, filter, map } from 'rxjs/operators';
 
 export const isNotUndefined = <T>(t: T | undefined): t is T => t !== undefined;
 export const filterNotUndefined = filter(isNotUndefined);
@@ -62,3 +62,10 @@ export const useEvent = <T>(
   }, []);
   return value;
 };
+
+export const hasBlur$ = merge(
+  fromEvent(window, 'focus').pipe(map(() => false)),
+  fromEvent(window, 'blur').pipe(map(() => true))
+).pipe(
+  debounceTime(100) // for stability
+);

@@ -1,22 +1,13 @@
 import { orientation } from 'o9n';
 import * as React from 'react';
-import { fromEvent, merge } from 'rxjs';
-import { debounceTime, map } from 'rxjs/operators';
 import { pause$ } from '../sandbox-api';
-import { isTouchEnabled, useEvent } from '../utils';
+import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
 import { ErrorView } from './error-view';
 import { Game } from './game';
 import { GestureView } from './gesture-view';
 import { Left } from './left';
 import { OverlayView } from './overlay-view';
 import { Right } from './right';
-
-const hasFocus$ = merge(
-  fromEvent(window, 'focus').pipe(map(() => false)),
-  fromEvent(window, 'blur').pipe(map(() => true))
-).pipe(
-  debounceTime(100) // for stability
-);
 
 const sideBarMinWidth = 86;
 const sideBarMinHeight = isTouchEnabled ? 160 : 60;
@@ -44,7 +35,7 @@ export function App(props: AppProps) {
   React.useEffect(() => {
     if (isEditorOpened) return; // ignore event while editor is opened
     // Update pause$ via window focus
-    const subscription = hasFocus$.subscribe(pause$);
+    const subscription = hasBlur$.subscribe(pause$);
     return () => subscription.unsubscribe();
   }, [isEditorOpened]);
 

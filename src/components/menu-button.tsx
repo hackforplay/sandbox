@@ -34,9 +34,8 @@ export function MenuButton(props: MenuButtonProps) {
           textOverflow: 'ellipsis',
           color: 'white',
           overflow: 'hidden',
-          paddingLeft: 2,
-          paddingRight: 2,
-          paddingBottom: 4,
+          padding: 8,
+          paddingTop: 0,
           fontSize: 'x-small'
         }}
       >

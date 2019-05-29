@@ -3,7 +3,7 @@ import { fromEvent, merge } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
 import { audioContextReady } from '../sandbox-api';
 import { useLocale } from '../useLocale';
-import { isTouchEnabled, useEvent } from '../utils';
+import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
 let _openGestureView = () => {};
 export const internalOpenGestureView = () => _openGestureView();
@@ -24,6 +24,7 @@ const input$ = isTouchEnabled
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
   _openGestureView = () => setOpen(true);
+  const notFocused = useObservable(hasBlur$, !document.hasFocus());
 
   const [t] = useLocale();
 
@@ -34,12 +35,6 @@ export function GestureView() {
       setOpen(false);
       sessionStorage.setItem(alreadyDoneGesture, 'done');
     });
-    if (!isTouchEnabled) {
-      // Enable keyboard input
-      if (!document.hasFocus()) {
-        focus();
-      }
-    }
     return () => subscription.unsubscribe();
   }, [open]);
 
@@ -68,9 +63,13 @@ export function GestureView() {
         zIndex: 1000
       }}
     >
-      {isTouchEnabled ? <TouchAnimation /> : <Keyboard />}
+      {isTouchEnabled || notFocused ? <TouchAnimation /> : <Keyboard />}
       <span style={{ paddingBottom: '1rem' }}>
-        {isTouchEnabled ? t['Touch to start'] : t['Press Attack key']}
+        {isTouchEnabled
+          ? t['Touch to start']
+          : notFocused
+          ? t['Click here']
+          : t['Press Attack key']}
       </span>
     </div>
   ) : null;

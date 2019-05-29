@@ -4,7 +4,6 @@ import { filter, first, tap } from 'rxjs/operators';
 import { audioContextReady } from '../sandbox-api';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled, useEvent } from '../utils';
-import { TouchApp } from './icons';
 
 let _openGestureView = () => {};
 export const internalOpenGestureView = () => _openGestureView();
@@ -69,8 +68,8 @@ export function GestureView() {
         zIndex: 1000
       }}
     >
-      {isTouchEnabled ? <TouchApp /> : <Keyboard />}
-      <span>
+      {isTouchEnabled ? <TouchAnimation /> : <Keyboard />}
+      <span style={{ paddingBottom: '1rem' }}>
         {isTouchEnabled ? t['Touch to start'] : t['Press Attack key']}
       </span>
     </div>
@@ -112,5 +111,28 @@ function Keyboard() {
         {t['Move']}
       </span>
     </div>
+  );
+}
+
+function TouchAnimation() {
+  const [frame, setFrame] = React.useState(0);
+
+  React.useEffect(() => {
+    const id = setTimeout(() => setFrame(1 - frame), 500);
+    return () => clearInterval(id);
+  }, [frame]);
+
+  return (
+    <img
+      src={
+        frame === 0
+          ? require('../resources/touch_app1.svg')
+          : require('../resources/touch_app2.svg')
+      }
+      alt="Touch"
+      style={{
+        margin: '1rem'
+      }}
+    />
   );
 }

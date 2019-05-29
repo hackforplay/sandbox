@@ -26,8 +26,6 @@ export function GestureView() {
   const [open, setOpen] = React.useState(true);
   _openGestureView = () => setOpen(true);
 
-  console.log('GestureView open', open);
-
   const [t] = useLocale();
 
   React.useEffect(() => {

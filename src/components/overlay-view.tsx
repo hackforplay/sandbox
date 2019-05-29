@@ -54,7 +54,11 @@ export function OverlayView(props: OverlayViewProps) {
             }
           }}
         >
-          <span style={{ color: 'white', fontSize: 'xx-large' }}>▶︎</span>
+          <span
+            style={{ color: 'white', fontSize: 'xx-large', userSelect: 'none' }}
+          >
+            ▶︎
+          </span>
         </div>
       ) : null}
     </div>

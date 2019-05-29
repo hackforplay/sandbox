@@ -69,8 +69,7 @@ export function App(props: AppProps) {
           flex: 4,
           display: 'flex',
           justifyContent: 'space-between',
-          alignItems: 'stretch',
-          maxHeight: isLandscape ? innerHeight : (innerWidth / 3) * 2
+          alignItems: 'stretch'
         }}
       >
         {isLandscape ? (

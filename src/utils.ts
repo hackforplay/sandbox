@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 export const isNotUndefined = <T>(t: T | undefined): t is T => t !== undefined;
@@ -31,6 +31,17 @@ export const useObservable = <T>(observable: Observable<T>) => {
   }, []);
 
   return value;
+};
+
+export const useSubject = <T>(observable: BehaviorSubject<T>) => {
+  const [value, setValue] = useState<T>(observable.value);
+  useEffect(() => {
+    const subscription = observable.subscribe(value => setValue(value));
+    return () => {
+      subscription.unsubscribe();
+    };
+  }, []);
+  return [value, observable.next.bind(observable)];
 };
 
 export const useEvent = <T>(

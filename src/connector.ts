@@ -5,6 +5,8 @@ const getUniqueId = (id => () => 'FEELES_UNIQ_ID-' + ++id)(0);
 
 const { port1, port2 } = new MessageChannel();
 
+export const port = port1;
+
 export const connected = Promise.resolve({ port: port1 });
 
 export const message$ = fromEvent<MessageEvent>(port1, 'message').pipe(share());

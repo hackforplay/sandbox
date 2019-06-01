@@ -30,7 +30,6 @@ export function Left(props: LeftProps) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 8,
-        paddingBottom: '16%',
         ...props.style
       }}
     >
@@ -85,6 +84,7 @@ export function Left(props: LeftProps) {
         )}
       </div>
       {isTouchEnabled ? <Pad /> : null}
+      <div style={{ flexGrow: 0, flexShrink: 1, flexBasis: '16%' }} />
     </div>
   );
 }

@@ -29,7 +29,6 @@ export function Right(props: RightProps) {
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         padding: 8,
-        paddingBottom: '16%',
         ...props.style
       }}
     >
@@ -60,6 +59,7 @@ export function Right(props: RightProps) {
         />
       </div>
       {isTouchEnabled ? <AButton /> : null}
+      <div style={{ flexGrow: 0, flexShrink: 1, flexBasis: '16%' }} />
     </div>
   );
 }

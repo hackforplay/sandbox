@@ -10,7 +10,7 @@ import { OverlayView } from './overlay-view';
 import { Right } from './right';
 
 const sideBarMinWidth = 86;
-const sideBarMinHeight = isTouchEnabled ? 160 : 60;
+const sideBarMinHeight = isTouchEnabled ? 300 : 60;
 
 interface AppProps {}
 

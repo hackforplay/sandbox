@@ -44,13 +44,14 @@ const defineCode = (moduleName: string, text: string) => {
 const resolveFromIde = (moduleName: string) =>
   sendMessage('resolve', moduleName)
     .then(({ data }) => {
-      if (data.error) {
+      const { error, value } = data;
+      if (error || typeof value !== 'string') {
         console.error(moduleName + ' is not found');
         // JavaScript を AMD として define
         define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
         return;
       }
-      defineCode(moduleName, data.value);
+      defineCode(moduleName, value);
     })
     .catch(error => {
       console.error(error);

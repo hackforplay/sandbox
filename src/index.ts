@@ -11,7 +11,7 @@ import * as sandboxApi from './sandbox-api';
 const { requirejs, define } = require('./require');
 
 requirejs.config({
-  waitSeconds: 10
+  waitSeconds: 20
 });
 
 // game などを読み込めるようにする

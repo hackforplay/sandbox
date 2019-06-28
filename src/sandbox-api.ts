@@ -3,7 +3,7 @@ import { internalEmphasizeDispatcher } from './components/right';
 import { connected as c, sendMessage } from './connector';
 
 export const code$ = new BehaviorSubject('');
-export const pause$ = new BehaviorSubject(false);
+export const pause$ = new BehaviorSubject(!document.hasFocus());
 
 export interface IButtonInput {
   up: boolean;

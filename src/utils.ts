@@ -63,9 +63,12 @@ export const useEvent = <T>(
   return value;
 };
 
-export const hasBlur$ = merge(
+export const hasBlur$ = new BehaviorSubject(!document.hasFocus());
+merge(
   fromEvent(window, 'focus').pipe(map(() => false)),
   fromEvent(window, 'blur').pipe(map(() => true))
-).pipe(
-  debounceTime(100) // for stability
-);
+)
+  .pipe(
+    debounceTime(100) // for stability
+  )
+  .subscribe(hasBlur$);

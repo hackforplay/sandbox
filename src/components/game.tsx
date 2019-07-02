@@ -13,9 +13,13 @@ export function Game() {
         const canvas =
           gameRef.current && gameRef.current.querySelector('canvas');
         if (!canvas) return;
+        const dataUrl = canvas.toDataURL(e.data.type);
+
         port.postMessage({
           ...e.data,
-          value: canvas.toDataURL(e.data.type)
+          value: {
+            dataUrl
+          }
         });
       });
     return () => subscription.unsubscribe();

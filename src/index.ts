@@ -21,23 +21,30 @@ define('sandbox-api', function(require: any, exports: any, module: any) {
 });
 
 const defineCode = (moduleName: string, text: string) => {
-  if (
-    text.indexOf('define(function') === 0 || // AMD
-    text.indexOf('(function(root, factory)') === 0 // UMD
-  ) {
-    // すでに AMD になっている
-    eval(text);
-    return;
-  }
+  try {
+    if (
+      text.indexOf('define(function') === 0 || // AMD
+      text.indexOf('(function(root, factory)') === 0 // UMD
+    ) {
+      // すでに AMD になっている
+      eval(text);
+      return;
+    }
 
-  // Unicode エスケープ文字がある場合, Babel が \u を \\u にしてしまうので, ここで直す
-  const code = text.replace(/\\u(\w{4})/g, (match, hex) => {
-    // e.g. hex === '7D2B'
-    const charCode = parseInt(hex, 16);
-    return String.fromCharCode(charCode);
-  });
-  // JavaScript を AMD として define
-  define(moduleName, new Function('require, exports, module', code));
+    // Unicode エスケープ文字がある場合, Babel が \u を \\u にしてしまうので, ここで直す
+    const code = text.replace(/\\u(\w{4})/g, (match, hex) => {
+      // e.g. hex === '7D2B'
+      const charCode = parseInt(hex, 16);
+      return String.fromCharCode(charCode);
+    });
+    // JavaScript を AMD として define
+    define(moduleName, new Function('require, exports, module', code));
+  } catch (error) {
+    runtimeError$.next(error);
+    console.error(error);
+    console.error('Above error was occured in ' + moduleName);
+    define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
+  }
 };
 
 // module resolver by feeles

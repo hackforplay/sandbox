@@ -43,6 +43,9 @@ export function Editor(props: EditorProps) {
     return subscription.unsubscribe;
   }, []);
 
+  const [hint, setHint] = React.useState(true);
+  const hideHint = React.useCallback(() => setHint(false), []);
+
   if (error) {
     return <span style={{ color: 'red' }}>{error.message}</span>;
   }
@@ -51,6 +54,7 @@ export function Editor(props: EditorProps) {
     <>
       <div
         style={{
+          position: 'relative',
           flex: 0,
           flexBasis: !props.open ? 0 : props.isLandscape ? width : height,
           transition: 'flex-basis 100ms',
@@ -65,7 +69,8 @@ export function Editor(props: EditorProps) {
             kana={kana.members}
             style={{
               height: '100%',
-              padding: 8
+              padding: 8,
+              zIndex: 1
             }}
             onUpdate={(prev, next) => {
               const current = code$.getValue();
@@ -77,6 +82,31 @@ export function Editor(props: EditorProps) {
               (code$ as any)._value = updated;
             }}
           />
+        ) : null}
+        {hint ? (
+          <div
+            style={{
+              backgroundColor: 'black',
+              color: 'white',
+              opacity: hint ? 0.5 : 0,
+              position: 'absolute',
+              bottom: 0,
+              width: '100%',
+              padding: 10,
+              cursor: 'pointer',
+              userSelect: 'none',
+              zIndex: 2
+            }}
+            onClick={hideHint}
+          >
+            <img
+              src="https://i.gyazo.com/9af05e7848bb0e172d4035b87fbd6f25.gif"
+              alt="色のついた文字をクリックすると、入力できるよ"
+              width={88}
+              height={42}
+              draggable={false}
+            />
+          </div>
         ) : null}
       </div>
       <Slider

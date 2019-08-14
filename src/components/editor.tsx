@@ -72,7 +72,7 @@ export function Editor(props: EditorProps) {
               padding: 8,
               zIndex: 1
             }}
-            onUpdate={(prev, next) => {
+            onUpdate={({ prev, next }) => {
               const current = code$.getValue();
               const updated =
                 current.slice(0, prev.start) +

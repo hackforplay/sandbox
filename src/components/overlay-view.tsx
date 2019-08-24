@@ -48,7 +48,11 @@ export function OverlayView(props: OverlayViewProps) {
                 try {
                   eval && eval(code$.value);
                 } catch (error) {
-                  runtimeError$.next(error);
+                  runtimeError$.next({
+                    fileName: 'REPL',
+                    message: error.message,
+                    stack: error.stack
+                  });
                 }
               }
             }

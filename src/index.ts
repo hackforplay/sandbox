@@ -40,9 +40,11 @@ const defineCode = (moduleName: string, text: string) => {
     // JavaScript を AMD として define
     define(moduleName, new Function('require, exports, module', code));
   } catch (error) {
-    runtimeError$.next(error);
-    console.error(error);
-    console.error('Above error was occured in ' + moduleName);
+    runtimeError$.next({
+      fileName: moduleName,
+      message: error.message,
+      stack: error.stack
+    });
     define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
   }
 };

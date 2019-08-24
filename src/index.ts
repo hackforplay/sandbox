@@ -38,7 +38,22 @@ const defineCode = (moduleName: string, text: string) => {
       return String.fromCharCode(charCode);
     });
     // JavaScript を AMD として define
-    define(moduleName, new Function('require, exports, module', code));
+    let callback = new Function('require, exports, module', code);
+    callback = new Proxy(callback, {
+      apply(target, thisArg, argumentsList) {
+        try {
+          target.apply(thisArg, argumentsList);
+        } catch (error) {
+          runtimeError$.next({
+            fileName: moduleName,
+            message: error.message,
+            stack: error.stack
+          });
+        }
+      }
+    });
+    callback.toString = () => code;
+    define(moduleName, callback);
   } catch (error) {
     runtimeError$.next({
       fileName: moduleName,

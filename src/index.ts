@@ -20,7 +20,6 @@ define('sandbox-api', function(require: any, exports: any, module: any) {
   module.exports = sandboxApi;
 });
 
-window.__sandbox_context_known_names = new Set();
 const defineCode = (moduleName: string, text: string) => {
   try {
     if (
@@ -46,7 +45,6 @@ const defineCode = (moduleName: string, text: string) => {
           // AMD 形式で読み込むファイルの名前をコンテキストとして与える
           const name = moduleName.split('/').reverse()[0];
           window.__sandbox_context_name = name;
-          window.__sandbox_context_known_names.add(name);
           target.apply(thisArg, argumentsList);
         } catch (error) {
           runtimeError$.next({

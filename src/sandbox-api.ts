@@ -1,4 +1,5 @@
 import { BehaviorSubject, fromEvent, merge } from 'rxjs';
+import { runtimeError$ } from './components/error-view';
 import { internalEmphasizeDispatcher } from './components/right';
 import { connected as c, sendMessage } from './connector';
 
@@ -176,6 +177,7 @@ const cloneError = (error: Error) => {
 };
 export const throwError: Feeles['throwError'] = error => {
   sendMessage('throwError', cloneError(error));
+  runtimeError$.next(error);
 };
 
 // eval する
@@ -236,7 +238,7 @@ export interface Feeles {
     replace: any
   ) => void;
   // error を IDE に投げる
-  throwError?: (error: Error) => void;
+  throwError?: (error: any) => void;
   // eval する
   eval?: (code: string) => void;
 }

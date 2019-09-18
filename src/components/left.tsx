@@ -20,6 +20,22 @@ export function Left(props: LeftProps) {
   const isFullScreen =
     fullScreenEnabled && Boolean(window.document.fullscreenElement);
 
+  const toggleFullScreen = React.useCallback(() => {
+    if (document.fullscreenElement) {
+      document
+        .exitFullscreen()
+        .then(() => forceUpdate({}))
+        .catch(console.error);
+    } else {
+      if (props.rootRef.current) {
+        props.rootRef.current
+          .requestFullscreen()
+          .then(() => forceUpdate({}))
+          .catch(console.error);
+      }
+    }
+  }, []);
+
   return (
     <div
       style={{
@@ -46,25 +62,13 @@ export function Left(props: LeftProps) {
             <MenuButton
               src={require('../resources/8bit_fullscreen_exit.png')}
               label={t['Full Screen']}
-              onClick={() => {
-                document
-                  .exitFullscreen()
-                  .then(() => forceUpdate({}))
-                  .catch(console.error);
-              }}
+              onClick={toggleFullScreen}
             />
           ) : (
             <MenuButton
               src={require('../resources/8bit_fullscreen.png')}
               label={t['Full Screen']}
-              onClick={() => {
-                if (props.rootRef.current) {
-                  props.rootRef.current
-                    .requestFullscreen()
-                    .then(() => forceUpdate({}))
-                    .catch(console.error);
-                }
-              }}
+              onClick={toggleFullScreen}
             />
           )
         ) : null}

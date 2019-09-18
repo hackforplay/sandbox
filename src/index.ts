@@ -32,37 +32,30 @@ const defineCode = (moduleName: string, text: string) => {
     }
 
     // Unicode エスケープ文字がある場合, Babel が \u を \\u にしてしまうので, ここで直す
-    const code = text.replace(/\\u(\w{4})/g, (match, hex) => {
+    let code = text.replace(/\\u(\w{4})/g, (match, hex) => {
       // e.g. hex === '7D2B'
       const charCode = parseInt(hex, 16);
       return String.fromCharCode(charCode);
     });
     // JavaScript を AMD として define
-    let callback = new Function('require, exports, module', code);
-    callback = new Proxy(callback, {
-      apply(target, thisArg, argumentsList) {
-        try {
-          // AMD 形式で読み込むファイルの名前をコンテキストとして与える
-          const name = moduleName.split('/').reverse()[0];
-          window.__sandbox_context_name = name;
-          target.apply(thisArg, argumentsList);
-        } catch (error) {
-          runtimeError$.next({
-            fileName: moduleName,
-            message: error.message,
-            stack: error.stack
-          });
-        }
-      }
-    });
-    callback.toString = () => code;
-    define(moduleName, callback);
+    if (moduleName.startsWith('modules/')) {
+      const name = moduleName.split('/').reverse()[0];
+      code = `window.__sandbox_context_name = '${name}';\n` + code;
+    }
+    // 実行時エラーを吸収する
+    code = `try {
+  ${code}
+} catch (e) {
+  console.error(e);
+  runtimeError$.next({
+    fileName: '${moduleName}',
+    message: e.message,
+    stack: e.stack
+  });
+}`;
+    define(moduleName, new Function('require, exports, module', code));
   } catch (error) {
-    runtimeError$.next({
-      fileName: moduleName,
-      message: error.message,
-      stack: error.stack
-    });
+    console.error(error);
     define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
   }
 };

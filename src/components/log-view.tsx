@@ -102,18 +102,7 @@ export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
       onClick={onClick}
     >
       <span>{(time.toFixed(1) + '').padStart(5, '0')}</span>
-      <span
-        style={{
-          borderRadius: '50%',
-          width: '1em',
-          height: '1em',
-          marginLeft: '1em',
-          marginRight: '1em',
-          backgroundColor: color,
-          border: '1px solid white',
-          flexShrink: 0
-        }}
-      />
+      <ColorCircle color={color} />
       <span
         style={{
           flexGrow: 1,
@@ -125,5 +114,29 @@ export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
         {message || ''}
       </span>
     </div>
+  );
+}
+
+export interface ColorCircleProps {
+  color: string;
+  onClick?: () => void;
+}
+
+export function ColorCircle({ color, onClick }: ColorCircleProps) {
+  return (
+    <span
+      style={{
+        borderRadius: '50%',
+        width: '1em',
+        height: '1em',
+        marginLeft: '1em',
+        marginRight: '1em',
+        backgroundColor: color,
+        border: '1px solid white',
+        flexShrink: 0,
+        cursor: onClick && 'pointer'
+      }}
+      onClick={onClick}
+    />
   );
 }

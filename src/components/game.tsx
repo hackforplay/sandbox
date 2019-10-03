@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { filter } from 'rxjs/operators';
 import { message$, port } from '../connector';
+import { LogView } from './log-view';
 
 export function Game() {
   const gameRef = React.useRef<HTMLDivElement>(null);
@@ -46,6 +47,7 @@ export function Game() {
           marginRight: 'auto'
         }}
       />
+      <LogView />
     </div>
   );
 }

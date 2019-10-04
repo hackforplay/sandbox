@@ -42,6 +42,7 @@ export function LogView() {
     .filter(log => (log.line[1] || '').includes(query))
     .slice(-1000);
   const [first] = loggerRef.current.logs;
+  const [last] = loggerRef.current.logs.slice(-1);
   const offsetTime = (first && first.time) || 0;
 
   React.useEffect(() => {
@@ -96,8 +97,8 @@ export function LogView() {
           ))}
         </div>
       ) : null}
-      {!expanded && first ? (
-        <LogItem log={first} offsetTime={offsetTime} onClick={toggle} />
+      {!expanded && last ? (
+        <LogItem log={last} offsetTime={offsetTime} onClick={toggle} />
       ) : null}
       {expanded
         ? logs.map((log, i) => (

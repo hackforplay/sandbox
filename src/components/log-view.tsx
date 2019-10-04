@@ -45,10 +45,38 @@ export function LogView() {
   const [last] = loggerRef.current.logs.slice(-1);
   const offsetTime = (first && first.time) || 0;
 
+  const scrollerRef = React.useRef<HTMLDivElement>(null);
+  const isAutoScrollRef = React.useRef(true);
+
   React.useEffect(() => {
     const logger = createLogger();
-    return logger.subscribe(() => forceUpdate());
+    return logger.subscribe(() => {
+      forceUpdate();
+      requestAnimationFrame(() => {
+        const el = scrollerRef.current;
+        if (!el || !isAutoScrollRef.current) return;
+        el.scrollTo(0, 9999); // auto scroll to down
+      });
+    });
   }, []);
+
+  const catchScroll = React.useCallback(
+    (event: React.WheelEvent<HTMLDivElement>) => {
+      if (isAutoScrollRef.current) {
+        if (event.deltaY < 0) {
+          isAutoScrollRef.current = false; // when scroll up
+        }
+      } else {
+        const el = scrollerRef.current;
+        if (event.deltaY > 0 && el) {
+          if (el.scrollTop + el.offsetHeight >= el.scrollHeight) {
+            isAutoScrollRef.current = true; // when scrolled down to bottom
+          }
+        }
+      }
+    },
+    []
+  );
 
   return (
     <div
@@ -100,11 +128,22 @@ export function LogView() {
       {!expanded && last ? (
         <LogItem log={last} offsetTime={offsetTime} onClick={toggle} />
       ) : null}
-      {expanded
-        ? logs.map((log, i) => (
+      {expanded ? (
+        <div
+          ref={scrollerRef}
+          style={{
+            width: '100%',
+            maxHeight: '50vh',
+            overflowY: 'scroll',
+            overflowX: 'hidden'
+          }}
+          onWheel={catchScroll}
+        >
+          {logs.map((log, i) => (
             <LogItem key={i} log={log} offsetTime={offsetTime} />
-          ))
-        : null}
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

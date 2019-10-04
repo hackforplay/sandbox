@@ -6,7 +6,6 @@ type R<T, A> = React.Reducer<T, A>;
 export enum TypeColors {
   info = '#70CAE4',
   asset = '#DCBC5F',
-  world = '#20480D',
   system = '#242424',
   error = '#E47070'
 }

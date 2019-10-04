@@ -10,18 +10,36 @@ export enum TypeColors {
   system = '#242424',
   error = '#E47070'
 }
+export type DefaultTypes = keyof typeof TypeColors;
+export type TypeFilter = { [key in DefaultTypes]: boolean };
+
+export const initialTypeFilter: TypeFilter = Object.assign.call(
+  null,
+  {},
+  ...Object.keys(TypeColors).map(key => ({ [key]: true }))
+);
 
 export function LogView() {
   const loggerRef = React.useRef(createLogger());
   const [, forceUpdate] = React.useReducer<R<number, void>>(i => i + 1, 0);
   const [expanded, toggle] = React.useReducer<R<boolean, any>>(b => !b, false);
+
   const [query, _setQuery] = React.useState('');
   const setQuery = React.useCallback(
     (e: React.FormEvent<HTMLInputElement>) => _setQuery(e.currentTarget.value),
     []
   );
 
+  const [typeFilter, setTypeFilter] = React.useState(initialTypeFilter);
+  const toggleType = (type: string) => () => {
+    if (has(type)) {
+      const next = { ...typeFilter, [type]: !typeFilter[type] };
+      setTypeFilter(next);
+    }
+  };
+
   const logs = loggerRef.current.logs
+    .filter(log => (has(log.line[0]) ? typeFilter[log.line[0]] : true))
     .filter(log => (log.line[1] || '').includes(query))
     .slice(-1000);
   const [first] = loggerRef.current.logs;
@@ -69,8 +87,13 @@ export function LogView() {
             }}
             onClick={toggle}
           />
-          {Object.entries(TypeColors).map(([type, color]) => (
-            <ColorCircle key={type} color={color} />
+          {entries(TypeColors).map(([type, color]) => (
+            <ColorCircle
+              key={type}
+              color={color}
+              hidden={!typeFilter[type]}
+              onClick={toggleType(type)}
+            />
           ))}
         </div>
       ) : null}
@@ -95,7 +118,7 @@ export interface LogItemProps {
 export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
   const [type, message] = log.line;
   const time = (log.time - offsetTime) / 1000;
-  const color = (TypeColors as any)[type] || 'white';
+  const color = has(type) ? TypeColors[type] : 'white';
   return (
     <div
       style={{
@@ -128,9 +151,10 @@ export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
 export interface ColorCircleProps {
   color: string;
   onClick?: () => void;
+  hidden?: boolean;
 }
 
-export function ColorCircle({ color, onClick }: ColorCircleProps) {
+export function ColorCircle({ color, onClick, hidden }: ColorCircleProps) {
   return (
     <span
       style={{
@@ -139,11 +163,22 @@ export function ColorCircle({ color, onClick }: ColorCircleProps) {
         height: '1em',
         marginRight: '1em',
         backgroundColor: color,
-        border: '1px solid white',
         flexShrink: 0,
-        cursor: onClick && 'pointer'
+        cursor: onClick && 'pointer',
+        boxSizing: 'border-box',
+        borderWidth: onClick ? '0.25em' : 1,
+        borderColor: hidden ? 'gray' : 'white',
+        borderStyle: 'solid'
       }}
       onClick={onClick}
     />
   );
+}
+
+function has(key: string): key is DefaultTypes {
+  return key in TypeColors;
+}
+
+function entries(typeFilter: typeof TypeColors) {
+  return Object.entries(typeFilter) as [DefaultTypes, TypeColors][];
 }

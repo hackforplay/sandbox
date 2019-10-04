@@ -106,6 +106,16 @@ export function LogView() {
             onChange={setQuery}
             autoFocus
           />
+          <span
+            style={{
+              marginLeft: '0.5em',
+              marginRight: '0.5em',
+              fontSize: '0.5em',
+              color: '#808080'
+            }}
+          >
+            {`${logs.length} logs`}
+          </span>
           <div
             style={{
               flex: 1,

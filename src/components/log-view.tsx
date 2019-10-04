@@ -3,6 +3,14 @@ import * as React from 'react';
 
 type R<T, A> = React.Reducer<T, A>;
 
+export enum TypeColors {
+  info = '#70CAE4',
+  asset = '#DCBC5F',
+  world = '#20480D',
+  system = '#242424',
+  error = '#E47070'
+}
+
 export function LogView() {
   const loggerRef = React.useRef(createLogger());
   const [, forceUpdate] = React.useReducer<R<number, void>>(i => i + 1, 0);
@@ -10,10 +18,6 @@ export function LogView() {
   const [query, _setQuery] = React.useState('');
   const setQuery = React.useCallback(
     (e: React.FormEvent<HTMLInputElement>) => _setQuery(e.currentTarget.value),
-    []
-  );
-  const ignore = React.useCallback(
-    (e: React.BaseSyntheticEvent) => e.stopPropagation(),
     []
   );
 
@@ -44,20 +48,30 @@ export function LogView() {
           style={{
             display: 'flex',
             flexDirection: 'row',
+            alignItems: 'center',
             width: '100%',
-            backgroundColor: '#D8D8D8',
-            cursor: 'pointer'
+            backgroundColor: '#D8D8D8'
           }}
-          onClick={toggle}
         >
           <input
             type="text"
             placeholder="Filter"
             value={query}
             onChange={setQuery}
-            onClick={ignore}
             autoFocus
           />
+          <div
+            style={{
+              flex: 1,
+              alignSelf: 'stretch',
+              cursor: 'pointer',
+              marginRight: '1em'
+            }}
+            onClick={toggle}
+          />
+          {Object.entries(TypeColors).map(([type, color]) => (
+            <ColorCircle key={type} color={color} />
+          ))}
         </div>
       ) : null}
       {!expanded && first ? (
@@ -78,18 +92,10 @@ export interface LogItemProps {
   onClick?: (value: any) => void; // hack for allow react.Dispatch
 }
 
-const iconColors: { [type: string]: string | undefined } = {
-  info: '#70CAE4',
-  asset: '#DCBC5F',
-  world: '#20480D',
-  system: '#242424',
-  error: '#E47070'
-};
-
 export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
   const [type, message] = log.line;
   const time = (log.time - offsetTime) / 1000;
-  const color = iconColors[type] || 'white';
+  const color = (TypeColors as any)[type] || 'white';
   return (
     <div
       style={{
@@ -101,7 +107,9 @@ export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
       }}
       onClick={onClick}
     >
-      <span>{(time.toFixed(1) + '').padStart(5, '0')}</span>
+      <span style={{ marginRight: '1em' }}>
+        {(time.toFixed(1) + '').padStart(5, '0')}
+      </span>
       <ColorCircle color={color} />
       <span
         style={{
@@ -129,7 +137,6 @@ export function ColorCircle({ color, onClick }: ColorCircleProps) {
         borderRadius: '50%',
         width: '1em',
         height: '1em',
-        marginLeft: '1em',
         marginRight: '1em',
         backgroundColor: color,
         border: '1px solid white',

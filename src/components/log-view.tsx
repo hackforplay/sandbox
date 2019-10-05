@@ -165,7 +165,7 @@ export interface LogItemProps {
 }
 
 export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
-  const [type, message] = log.line;
+  const [type, message, when] = log.line;
   const time = (log.time - offsetTime) / 1000;
   const color = has(type) ? TypeColors[type] : 'white';
   return (
@@ -190,6 +190,7 @@ export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap'
         }}
+        title={when}
       >
         {message || ''}
       </span>

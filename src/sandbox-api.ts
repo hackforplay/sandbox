@@ -1,5 +1,5 @@
+import { log } from '@hackforplay/log';
 import { BehaviorSubject, fromEvent, merge } from 'rxjs';
-import { runtimeError$ } from './components/error-view';
 import { internalEmphasizeDispatcher } from './components/right';
 import { connected as c, sendMessage } from './connector';
 
@@ -176,8 +176,7 @@ const cloneError = (error: Error) => {
   return clonable;
 };
 export const throwError: Feeles['throwError'] = error => {
-  sendMessage('throwError', cloneError(error));
-  runtimeError$.next(error);
+  log('error', (error && error.message) || error, 'Unknown');
 };
 
 // eval する

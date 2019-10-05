@@ -1,8 +1,8 @@
+import { log } from '@hackforplay/log';
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { filter, first } from 'rxjs/operators';
 import { App } from './components/app';
-import { runtimeError$ } from './components/error-view';
 import { message$, sendMessage } from './connector';
 import { patchForEnchantJs } from './patch-for-enchant-js';
 import './runtime';
@@ -47,11 +47,7 @@ const defineCode = (moduleName: string, text: string) => {
   ${code}
 } catch (e) {
   console.error(e);
-  runtimeError$.next({
-    fileName: '${moduleName}',
-    message: e.message,
-    stack: e.stack
-  });
+  log && log('error', e && e.message || e, '${moduleName}.js');
 }`;
     define(moduleName, new Function('require, exports, module', code));
   } catch (error) {
@@ -62,27 +58,26 @@ const defineCode = (moduleName: string, text: string) => {
 
 // module resolver by feeles
 const resolveFromIde = (moduleName: string) =>
-  sendMessage('resolve', moduleName)
-    .then(({ data }) => {
-      const { error, value } = data;
-      if (error || typeof value !== 'string') {
-        console.error(moduleName + ' is not found');
-        // JavaScript を AMD として define
-        define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
-        return;
-      }
-      defineCode(moduleName, value);
-    })
-    .catch(error => {
-      console.error(error);
-      runtimeError$.next(error);
-    });
+  sendMessage('resolve', moduleName).then(({ data }) => {
+    const { error, value } = data;
+    if (error || typeof value !== 'string') {
+      console.error(moduleName + ' is not found');
+      // JavaScript を AMD として define
+      define(moduleName, new Function('require, exports, module', '')); // 無視して空のモジュールを登録
+      return;
+    }
+    defineCode(moduleName, value);
+  });
 
 // Override require()
 requirejs.load = (context: any, moduleName: string) => {
-  resolveFromIde(moduleName).then(() => {
-    context.completeLoad(moduleName);
-  });
+  resolveFromIde(moduleName)
+    .then(() => {
+      context.completeLoad(moduleName);
+    })
+    .catch(error => {
+      log('error', error.message, `require('${moduleName}')`);
+    });
 };
 
 const entryPointIsReady = message$

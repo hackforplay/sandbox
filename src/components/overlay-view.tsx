@@ -1,8 +1,8 @@
+import { log } from '@hackforplay/log';
 import * as React from 'react';
 import { code$, pause$ } from '../sandbox-api';
 import { useObservable } from '../utils';
 import { Editor } from './editor';
-import { runtimeError$ } from './error-view';
 
 interface OverlayViewProps {
   isLandscape: boolean;
@@ -47,12 +47,9 @@ export function OverlayView(props: OverlayViewProps) {
               if (props.isEditorOpened) {
                 try {
                   eval && eval(code$.value);
-                } catch (error) {
-                  runtimeError$.next({
-                    fileName: 'REPL',
-                    message: error.message,
-                    stack: error.stack
-                  });
+                } catch (e) {
+                  log('error', (e && e.message) || e, 'マドウショ');
+                  console.error(e);
                 }
               }
             }

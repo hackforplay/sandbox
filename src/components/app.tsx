@@ -2,7 +2,6 @@ import { orientation } from 'o9n';
 import * as React from 'react';
 import { pause$ } from '../sandbox-api';
 import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
-import { ErrorView } from './error-view';
 import { Game } from './game';
 import { GestureView } from './gesture-view';
 import { Left } from './left';
@@ -54,7 +53,6 @@ export function App(props: AppProps) {
       }}
       ref={rootRef}
     >
-      <ErrorView />
       <div
         style={{
           flex: 4,

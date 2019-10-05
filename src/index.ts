@@ -47,7 +47,7 @@ const defineCode = (moduleName: string, text: string) => {
   ${code}
 } catch (e) {
   console.error(e);
-  log && log('error', e && e.message || e, 'modules/${moduleName}.js');
+  log && log('error', e && e.message || e, '${moduleName}.js');
 }`;
     define(moduleName, new Function('require, exports, module', code));
   } catch (error) {

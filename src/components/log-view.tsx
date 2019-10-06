@@ -12,11 +12,12 @@ export enum TypeColors {
 export type DefaultTypes = keyof typeof TypeColors;
 export type TypeFilter = { [key in DefaultTypes]: boolean };
 
-export const initialTypeFilter: TypeFilter = Object.assign.call(
-  null,
-  {},
-  ...Object.keys(TypeColors).map(key => ({ [key]: true }))
-);
+export const initialTypeFilter: TypeFilter = {
+  info: true,
+  asset: false,
+  system: true,
+  error: true
+};
 
 export function LogView() {
   const loggerRef = React.useRef(createLogger());

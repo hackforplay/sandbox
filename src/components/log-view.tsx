@@ -43,7 +43,7 @@ export function LogView() {
     .filter(log => (log.line[1] || '').includes(query))
     .slice(-1000);
   const [first] = loggerRef.current.logs;
-  const [last] = loggerRef.current.logs.slice(-1);
+  const [last] = logs.slice(-1);
   const offsetTime = (first && first.time) || 0;
 
   const scrollerRef = React.useRef<HTMLDivElement>(null);

@@ -17,7 +17,7 @@ interface RightProps {
 }
 
 export function Right(props: RightProps) {
-  const [isEmphasized, setIsEmphasized] = React.useState(true);
+  const [isEmphasized, setIsEmphasized] = React.useState(false);
   _dispatcher = setIsEmphasized;
   const [t] = useLocale();
 

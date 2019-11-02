@@ -36,7 +36,7 @@ const localeMap: {
     'Full Screen': 'フルスクリーン',
     Reload: 'さいよみこみ',
     'How to Play': 'そうさせつめい',
-    "Let's edit program!": 'ゲームがバグってる……！プログラムを書きかえよう！'
+    "Let's edit program!": 'ゲームがバグってる……！ プログラムを書きかえよう！'
   }
 };
 

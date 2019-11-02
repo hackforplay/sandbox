@@ -1,0 +1,23 @@
+.balloon {
+  position: absolute;
+  background-color: white;
+  font-size: 24px;
+  padding: 12px 32px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.balloon.hidden {
+  display: none;
+}
+
+.balloon:after {
+  content: '';
+  position: absolute;
+  border-width: 10px 16px;
+  border-style: solid;
+  border-color: transparent;
+  border-left-color: white;
+  right: -32px;
+  top: calc(50% - 10px);
+}

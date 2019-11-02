@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { input$ } from '../sandbox-api';
+import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
 
 let _dispatcher: React.Dispatch<React.SetStateAction<boolean>> | void;
@@ -16,14 +17,15 @@ interface RightProps {
 }
 
 export function Right(props: RightProps) {
-  const [isEmphasized, setIsEmphasized] = React.useState(false);
+  const [isEmphasized, setIsEmphasized] = React.useState(true);
   _dispatcher = setIsEmphasized;
+  const [t] = useLocale();
 
   return (
     <div
       style={{
         overflow: 'visible',
-        zIndex: 1,
+        zIndex: 3,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
@@ -57,6 +59,11 @@ export function Right(props: RightProps) {
           }}
           alt=""
         />
+        {isEmphasized ? (
+          <div className="balloon" style={{ right: 154, marginTop: -48 }}>
+            {t["Let's edit program!"]}
+          </div>
+        ) : null}
       </div>
       {isTouchEnabled ? <AButton /> : null}
       <div style={{ flexGrow: 0, flexShrink: 1, flexBasis: '16%' }} />

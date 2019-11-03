@@ -25,7 +25,7 @@ const localeMap: {
     'Full Screen': 'Full Screen',
     Reload: 'Reload',
     'How to Play': 'How to Play',
-    "Let's edit program!": `This game is buggy...! Let's edit program!`
+    "Let's edit program!": `Let's rewrite the magic book!`
   },
   ja: {
     Attack: 'こうげき',
@@ -36,7 +36,7 @@ const localeMap: {
     'Full Screen': 'フルスクリーン',
     Reload: 'さいよみこみ',
     'How to Play': 'そうさせつめい',
-    "Let's edit program!": 'ゲームがバグってる……！ プログラムを書きかえよう！'
+    "Let's edit program!": 'まほうの本を 書きかえよう！'
   }
 };
 

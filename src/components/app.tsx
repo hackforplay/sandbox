@@ -1,6 +1,7 @@
 import { orientation } from 'o9n';
 import * as React from 'react';
 import { pause$ } from '../sandbox-api';
+import app from '../styles/app.scss';
 import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
 import { Game } from './game';
 import { GestureView } from './gesture-view';
@@ -39,20 +40,7 @@ export function App(props: AppProps) {
   }, [isEditorOpened]);
 
   return (
-    <div
-      style={{
-        width: '100%',
-        height: '100%',
-        position: 'relative',
-        overflow: 'hidden',
-        backgroundImage: `url(${require('../resources/background.png')})`,
-        backgroundRepeat: 'repeat',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between'
-      }}
-      ref={rootRef}
-    >
+    <div className={app.root} ref={rootRef}>
       <div
         style={{
           flex: 4,

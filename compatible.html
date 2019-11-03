@@ -1,61 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" style="margin: 0;">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
     <title>HackforPlay Sandbox</title>
-    <style>
-      html,
-      body {
-        margin: 0;
-        font-family: helvetica, arial, 'Hiragino Kaku Gothic ProN', meiryo,
-          sans-serif;
-      }
-      input {
-        font-size: 16px;
-      }
-      #app {
-        width: 100vw;
-        height: 100vh;
-        overflow: hidden;
-      }
-      @keyframes hackforplay-emphasize-animation {
-        0% {
-          background-color: rgba(255, 255, 255, 0);
-          box-shadow: 0px 0px 12px 12px rgba(255, 255, 255, 0);
-        }
-        100% {
-          background-color: rgba(255, 255, 255, 1);
-          box-shadow: 0px 0px 12px 12px rgba(255, 255, 255, 1);
-        }
-      }
-      .hackforplay-emphasize-animation {
-        animation-name: hackforplay-emphasize-animation;
-        animation-duration: 500ms;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-        transform: scale(2);
-        transform-origin: right top;
-      }
-      @keyframes hackforplay-keyboard-animation {
-        0% {
-          opacity: 0;
-        }
-        100% {
-          opacity: 1;
-        }
-      }
-      .hackforplay-keyboard-animation {
-        animation-name: hackforplay-keyboard-animation;
-        animation-duration: 500ms;
-        animation-iteration-count: infinite;
-        animation-direction: alternate;
-      }
-    </style>
-    <link rel="stylesheet" href="./src/styles/balloon.css" />
   </head>
-  <body>
+  <body style="margin: 0;">
     <div id="app"></div>
     <script src="./src/index.ts" async defer></script>
   </body>

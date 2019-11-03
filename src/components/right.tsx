@@ -1,7 +1,9 @@
 import * as React from 'react';
 import { input$ } from '../sandbox-api';
+import emphasize from '../styles/emphasize.scss';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
+import balloon from '../styles/balloon.scss';
 
 let _dispatcher: React.Dispatch<React.SetStateAction<boolean>> | void;
 export const internalEmphasizeDispatcher = () => {
@@ -51,7 +53,7 @@ export function Right(props: RightProps) {
             height: '100%',
             transition: 'all 250ms'
           }}
-          className={isEmphasized ? 'hackforplay-emphasize-animation' : ''}
+          className={isEmphasized ? emphasize.root : ''}
           height={60}
           onClick={() => {
             props.setEditorOpened(!props.isEditorOpened);
@@ -60,7 +62,10 @@ export function Right(props: RightProps) {
           alt=""
         />
         {isEmphasized ? (
-          <div className="balloon" style={{ right: 154, marginTop: -48 }}>
+          <div
+            className={balloon.balloon}
+            style={{ right: 154, marginTop: -48 }}
+          >
             {t["Let's edit program!"]}
           </div>
         ) : null}

@@ -2,6 +2,7 @@ import * as React from 'react';
 import { fromEvent, merge } from 'rxjs';
 import { filter, first, tap } from 'rxjs/operators';
 import { audioContextReady } from '../sandbox-api';
+import view from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
 import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
@@ -26,8 +27,6 @@ export function GestureView() {
   _openGestureView = () => setOpen(true);
   const notFocused = useObservable(hasBlur$, !document.hasFocus());
 
-  const [t] = useLocale();
-
   React.useEffect(() => {
     if (!open) return;
 
@@ -47,30 +46,8 @@ export function GestureView() {
   }, []);
 
   return open ? (
-    <div
-      style={{
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: '100%',
-        height: '100%',
-        backgroundColor: 'rgb(0,0,0)',
-        color: 'rgb(255,255,255)',
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        alignItems: 'center',
-        zIndex: 1000
-      }}
-    >
+    <div className={view.root}>
       {isTouchEnabled || notFocused ? <TouchAnimation /> : <Keyboard />}
-      <span style={{ paddingBottom: '1rem' }}>
-        {isTouchEnabled
-          ? t['Touch to start']
-          : notFocused
-          ? t['Click here']
-          : t['Press Attack key']}
-      </span>
     </div>
   ) : null;
 }
@@ -83,55 +60,48 @@ function Keyboard() {
 
   return (
     <div
+      className={view.keyboard}
       style={{
-        position: 'relative',
-        width: 796,
-        height: 360,
         transform: `scale(${scale})`
       }}
     >
       <img
         src={require('../resources/keyboard_normal.png')}
+        className={view.normal}
         alt=""
         draggable={false}
-        style={{ position: 'absolute' }}
       />
       <img
         src={require('../resources/keyboard_bright.png')}
-        className="hackforplay-keyboard-animation"
+        className={view.bright}
         alt=""
         draggable={false}
-        style={{ position: 'absolute', zIndex: 1 }}
       />
-      <span style={{ position: 'absolute', left: 325, top: 336, zIndex: 2 }}>
-        {t['Attack']}
-      </span>
-      <span style={{ position: 'absolute', left: 676, top: 336, zIndex: 2 }}>
-        {t['Move']}
-      </span>
+      <div className={view.attack}>{t['Attack']}</div>
+      <div className={view.move}>{t['Move']}</div>
+      <div className={view.press}>{t['Press Attack key']}</div>
     </div>
   );
 }
 
 function TouchAnimation() {
-  const [frame, setFrame] = React.useState(0);
-
-  React.useEffect(() => {
-    const id = setTimeout(() => setFrame(1 - frame), 500);
-    return () => clearInterval(id);
-  }, [frame]);
+  const [t] = useLocale();
 
   return (
-    <img
-      src={
-        frame === 0
-          ? require('../resources/touch_app1.svg')
-          : require('../resources/touch_app2.svg')
-      }
-      alt="Touch"
-      style={{
-        margin: '1rem'
-      }}
-    />
+    <div className={view.touch}>
+      <img
+        src={require('../resources/touch_app1.svg')}
+        alt="Touch"
+        className={view.on}
+      />
+      <img
+        src={require('../resources/touch_app2.svg')}
+        alt="Touch"
+        className={view.off}
+      />
+      <div className={view.click}>
+        {isTouchEnabled ? t['Touch to start'] : t['Click here']}
+      </div>
+    </div>
   );
 }

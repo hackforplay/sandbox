@@ -1,0 +1,15 @@
+name: CI
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v1
+    - name: Firebase Deploy
+      uses: npm run deploy
+      env:
+        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

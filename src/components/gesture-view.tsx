@@ -47,7 +47,10 @@ export function GestureView() {
 
   return open ? (
     <div className={view.root}>
-      {isTouchEnabled || notFocused ? <TouchAnimation /> : <Keyboard />}
+      <div className={view.blank} />
+      <div className={view.pane}>
+        {isTouchEnabled || notFocused ? <TouchAnimation /> : <Keyboard />}
+      </div>
     </div>
   ) : null;
 }

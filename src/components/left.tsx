@@ -5,7 +5,7 @@ import { IButtonInput, input$ } from '../sandbox-api';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
 import { MenuButton } from './menu-button';
-import { internalOpenGestureView } from './gesture-view';
+import { internalHowToPlayDispatcher } from './gesture-view';
 
 interface LeftProps {
   isLandscape: boolean;
@@ -83,7 +83,7 @@ export function Left(props: LeftProps) {
           <MenuButton
             src={require('../resources/8bit_videogame.png')}
             label={t['How to Play']}
-            onClick={internalOpenGestureView}
+            onClick={internalHowToPlayDispatcher}
           />
         )}
       </div>

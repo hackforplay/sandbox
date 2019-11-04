@@ -7,7 +7,7 @@ import { useLocale } from '../useLocale';
 import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
 let _openGestureView = () => {};
-export const internalOpenGestureView = () => _openGestureView();
+export const internalHowToPlayDispatcher = () => _openGestureView();
 
 const alreadyDoneGesture = 'already-done-gesture';
 
@@ -24,7 +24,13 @@ const input$ = isTouchEnabled
 
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
-  _openGestureView = () => setOpen(true);
+  React.useEffect(() => {
+    _openGestureView = () => setOpen(true);
+    return () => {
+      _openGestureView = () => {};
+    };
+  }, [setOpen]);
+
   const notFocused = useObservable(hasBlur$, !document.hasFocus());
 
   React.useEffect(() => {

@@ -1,5 +1,6 @@
 import { log } from '@hackforplay/log';
 import { BehaviorSubject, fromEvent, merge } from 'rxjs';
+import { internalHowToPlayDispatcher } from './components/gesture-view';
 import { internalEmphasizeDispatcher } from './components/right';
 import { connected as c, sendMessage } from './connector';
 
@@ -24,6 +25,7 @@ export const input$ = new BehaviorSubject<IButtonInput>({
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
 export const emphasizeCode: Feeles['emphasizeCode'] = internalEmphasizeDispatcher;
+export const showHowToPlay: Feeles['showHowToPlay'] = internalHowToPlayDispatcher;
 
 export interface KanaConfig {
   members: {
@@ -188,6 +190,7 @@ export interface Feeles {
   pause$: BehaviorSubject<boolean>;
   input$: BehaviorSubject<IButtonInput>;
   emphasizeCode: () => void;
+  showHowToPlay: () => void;
   audioContextReady: Promise<AudioContext>;
   /**
    * Deprecated

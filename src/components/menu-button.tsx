@@ -12,7 +12,8 @@ export function MenuButton(props: MenuButtonProps) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        userSelect: 'none'
       }}
     >
       <img
@@ -23,7 +24,8 @@ export function MenuButton(props: MenuButtonProps) {
           cursor: 'pointer',
           height: '10vh',
           minHeight: 24,
-          maxHeight: 60
+          maxHeight: 60,
+          userSelect: 'none'
         }}
         onClick={props.onClick}
       />

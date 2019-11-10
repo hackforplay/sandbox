@@ -3,6 +3,7 @@ import * as React from 'react';
 import { code$, pause$ } from '../sandbox-api';
 import { useObservable } from '../utils';
 import { Editor } from './editor';
+import view from '../styles/overlay-view.scss';
 
 interface OverlayViewProps {
   isLandscape: boolean;
@@ -57,6 +58,7 @@ export function OverlayView(props: OverlayViewProps) {
         >
           <span
             style={{ color: 'white', fontSize: 'xx-large', userSelect: 'none' }}
+            className={view.resume}
           >
             ▶︎
           </span>

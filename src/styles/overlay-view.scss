@@ -1,0 +1,12 @@
+.resume {
+  animation: 500ms ease-in-out 0ms infinite emphasize;
+}
+
+@keyframes emphasize {
+  0% {
+    transform: scale(100%);
+  }
+  100% {
+    transform: scale(400%);
+  }
+}

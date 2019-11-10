@@ -47,9 +47,9 @@ export function Left(props: LeftProps) {
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 8,
-        userSelect: 'none',
         ...props.style
       }}
+      className={utils.noselect}
     >
       <div
         style={{
@@ -156,7 +156,6 @@ function Pad() {
         // disable callout
         WebkitTouchCallout: 'none'
       }}
-      className={utils.noselect}
       onContextMenu={e => e.preventDefault()}
       onTouchStart={onTouch}
       onTouchMove={onTouch}

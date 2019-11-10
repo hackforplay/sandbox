@@ -2,10 +2,11 @@ import * as React from 'react';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
+import utils from '../styles/utils.scss';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
-import { MenuButton } from './menu-button';
 import { internalHowToPlayDispatcher } from './gesture-view';
+import { MenuButton } from './menu-button';
 
 interface LeftProps {
   isLandscape: boolean;
@@ -153,10 +154,9 @@ function Pad() {
             ? 'rotate(270deg)'
             : undefined,
         // disable callout
-        WebkitTouchCallout: 'none',
-        WebkitUserSelect: 'none',
-        userSelect: 'none'
+        WebkitTouchCallout: 'none'
       }}
+      className={utils.noselect}
       onContextMenu={e => e.preventDefault()}
       onTouchStart={onTouch}
       onTouchMove={onTouch}

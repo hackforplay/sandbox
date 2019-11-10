@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { input$ } from '../sandbox-api';
+import balloon from '../styles/balloon.scss';
 import emphasize from '../styles/emphasize.scss';
+import utils from '../styles/utils.scss';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
-import balloon from '../styles/balloon.scss';
 
 let _dispatcher: React.Dispatch<React.SetStateAction<boolean>> | void;
 export const internalEmphasizeDispatcher = () => {
@@ -44,6 +45,7 @@ export function Right(props: RightProps) {
           width: '100%',
           textAlign: 'right'
         }}
+        className={utils.noselect}
       >
         <img
           src={require('../resources/enchantbook.png')}

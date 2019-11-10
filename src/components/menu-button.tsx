@@ -1,4 +1,5 @@
 import * as React from 'react';
+import utils from '../styles/utils.scss';
 
 interface MenuButtonProps {
   src: string;
@@ -12,9 +13,9 @@ export function MenuButton(props: MenuButtonProps) {
       style={{
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center',
-        userSelect: 'none'
+        alignItems: 'center'
       }}
+      className={utils.noselect}
     >
       <img
         src={props.src}
@@ -24,8 +25,7 @@ export function MenuButton(props: MenuButtonProps) {
           cursor: 'pointer',
           height: '10vh',
           minHeight: 24,
-          maxHeight: 60,
-          userSelect: 'none'
+          maxHeight: 60
         }}
         onClick={props.onClick}
       />
@@ -38,8 +38,7 @@ export function MenuButton(props: MenuButtonProps) {
           overflow: 'hidden',
           padding: 8,
           paddingTop: 0,
-          fontSize: 'x-small',
-          userSelect: 'none'
+          fontSize: 'x-small'
         }}
       >
         {props.label}

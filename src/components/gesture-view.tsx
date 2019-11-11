@@ -26,7 +26,7 @@ const input$ = isTouchEnabled
 
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
-  const [pressKey, setPressKey] = React.useState(' ');
+  const [pressKey, setPressKey] = React.useState<PressKey>(' ');
   React.useEffect(() => {
     _openGestureView = press => {
       setPressKey(press);
@@ -35,7 +35,7 @@ export function GestureView() {
     return () => {
       _openGestureView = () => {};
     };
-  }, [setOpen]);
+  }, []);
 
   const notFocused = useObservable(hasBlur$, !document.hasFocus());
 
@@ -72,7 +72,7 @@ export function GestureView() {
 }
 
 interface KeyboardProps {
-  pressKey: string;
+  pressKey: PressKey;
 }
 
 function Keyboard({ pressKey }: KeyboardProps) {
@@ -90,13 +90,21 @@ function Keyboard({ pressKey }: KeyboardProps) {
     >
       <div className={view.use}>{t['This game use a Keyboard']}</div>
       <img
-        src={require('../resources/keyboard_normal.png')}
+        src={
+          pressKey === ' '
+            ? require('../resources/keyboard_space_normal.png')
+            : require('../resources/keyboard_arrow_normal.png')
+        }
         className={view.normal}
         alt=""
         draggable={false}
       />
       <img
-        src={require('../resources/keyboard_bright.png')}
+        src={
+          pressKey === ' '
+            ? require('../resources/keyboard_space_push.png')
+            : require('../resources/keyboard_arrow_push.png')
+        }
         className={view.bright}
         alt=""
         draggable={false}

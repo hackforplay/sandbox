@@ -12,9 +12,13 @@
 
 .pane {
   padding: 64px 64px 32px 64px;
+  border: 8px solid white;
+  @media (max-height: 600px) {
+    padding: 0px;
+    border: none;
+  }
   background-color: rgb(0, 0, 0);
   color: rgb(255, 255, 255);
-  border: 8px solid white;
   border-radius: 8px;
   margin-bottom: 32px;
 }

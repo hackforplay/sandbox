@@ -78,7 +78,7 @@ interface KeyboardProps {
 
 function Keyboard(props: KeyboardProps) {
   const scale = useEvent(window, 'resize', () =>
-    Math.min(1, window.innerWidth / 796)
+    Math.min(1, window.innerWidth / 818)
   );
   const [t] = useLocale();
 

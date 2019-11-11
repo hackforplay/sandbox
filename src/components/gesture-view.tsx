@@ -6,7 +6,7 @@ import view from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
 import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
-export type PressKey = ' ' | 'ArrowRight';
+export type PressKey = ' ' | 'ArrowRight' | 'all';
 
 let _openGestureView = (press: PressKey) => {};
 export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') =>
@@ -93,7 +93,9 @@ function Keyboard({ pressKey }: KeyboardProps) {
         src={
           pressKey === ' '
             ? require('../resources/keyboard_space_normal.png')
-            : require('../resources/keyboard_arrow_normal.png')
+            : pressKey === 'ArrowRight'
+            ? require('../resources/keyboard_arrow_normal.png')
+            : require('../resources/keyboard_all_normal.png')
         }
         className={view.normal}
         alt=""
@@ -103,7 +105,9 @@ function Keyboard({ pressKey }: KeyboardProps) {
         src={
           pressKey === ' '
             ? require('../resources/keyboard_space_push.png')
-            : require('../resources/keyboard_arrow_push.png')
+            : pressKey === 'ArrowRight'
+            ? require('../resources/keyboard_arrow_push.png')
+            : require('../resources/keyboard_all_push.png')
         }
         className={view.bright}
         alt=""

@@ -6,8 +6,11 @@ import view from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
 import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
-let _openGestureView = () => {};
-export const internalHowToPlayDispatcher = () => _openGestureView();
+export type PressKey = ' ' | 'ArrowRight';
+
+let _openGestureView = (press: PressKey) => {};
+export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') =>
+  _openGestureView(press);
 
 const alreadyDoneGesture = 'already-done-gesture';
 
@@ -18,14 +21,17 @@ const input$ = isTouchEnabled
       fromEvent<KeyboardEvent>(window, 'keyup', { capture: true })
     ).pipe(
       tap(e => e.stopPropagation()),
-      filter(e => e.key === ' '),
       first()
     );
 
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
+  const [pressKey, setPressKey] = React.useState(' ');
   React.useEffect(() => {
-    _openGestureView = () => setOpen(true);
+    _openGestureView = press => {
+      setPressKey(press);
+      setOpen(true);
+    };
     return () => {
       _openGestureView = () => {};
     };
@@ -55,13 +61,21 @@ export function GestureView() {
     <div className={view.root}>
       <div className={view.blank} />
       <div className={view.pane}>
-        {isTouchEnabled || notFocused ? <TouchAnimation /> : <Keyboard />}
+        {isTouchEnabled || notFocused ? (
+          <TouchAnimation />
+        ) : (
+          <Keyboard pressKey={pressKey} />
+        )}
       </div>
     </div>
   ) : null;
 }
 
-function Keyboard() {
+interface KeyboardProps {
+  pressKey: string;
+}
+
+function Keyboard({ pressKey }: KeyboardProps) {
   const scale = useEvent(window, 'resize', () =>
     Math.min(1, window.innerWidth / 796)
   );

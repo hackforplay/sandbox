@@ -85,7 +85,7 @@ export function Left(props: LeftProps) {
           <MenuButton
             src={require('../resources/8bit_videogame.png')}
             label={t['How to Play']}
-            onClick={internalHowToPlayDispatcher}
+            onClick={() => internalHowToPlayDispatcher('all')}
           />
         )}
       </div>

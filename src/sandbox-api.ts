@@ -190,7 +190,7 @@ export interface Feeles {
   pause$: BehaviorSubject<boolean>;
   input$: BehaviorSubject<IButtonInput>;
   emphasizeCode: () => void;
-  showHowToPlay: () => void;
+  showHowToPlay: typeof internalHowToPlayDispatcher;
   audioContextReady: Promise<AudioContext>;
   /**
    * Deprecated

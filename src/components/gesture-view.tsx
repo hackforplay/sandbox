@@ -14,58 +14,58 @@ export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') =>
 
 const alreadyDoneGesture = 'already-done-gesture';
 
-const input$ = isTouchEnabled
+const touchend$ = isTouchEnabled
   ? fromEvent(window, 'touchend').pipe(first())
-  : merge(
-      fromEvent<KeyboardEvent>(window, 'keydown', { capture: true }),
-      fromEvent<KeyboardEvent>(window, 'keyup', { capture: true })
-    ).pipe(
-      tap(e => e.stopPropagation()),
-      first()
-    );
+  : fromEvent(window, 'mousedown').pipe(first());
+
+const keydown$ = (key: PressKey) =>
+  fromEvent<KeyboardEvent>(window, 'keydown', {
+    capture: true
+  }).pipe(
+    filter(e => e.key === key || key === 'all'),
+    first()
+  );
 
 export function GestureView() {
-  const [open, setOpen] = React.useState(true);
-  const [pressKey, setPressKey] = React.useState<PressKey>(' ');
+  const [showTouch, setShowTouch] = React.useState(true);
+  const [showKeyboard, setShowKeyboard] = React.useState<PressKey>();
   React.useEffect(() => {
-    _openGestureView = press => {
-      setPressKey(press);
-      setOpen(true);
-    };
+    _openGestureView = setShowKeyboard;
     return () => {
       _openGestureView = () => {};
     };
+  }, []);
+  const close = React.useCallback(() => {
+    setShowTouch(false);
+    setShowKeyboard(undefined);
   }, []);
 
   const notFocused = useObservable(hasBlur$, !document.hasFocus());
 
   React.useEffect(() => {
-    if (!open) return;
-
-    const subscription = input$.subscribe(e => {
-      setOpen(false);
+    audioContextReady.then(() => {
+      if (sessionStorage.getItem(alreadyDoneGesture) !== null) {
+        setShowTouch(false); // Skip waiting gesture (without how-to-play button pressed)
+      }
+    });
+    const subscription = touchend$.subscribe(() => {
       sessionStorage.setItem(alreadyDoneGesture, 'done');
     });
     return () => subscription.unsubscribe();
-  }, [open]);
-
-  React.useEffect(() => {
-    audioContextReady.then(() => {
-      if (sessionStorage.getItem(alreadyDoneGesture) !== null) {
-        setOpen(false); // Skip waiting gesture (without how-to-play button pressed)
-      }
-    });
   }, []);
 
-  return open ? (
+  return showTouch || notFocused ? (
     <div className={view.root}>
       <div className={view.blank} />
       <div className={view.pane}>
-        {isTouchEnabled || notFocused ? (
-          <TouchAnimation />
-        ) : (
-          <Keyboard pressKey={pressKey} />
-        )}
+        <TouchAnimation onRequestClose={close} />
+      </div>
+    </div>
+  ) : showKeyboard ? (
+    <div className={view.root}>
+      <div className={view.blank} />
+      <div className={view.pane}>
+        <Keyboard onRequestClose={close} pressKey={showKeyboard} />
       </div>
     </div>
   ) : null;
@@ -73,13 +73,21 @@ export function GestureView() {
 
 interface KeyboardProps {
   pressKey: PressKey;
+  onRequestClose: () => void;
 }
 
-function Keyboard({ pressKey }: KeyboardProps) {
+function Keyboard(props: KeyboardProps) {
   const scale = useEvent(window, 'resize', () =>
     Math.min(1, window.innerWidth / 796)
   );
   const [t] = useLocale();
+
+  React.useEffect(() => {
+    const subscription = keydown$(props.pressKey).subscribe(() => {
+      props.onRequestClose();
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div
@@ -91,9 +99,9 @@ function Keyboard({ pressKey }: KeyboardProps) {
       <div className={view.use}>{t['This game use a Keyboard']}</div>
       <img
         src={
-          pressKey === ' '
+          props.pressKey === ' '
             ? require('../resources/keyboard_space_normal.png')
-            : pressKey === 'ArrowRight'
+            : props.pressKey === 'ArrowRight'
             ? require('../resources/keyboard_arrow_normal.png')
             : require('../resources/keyboard_all_normal.png')
         }
@@ -103,9 +111,9 @@ function Keyboard({ pressKey }: KeyboardProps) {
       />
       <img
         src={
-          pressKey === ' '
+          props.pressKey === ' '
             ? require('../resources/keyboard_space_push.png')
-            : pressKey === 'ArrowRight'
+            : props.pressKey === 'ArrowRight'
             ? require('../resources/keyboard_arrow_push.png')
             : require('../resources/keyboard_all_push.png')
         }
@@ -117,8 +125,18 @@ function Keyboard({ pressKey }: KeyboardProps) {
   );
 }
 
-function TouchAnimation() {
+interface TouchAnimationProps {
+  onRequestClose: () => void;
+}
+
+function TouchAnimation(props: TouchAnimationProps) {
   const [t] = useLocale();
+  React.useEffect(() => {
+    const subscription = touchend$.subscribe(() => {
+      props.onRequestClose();
+    });
+    return () => subscription.unsubscribe();
+  }, []);
 
   return (
     <div className={view.touch}>

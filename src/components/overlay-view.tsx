@@ -1,9 +1,10 @@
 import { log } from '@hackforplay/log';
 import * as React from 'react';
 import { code$, pause$ } from '../sandbox-api';
+import view from '../styles/overlay-view.scss';
+import utils from '../styles/utils.scss';
 import { useObservable } from '../utils';
 import { Editor } from './editor';
-import view from '../styles/overlay-view.scss';
 
 interface OverlayViewProps {
   isLandscape: boolean;
@@ -28,19 +29,12 @@ export function OverlayView(props: OverlayViewProps) {
         alignItems: 'stretch',
         flexDirection: props.isLandscape ? 'row-reverse' : 'column-reverse'
       }}
+      className={utils.noselect}
     >
       <Editor open={props.isEditorOpened} isLandscape={props.isLandscape} />
       {paused ? (
         <div
-          style={{
-            flex: 1,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            textAlign: 'center',
-            pointerEvents: 'initial'
-          }}
+          className={view.wrapper}
           onClick={() => {
             if (props.isEditorOpened) {
               pause$.next(false); // PAUSE を解除する
@@ -56,12 +50,7 @@ export function OverlayView(props: OverlayViewProps) {
             }
           }}
         >
-          <span
-            style={{ color: 'white', fontSize: 'xx-large', userSelect: 'none' }}
-            className={view.resume}
-          >
-            ▶︎
-          </span>
+          <span className={view.resume}>▶︎</span>
         </div>
       ) : null}
     </div>

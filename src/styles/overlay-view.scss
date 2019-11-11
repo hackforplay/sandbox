@@ -1,12 +1,32 @@
-.resume {
-  animation: 500ms ease-in-out 0ms infinite emphasize;
+.wrapper {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  pointer-events: initial;
+  cursor: pointer;
 }
 
-@keyframes emphasize {
+.resume {
+  color: white;
+  animation-name: bounce;
+  animation-duration: 500ms;
+  animation-iteration-count: infinite;
+  animation-direction: alternate;
+  animation-timing-function: ease-in-out;
+  font-size: 32px;
+  @media (min-height: 600px) {
+    font-size: 64px;
+  }
+}
+
+@keyframes bounce {
   0% {
-    transform: scale(100%);
+    transform: scale(1);
   }
   100% {
-    transform: scale(400%);
+    transform: scale(1.3);
   }
 }

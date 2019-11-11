@@ -71,18 +71,30 @@
     animation: blink 500ms linear 0ms infinite alternate;
   }
 
+  & > img {
+    z-index: 1;
+  }
+  & > div {
+    z-index: 2;
+  }
+
+  .use {
+    position: absolute;
+    left: 205px;
+    top: -46px;
+    font-size: 20px;
+  }
+
   .attack {
     position: absolute;
     left: 325px;
     top: 336px;
-    z-index: 2;
   }
 
   .move {
     position: absolute;
     left: 676px;
     top: 336px;
-    z-index: 2;
   }
 
   .press {

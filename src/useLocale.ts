@@ -10,6 +10,7 @@ export type LocaleKeys =
   | 'Full Screen'
   | 'Reload'
   | 'How to Play'
+  | 'This game use a Keyboard'
   | `Let's edit program!`;
 export type Locale = { [key in LocaleKeys]: string };
 
@@ -25,17 +26,19 @@ const localeMap: {
     'Full Screen': 'Full Screen',
     Reload: 'Reload',
     'How to Play': 'How to Play',
+    'This game use a Keyboard': 'This game use a Keyboard',
     "Let's edit program!": `Let's rewrite the magic book!`
   },
   ja: {
     Attack: 'こうげき',
     Move: 'いどう',
-    'Press Attack key': 'こうげき キーを 押してください',
+    'Press Attack key': '「こうげき」のキーを おしてください',
     'Touch to start': 'タッチしてください',
     'Click here': 'ここをクリックしてください',
     'Full Screen': 'フルスクリーン',
     Reload: 'さいよみこみ',
     'How to Play': 'そうさせつめい',
+    'This game use a Keyboard': 'このゲームでは、キーボードをつかいます',
     "Let's edit program!": 'まほうの本を 書きかえよう！'
   }
 };

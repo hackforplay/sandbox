@@ -74,6 +74,7 @@ function Keyboard() {
         transform: `scale(${scale})`
       }}
     >
+      <div className={view.use}>{t['This game use a Keyboard']}</div>
       <img
         src={require('../resources/keyboard_normal.png')}
         className={view.normal}

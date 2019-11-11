@@ -109,9 +109,6 @@ function Keyboard({ pressKey }: KeyboardProps) {
         alt=""
         draggable={false}
       />
-      <div className={view.attack}>{t['Attack']}</div>
-      <div className={view.move}>{t['Move']}</div>
-      <div className={view.press}>{t['Press Attack key']}</div>
     </div>
   );
 }

@@ -26,7 +26,7 @@ const localeMap: {
     'Full Screen': 'Full Screen',
     Reload: 'Reload',
     'How to Play': 'How to Play',
-    'This game use a Keyboard': 'This game use a Keyboard',
+    'This game use a Keyboard': 'Use KEYBOARD in this game',
     "Let's edit program!": `Let's rewrite the magic book!`
   },
   ja: {

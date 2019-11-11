@@ -6,8 +6,11 @@ import view from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
 import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
-let _openGestureView = () => {};
-export const internalHowToPlayDispatcher = () => _openGestureView();
+export type PressKey = ' ' | 'ArrowRight' | 'all';
+
+let _openGestureView = (press: PressKey) => {};
+export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') =>
+  _openGestureView(press);
 
 const alreadyDoneGesture = 'already-done-gesture';
 
@@ -18,18 +21,21 @@ const input$ = isTouchEnabled
       fromEvent<KeyboardEvent>(window, 'keyup', { capture: true })
     ).pipe(
       tap(e => e.stopPropagation()),
-      filter(e => e.key === ' '),
       first()
     );
 
 export function GestureView() {
   const [open, setOpen] = React.useState(true);
+  const [pressKey, setPressKey] = React.useState<PressKey>(' ');
   React.useEffect(() => {
-    _openGestureView = () => setOpen(true);
+    _openGestureView = press => {
+      setPressKey(press);
+      setOpen(true);
+    };
     return () => {
       _openGestureView = () => {};
     };
-  }, [setOpen]);
+  }, []);
 
   const notFocused = useObservable(hasBlur$, !document.hasFocus());
 
@@ -55,13 +61,21 @@ export function GestureView() {
     <div className={view.root}>
       <div className={view.blank} />
       <div className={view.pane}>
-        {isTouchEnabled || notFocused ? <TouchAnimation /> : <Keyboard />}
+        {isTouchEnabled || notFocused ? (
+          <TouchAnimation />
+        ) : (
+          <Keyboard pressKey={pressKey} />
+        )}
       </div>
     </div>
   ) : null;
 }
 
-function Keyboard() {
+interface KeyboardProps {
+  pressKey: PressKey;
+}
+
+function Keyboard({ pressKey }: KeyboardProps) {
   const scale = useEvent(window, 'resize', () =>
     Math.min(1, window.innerWidth / 796)
   );
@@ -76,20 +90,29 @@ function Keyboard() {
     >
       <div className={view.use}>{t['This game use a Keyboard']}</div>
       <img
-        src={require('../resources/keyboard_normal.png')}
+        src={
+          pressKey === ' '
+            ? require('../resources/keyboard_space_normal.png')
+            : pressKey === 'ArrowRight'
+            ? require('../resources/keyboard_arrow_normal.png')
+            : require('../resources/keyboard_all_normal.png')
+        }
         className={view.normal}
         alt=""
         draggable={false}
       />
       <img
-        src={require('../resources/keyboard_bright.png')}
+        src={
+          pressKey === ' '
+            ? require('../resources/keyboard_space_push.png')
+            : pressKey === 'ArrowRight'
+            ? require('../resources/keyboard_arrow_push.png')
+            : require('../resources/keyboard_all_push.png')
+        }
         className={view.bright}
         alt=""
         draggable={false}
       />
-      <div className={view.attack}>{t['Attack']}</div>
-      <div className={view.move}>{t['Move']}</div>
-      <div className={view.press}>{t['Press Attack key']}</div>
     </div>
   );
 }

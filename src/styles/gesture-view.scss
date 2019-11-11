@@ -72,7 +72,7 @@
   & > .bright {
     position: absolute;
     z-index: 1;
-    animation: blink 500ms linear 0ms infinite alternate;
+    animation: blink 500ms cubic-bezier(1, 0, 0, 1) 0ms infinite alternate;
   }
 
   & > img {
@@ -88,31 +88,17 @@
     top: -46px;
     font-size: 20px;
   }
-
-  .attack {
-    position: absolute;
-    left: 325px;
-    top: 336px;
-  }
-
-  .move {
-    position: absolute;
-    left: 676px;
-    top: 336px;
-  }
-
-  .press {
-    position: absolute;
-    top: 380px;
-    width: 100%;
-    text-align: center;
-    font-size: 24px;
-  }
 }
 
 @keyframes blink {
   0% {
     opacity: 0;
+  }
+  49% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
   100% {
     opacity: 1;

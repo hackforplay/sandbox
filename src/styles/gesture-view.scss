@@ -68,7 +68,7 @@
   & > .bright {
     position: absolute;
     z-index: 1;
-    animation: blink 500ms linear 0ms infinite alternate;
+    animation: blink 500ms cubic-bezier(1, 0, 0, 1) 0ms infinite alternate;
   }
 
   & > img {
@@ -109,6 +109,12 @@
 @keyframes blink {
   0% {
     opacity: 0;
+  }
+  49% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
   }
   100% {
     opacity: 1;

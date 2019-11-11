@@ -1,6 +1,6 @@
 import * as React from 'react';
-import { fromEvent, merge } from 'rxjs';
-import { filter, first, tap } from 'rxjs/operators';
+import { fromEvent } from 'rxjs';
+import { filter, first } from 'rxjs/operators';
 import { audioContextReady } from '../sandbox-api';
 import view from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';

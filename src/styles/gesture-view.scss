@@ -33,13 +33,11 @@
   height: 500px;
 
   & > .off {
-    position: absolute;
-    animation: touch 500ms cubic-bezier(1, 0, 0, 1) 0ms infinite alternate;
+    display: none;
   }
 
   & > .on {
-    @extend .off;
-    animation-direction: alternate-reverse;
+    position: absolute;
   }
 
   .click {
@@ -48,15 +46,6 @@
     width: 100%;
     text-align: center;
     font-size: 24px;
-  }
-}
-
-@keyframes touch {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
   }
 }
 

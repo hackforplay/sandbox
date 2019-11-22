@@ -2,7 +2,7 @@ import * as React from 'react';
 import { fromEvent } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
 import { audioContextReady } from '../sandbox-api';
-import view from '../styles/gesture-view.scss';
+import style from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
 import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
 
@@ -55,16 +55,16 @@ export function GestureView() {
   }, []);
 
   return showTouch || notFocused ? (
-    <div className={view.root}>
-      <div className={view.blank} />
-      <div className={view.pane}>
+    <div className={style.root}>
+      <div className={style.blank} />
+      <div className={style.pane}>
         <TouchAnimation onRequestClose={close} />
       </div>
     </div>
   ) : showKeyboard ? (
-    <div className={view.root}>
-      <div className={view.blank} />
-      <div className={view.pane}>
+    <div className={style.root}>
+      <div className={style.blank} />
+      <div className={style.pane}>
         <Keyboard onRequestClose={close} pressKey={showKeyboard} />
       </div>
     </div>
@@ -91,12 +91,12 @@ function Keyboard(props: KeyboardProps) {
 
   return (
     <div
-      className={view.keyboard}
+      className={style.keyboard}
       style={{
         transform: `scale(${scale})`
       }}
     >
-      <div className={view.use}>{t['This game use a Keyboard']}</div>
+      <div className={style.use}>{t['This game use a Keyboard']}</div>
       <img
         src={
           props.pressKey === ' '
@@ -105,7 +105,7 @@ function Keyboard(props: KeyboardProps) {
             ? require('../resources/keyboard_arrow_normal.png')
             : require('../resources/keyboard_all_normal.png')
         }
-        className={view.normal}
+        className={style.normal}
         alt=""
         draggable={false}
       />
@@ -117,7 +117,7 @@ function Keyboard(props: KeyboardProps) {
             ? require('../resources/keyboard_arrow_push.png')
             : require('../resources/keyboard_all_push.png')
         }
-        className={view.bright}
+        className={style.bright}
         alt=""
         draggable={false}
       />
@@ -138,19 +138,29 @@ function TouchAnimation(props: TouchAnimationProps) {
     return () => subscription.unsubscribe();
   }, []);
 
+  const [frame, setFrame] = React.useState(0);
+  React.useEffect(() => {
+    const handle = window.setTimeout(() => {
+      setFrame(frame + 1);
+    }, 600);
+    return () => {
+      window.clearTimeout(handle);
+    };
+  }, [frame]);
+
   return (
-    <div className={view.touch}>
+    <div className={style.touch}>
       <img
         src={require('../resources/touch_app1.svg')}
         alt="Touch"
-        className={view.on}
+        className={frame % 2 ? style.on : style.off}
       />
       <img
         src={require('../resources/touch_app2.svg')}
         alt="Touch"
-        className={view.off}
+        className={frame % 2 ? style.off : style.on}
       />
-      <div className={view.click}>
+      <div className={style.click}>
         {isTouchEnabled ? t['Touch to start'] : t['Click here']}
       </div>
     </div>

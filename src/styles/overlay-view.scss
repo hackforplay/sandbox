@@ -1,0 +1,19 @@
+.overlay {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 100;
+  display: flex;
+  align-items: stretch;
+  flex-direction: column-reverse;
+  &.landscape {
+    flex-direction: row-reverse;
+  }
+
+  pointer-events: none;
+  & > * {
+    pointer-events: initial;
+  }
+}

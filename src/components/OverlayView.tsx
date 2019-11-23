@@ -1,6 +1,8 @@
 import { log } from '@hackforplay/log';
+import classNames from 'classnames';
 import * as React from 'react';
 import { audioContextReady, code$, pause$ } from '../sandbox-api';
+import style from '../styles/overlay-view.scss';
 import utils from '../styles/utils.scss';
 import { useObservable } from '../utils';
 import { Editor } from './Editor';
@@ -40,19 +42,11 @@ export function OverlayView(props: OverlayViewProps) {
 
   return (
     <div
-      style={{
-        pointerEvents: 'none',
-        position: 'absolute',
-        left: 0,
-        top: 0,
-        width: '100%',
-        height: '100%',
-        zIndex: 100,
-        display: 'flex',
-        alignItems: 'stretch',
-        flexDirection: props.isLandscape ? 'row-reverse' : 'column-reverse'
-      }}
-      className={utils.noselect}
+      className={classNames(
+        style.overlay,
+        utils.noselect,
+        props.isLandscape && style.landscape
+      )}
     >
       <Editor open={props.isEditorOpened} isLandscape={props.isLandscape} />
       {needUserAction || paused ? <Pause onClick={onClick} /> : null}

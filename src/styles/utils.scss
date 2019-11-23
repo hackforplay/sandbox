@@ -1,26 +1,23 @@
-%noselect {
-  -webkit-touch-callout: none; /* iOS Safari */
-  -webkit-user-select: none; /* Safari */
-  -khtml-user-select: none; /* Konqueror HTML */
-  -moz-user-select: none; /* Old versions of Firefox */
-  -ms-user-select: none; /* Internet Explorer/Edge */
-  user-select: none; /* Non-prefixed version, currently
+@mixin select($value: none) {
+  -webkit-touch-callout: $value; /* iOS Safari */
+  -webkit-user-select: $value; /* Safari */
+  -khtml-user-select: $value; /* Konqueror HTML */
+  -moz-user-select: $value; /* Old versions of Firefox */
+  -ms-user-select: $value; /* Internet Explorer/Edge */
+  user-select: $value; /* Non-prefixed version, currently
                           supported by Chrome, Opera and Firefox */
 }
 
 .noselect {
-  @extend %noselect;
+  @include select(none);
   * {
-    @extend %noselect;
+    @include select(none);
   }
 }
 
 .select * {
-  -webkit-touch-callout: initial; /* iOS Safari */
-  -webkit-user-select: initial; /* Safari */
-  -khtml-user-select: initial; /* Konqueror HTML */
-  -moz-user-select: initial; /* Old versions of Firefox */
-  -ms-user-select: initial; /* Internet Explorer/Edge */
-  user-select: initial; /* Non-prefixed version, currently
-                          supported by Chrome, Opera and Firefox */
+  @include select(initial);
+  * {
+    @include select(initial);
+  }
 }

@@ -14,3 +14,13 @@
     @extend %noselect;
   }
 }
+
+.select * {
+  -webkit-touch-callout: initial; /* iOS Safari */
+  -webkit-user-select: initial; /* Safari */
+  -khtml-user-select: initial; /* Konqueror HTML */
+  -moz-user-select: initial; /* Old versions of Firefox */
+  -ms-user-select: initial; /* Internet Explorer/Edge */
+  user-select: initial; /* Non-prefixed version, currently
+                          supported by Chrome, Opera and Firefox */
+}

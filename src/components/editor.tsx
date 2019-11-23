@@ -5,6 +5,7 @@ import classNames from 'classnames';
 import * as React from 'react';
 import { code$, kana$ } from '../sandbox-api';
 import style from '../styles/editor.scss';
+import utils from '../styles/utils.scss';
 import { useObservable } from '../utils';
 import { Slider } from './Slider';
 
@@ -55,7 +56,7 @@ export function Editor(props: EditorProps) {
   return (
     <>
       <div
-        className={style.editor}
+        className={classNames(style.editor, utils.select)}
         style={{
           flexBasis: !props.open ? 0 : props.isLandscape ? width : height
         }}

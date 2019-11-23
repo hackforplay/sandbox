@@ -23,14 +23,8 @@ $sideBarMinWidth: 86px;
   justify-content: space-between;
   align-items: stretch;
 
-  .left {
-    flex: 0;
-    min-width: $sideBarMinWidth;
-  }
-
-  .right {
-    flex: 0;
-    min-width: $sideBarMinWidth;
+  .left .container {
+    flex-direction: column;
   }
 }
 
@@ -43,15 +37,60 @@ $sideBarMinWidth: 86px;
     min-height: 300;
   }
 
-  .left {
-    min-width: $sideBarMinWidth;
+  .left .container {
+    flex-direction: row;
   }
+}
 
-  .blank {
+%sideBar {
+  min-width: $sideBarMinWidth;
+  overflow: visible;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 8px;
+}
+
+.left {
+  @extend %sideBar;
+  z-index: 2;
+
+  .container {
     flex: 1;
+    z-index: 1;
+    display: flex;
   }
+}
 
-  .right {
-    min-width: $sideBarMinWidth;
+.right {
+  @extend %sideBar;
+  z-index: 3;
+  align-items: flex-end;
+
+  .container {
+    flex: 1;
+    height: 10vh;
+    max-height: 60px;
+    width: 100%;
+    text-align: right;
+
+    .book {
+      cursor: pointer;
+      height: 100%;
+      transition: all 250ms;
+    }
+
+    .balloon {
+      right: 154px;
+      margin-top: -48px;
+    }
   }
+}
+
+.space {
+  flex: 0 1 16%;
+}
+
+.blank {
+  flex: 1;
 }

@@ -1,5 +1,7 @@
+import classNames from 'classnames';
 import * as React from 'react';
 import { input$ } from '../sandbox-api';
+import style from '../styles/app.scss';
 import balloon from '../styles/balloon.scss';
 import emphasize from '../styles/emphasize.scss';
 import utils from '../styles/utils.scss';
@@ -13,68 +15,38 @@ export const internalEmphasizeDispatcher = () => {
   }
 };
 
-export interface RightProps extends React.HTMLAttributes<HTMLDivElement> {
+export interface RightProps {
   setEditorOpened: (open: boolean) => void;
   isEditorOpened: boolean;
 }
 
-export function Right({ className, style, ...props }: RightProps) {
+export function Right({ setEditorOpened, isEditorOpened }: RightProps) {
   const [isEmphasized, setIsEmphasized] = React.useState(false);
   _dispatcher = setIsEmphasized;
   const [t] = useLocale();
 
   return (
-    <div
-      className={className}
-      style={{
-        overflow: 'visible',
-        zIndex: 3,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-        padding: 8,
-        ...style
-      }}
-      {...props}
-    >
-      <div
-        style={{
-          flex: 1,
-          height: '10vh',
-          maxHeight: 60,
-          width: '100%',
-          textAlign: 'right'
-        }}
-        className={utils.noselect}
-      >
+    <div className={style.right}>
+      <div className={classNames(style.container, utils.noselect)}>
         <img
           src={require('../resources/enchantbook.png')}
           draggable={false}
-          style={{
-            cursor: 'pointer',
-            height: '100%',
-            transition: 'all 250ms'
-          }}
-          className={isEmphasized ? emphasize.root : ''}
+          className={classNames(style.book, isEmphasized && emphasize.root)}
           height={60}
           onClick={() => {
-            props.setEditorOpened(!props.isEditorOpened);
+            setEditorOpened(!isEditorOpened);
             setIsEmphasized(false);
           }}
           alt=""
         />
         {isEmphasized ? (
-          <div
-            className={balloon.balloon}
-            style={{ right: 154, marginTop: -48 }}
-          >
+          <div className={classNames(style.balloon, balloon.balloon)}>
             {t["Let's edit program!"]}
           </div>
         ) : null}
       </div>
       {isTouchEnabled ? <AButton /> : null}
-      <div style={{ flexGrow: 0, flexShrink: 1, flexBasis: '16%' }} />
+      <div className={style.space} />
     </div>
   );
 }

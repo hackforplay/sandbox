@@ -3,24 +3,18 @@ import * as React from 'react';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
 import { IButtonInput, input$ } from '../sandbox-api';
+import style from '../styles/app.scss';
 import utils from '../styles/utils.scss';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
 import { internalHowToPlayDispatcher } from './GestureView';
 import { MenuButton } from './MenuButton';
 
-export interface LeftProps extends React.HTMLAttributes<HTMLDivElement> {
-  isLandscape: boolean;
+export interface LeftProps {
   rootRef: React.RefObject<HTMLDivElement>;
 }
 
-export function Left({
-  isLandscape,
-  rootRef,
-  className,
-  style,
-  ...props
-}: LeftProps) {
+export function Left({ rootRef }: LeftProps) {
   const [t] = useLocale();
   const [, forceUpdate] = React.useState({});
 
@@ -45,27 +39,8 @@ export function Left({
   }, []);
 
   return (
-    <div
-      className={classNames(className, utils.noselect)}
-      style={{
-        overflow: 'visible',
-        zIndex: 2,
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-between',
-        padding: 8,
-        ...style
-      }}
-      {...props}
-    >
-      <div
-        style={{
-          flex: 1,
-          zIndex: 1,
-          display: 'flex',
-          flexDirection: isLandscape ? 'column' : 'row'
-        }}
-      >
+    <div className={classNames(style.left, utils.noselect)}>
+      <div className={style.container}>
         {fullScreenEnabled ? (
           isFullScreen ? (
             <MenuButton
@@ -97,7 +72,7 @@ export function Left({
         )}
       </div>
       {isTouchEnabled ? <Pad /> : null}
-      <div style={{ flexGrow: 0, flexShrink: 1, flexBasis: '16%' }} />
+      <div className={style.space} />
     </div>
   );
 }

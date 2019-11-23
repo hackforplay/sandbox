@@ -42,15 +42,12 @@ export function App(props: AppProps) {
   return (
     <div className={style.root} ref={rootRef}>
       <div className={style.landscapeWrapper}>
-        {isLandscape ? (
-          <Left isLandscape rootRef={rootRef} className={style.left} />
-        ) : null}
+        {isLandscape ? <Left rootRef={rootRef} /> : null}
         <Game />
         {isLandscape ? (
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}
-            className={style.right}
           />
         ) : null}
       </div>
@@ -61,12 +58,11 @@ export function App(props: AppProps) {
             isTouchEnabled && style.isTouchEnabled
           )}
         >
-          <Left isLandscape={false} rootRef={rootRef} className={style.left} />
+          <Left rootRef={rootRef} />
           <div className={style.blank} />
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}
-            className={style.right}
           />
         </div>
       )}

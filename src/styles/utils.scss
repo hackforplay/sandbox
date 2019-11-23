@@ -10,7 +10,7 @@
 
 .noselect {
   @extend %noselect;
-  & > * {
+  * {
     @extend %noselect;
   }
 }

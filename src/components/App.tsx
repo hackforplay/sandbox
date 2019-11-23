@@ -3,6 +3,7 @@ import { orientation } from 'o9n';
 import * as React from 'react';
 import { pause$ } from '../sandbox-api';
 import style from '../styles/app.scss';
+import utils from '../styles/utils.scss';
 import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
 import { Game } from './Game';
 import { GestureView } from './GestureView';
@@ -59,7 +60,7 @@ export function App(props: AppProps) {
           )}
         >
           <Left rootRef={rootRef} />
-          <div className={style.blank} />
+          <div className={classNames(style.blank, utils.noselect)} />
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}

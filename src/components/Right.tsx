@@ -26,8 +26,8 @@ export function Right({ setEditorOpened, isEditorOpened }: RightProps) {
   const [t] = useLocale();
 
   return (
-    <div className={style.right}>
-      <div className={classNames(style.container, utils.noselect)}>
+    <div className={classNames(style.right, utils.noselect)}>
+      <div className={style.container}>
         <img
           src={require('../resources/enchantbook.png')}
           draggable={false}

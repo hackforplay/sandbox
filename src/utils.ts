@@ -5,7 +5,7 @@ import { debounceTime, filter, map } from 'rxjs/operators';
 export const isNotUndefined = <T>(t: T | undefined): t is T => t !== undefined;
 export const filterNotUndefined = filter(isNotUndefined);
 
-export const keys = <T>(obj: T) => {
+export const keys = <T extends object>(obj: T) => {
   const result: (keyof T)[] = [];
   for (const key in obj) {
     if (obj.hasOwnProperty(key)) {

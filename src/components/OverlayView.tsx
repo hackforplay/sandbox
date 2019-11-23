@@ -4,7 +4,7 @@ import { code$, pause$ } from '../sandbox-api';
 import view from '../styles/overlay-view.scss';
 import utils from '../styles/utils.scss';
 import { useObservable } from '../utils';
-import { Editor } from './editor';
+import { Editor } from './Editor';
 
 interface OverlayViewProps {
   isLandscape: boolean;

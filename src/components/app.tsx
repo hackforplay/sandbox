@@ -3,11 +3,11 @@ import * as React from 'react';
 import { pause$ } from '../sandbox-api';
 import app from '../styles/app.scss';
 import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
-import { Game } from './game';
-import { GestureView } from './gesture-view';
-import { Left } from './left';
-import { OverlayView } from './overlay-view';
-import { Right } from './right';
+import { Game } from './Game';
+import { GestureView } from './GestureView';
+import { Left } from './Left';
+import { OverlayView } from './OverlayView';
+import { Right } from './Right';
 
 const sideBarMinWidth = 86;
 const sideBarMinHeight = isTouchEnabled ? 300 : 60;

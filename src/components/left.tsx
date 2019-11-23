@@ -5,8 +5,8 @@ import { IButtonInput, input$ } from '../sandbox-api';
 import utils from '../styles/utils.scss';
 import { useLocale } from '../useLocale';
 import { isTouchEnabled } from '../utils';
-import { internalHowToPlayDispatcher } from './gesture-view';
-import { MenuButton } from './menu-button';
+import { internalHowToPlayDispatcher } from './GestureView';
+import { MenuButton } from './MenuButton';
 
 interface LeftProps {
   isLandscape: boolean;

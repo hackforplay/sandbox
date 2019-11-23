@@ -4,7 +4,7 @@ import { Root } from '@hackforplay/react-ast-mutator-components';
 import * as React from 'react';
 import { code$, kana$ } from '../sandbox-api';
 import { useObservable } from '../utils';
-import { Slider } from './slider';
+import { Slider } from './Slider';
 
 interface EditorProps {
   open: boolean;

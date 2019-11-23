@@ -2,7 +2,7 @@ import { log } from '@hackforplay/log';
 import { createElement } from 'react';
 import { render } from 'react-dom';
 import { filter, first } from 'rxjs/operators';
-import { App } from './components/app';
+import { App } from './components/App';
 import { message$, sendMessage } from './connector';
 import { patchForEnchantJs } from './patch-for-enchant-js';
 import './runtime';

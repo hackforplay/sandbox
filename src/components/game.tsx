@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { filter } from 'rxjs/operators';
 import { message$, port } from '../connector';
-import { LogView } from './log-view';
+import { LogView } from './LogView';
 
 export function Game() {
   const gameRef = React.useRef<HTMLDivElement>(null);

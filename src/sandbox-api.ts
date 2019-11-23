@@ -1,7 +1,7 @@
 import { log } from '@hackforplay/log';
 import { BehaviorSubject, fromEvent, merge } from 'rxjs';
-import { internalHowToPlayDispatcher } from './components/gesture-view';
-import { internalEmphasizeDispatcher } from './components/right';
+import { internalHowToPlayDispatcher } from './components/GestureView';
+import { internalEmphasizeDispatcher } from './components/Right';
 import { connected as c, sendMessage } from './connector';
 
 export const code$ = new BehaviorSubject('');

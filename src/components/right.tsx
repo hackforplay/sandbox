@@ -13,19 +13,19 @@ export const internalEmphasizeDispatcher = () => {
   }
 };
 
-interface RightProps {
-  style: React.CSSProperties;
+export interface RightProps extends React.HTMLAttributes<HTMLDivElement> {
   setEditorOpened: (open: boolean) => void;
   isEditorOpened: boolean;
 }
 
-export function Right(props: RightProps) {
+export function Right({ className, style, ...props }: RightProps) {
   const [isEmphasized, setIsEmphasized] = React.useState(false);
   _dispatcher = setIsEmphasized;
   const [t] = useLocale();
 
   return (
     <div
+      className={className}
       style={{
         overflow: 'visible',
         zIndex: 3,
@@ -34,8 +34,9 @@ export function Right(props: RightProps) {
         justifyContent: 'space-between',
         alignItems: 'flex-end',
         padding: 8,
-        ...props.style
+        ...style
       }}
+      {...props}
     >
       <div
         style={{

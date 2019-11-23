@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import * as React from 'react';
 import { Subject } from 'rxjs';
 import { distinctUntilChanged, map, tap } from 'rxjs/operators';
@@ -8,12 +9,18 @@ import { isTouchEnabled } from '../utils';
 import { internalHowToPlayDispatcher } from './GestureView';
 import { MenuButton } from './MenuButton';
 
-interface LeftProps {
+export interface LeftProps extends React.HTMLAttributes<HTMLDivElement> {
   isLandscape: boolean;
-  style: React.CSSProperties;
   rootRef: React.RefObject<HTMLDivElement>;
 }
-export function Left(props: LeftProps) {
+
+export function Left({
+  isLandscape,
+  rootRef,
+  className,
+  style,
+  ...props
+}: LeftProps) {
   const [t] = useLocale();
   const [, forceUpdate] = React.useState({});
 
@@ -28,8 +35,8 @@ export function Left(props: LeftProps) {
         .then(() => forceUpdate({}))
         .catch(console.error);
     } else {
-      if (props.rootRef.current) {
-        props.rootRef.current
+      if (rootRef.current) {
+        rootRef.current
           .requestFullscreen()
           .then(() => forceUpdate({}))
           .catch(console.error);
@@ -39,24 +46,24 @@ export function Left(props: LeftProps) {
 
   return (
     <div
+      className={classNames(className, utils.noselect)}
       style={{
-        flex: 1,
         overflow: 'visible',
         zIndex: 2,
         display: 'flex',
         flexDirection: 'column',
         justifyContent: 'space-between',
         padding: 8,
-        ...props.style
+        ...style
       }}
-      className={utils.noselect}
+      {...props}
     >
       <div
         style={{
           flex: 1,
           zIndex: 1,
           display: 'flex',
-          flexDirection: props.isLandscape ? 'column' : 'row'
+          flexDirection: isLandscape ? 'column' : 'row'
         }}
       >
         {fullScreenEnabled ? (

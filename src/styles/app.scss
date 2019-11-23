@@ -1,3 +1,5 @@
+$sideBarMinWidth: 86px;
+
 .root {
   width: 100vw;
   height: 100vh;
@@ -12,5 +14,44 @@
 
   input {
     font-size: 16px;
+  }
+}
+
+.landscapeWrapper {
+  flex: 4;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+
+  .left {
+    flex: 0;
+    min-width: $sideBarMinWidth;
+  }
+
+  .right {
+    flex: 0;
+    min-width: $sideBarMinWidth;
+  }
+}
+
+.portraitWrapper {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  min-height: 60;
+  &.isTouchEnabled {
+    min-height: 300;
+  }
+
+  .left {
+    min-width: $sideBarMinWidth;
+  }
+
+  .blank {
+    flex: 1;
+  }
+
+  .right {
+    min-width: $sideBarMinWidth;
   }
 }

@@ -1,7 +1,8 @@
+import classNames from 'classnames';
 import { orientation } from 'o9n';
 import * as React from 'react';
 import { pause$ } from '../sandbox-api';
-import app from '../styles/app.scss';
+import style from '../styles/app.scss';
 import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
 import { Game } from './Game';
 import { GestureView } from './GestureView';
@@ -10,7 +11,6 @@ import { OverlayView } from './OverlayView';
 import { Right } from './Right';
 
 const sideBarMinWidth = 86;
-const sideBarMinHeight = isTouchEnabled ? 300 : 60;
 
 interface AppProps {}
 
@@ -40,50 +40,33 @@ export function App(props: AppProps) {
   }, [isEditorOpened]);
 
   return (
-    <div className={app.root} ref={rootRef}>
-      <div
-        style={{
-          flex: 4,
-          display: 'flex',
-          justifyContent: 'space-between',
-          alignItems: 'stretch'
-        }}
-      >
+    <div className={style.root} ref={rootRef}>
+      <div className={style.landscapeWrapper}>
         {isLandscape ? (
-          <Left
-            isLandscape
-            rootRef={rootRef}
-            style={{ flex: 0, minWidth: sideBarMinWidth }}
-          />
+          <Left isLandscape rootRef={rootRef} className={style.left} />
         ) : null}
         <Game />
         {isLandscape ? (
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}
-            style={{ flex: 0, minWidth: sideBarMinWidth }}
+            className={style.right}
           />
         ) : null}
       </div>
       {isLandscape ? null : (
         <div
-          style={{
-            flex: 1,
-            display: 'flex',
-            alignItems: 'stretch',
-            minHeight: sideBarMinHeight
-          }}
+          className={classNames(
+            style.portraitWrapper,
+            isTouchEnabled && style.isTouchEnabled
+          )}
         >
-          <Left
-            isLandscape={false}
-            rootRef={rootRef}
-            style={{ minWidth: sideBarMinWidth }}
-          />
-          <div style={{ flex: 1 }} />
+          <Left isLandscape={false} rootRef={rootRef} className={style.left} />
+          <div className={style.blank} />
           <Right
             isEditorOpened={isEditorOpened}
             setEditorOpened={setEditorOpened}
-            style={{ minWidth: sideBarMinWidth }}
+            className={style.right}
           />
         </div>
       )}

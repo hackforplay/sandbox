@@ -1,13 +1,12 @@
 import * as React from 'react';
 import { fromEvent } from 'rxjs';
 
-interface SliderProps {
+interface SliderProps extends React.HTMLAttributes<HTMLDivElement> {
   isLandscape: boolean;
   onMove: (movementX: number, movementY: number) => void;
-  style?: React.CSSProperties;
 }
 
-export function Slider(props: SliderProps) {
+export function Slider({ isLandscape, onMove, ...props }: SliderProps) {
   const [state] = React.useState({
     x: 0,
     y: 0,
@@ -21,13 +20,13 @@ export function Slider(props: SliderProps) {
     const mousemove = fromEvent<MouseEvent>(window, 'mousemove').subscribe(
       e => {
         if (state.hover) {
-          if (props.isLandscape) {
+          if (isLandscape) {
             state.x += e.movementX;
           } else {
             state.y += e.movementY;
           }
         }
-        props.onMove(state.x, state.y);
+        onMove(state.x, state.y);
       }
     );
     const mouseup = fromEvent<MouseEvent>(window, 'mouseup').subscribe(() => {
@@ -47,12 +46,12 @@ export function Slider(props: SliderProps) {
         if (!lastTouch) return;
         const touch = e.touches.item(0);
         if (touch && touch.identifier === lastTouch.identifier) {
-          if (props.isLandscape) {
+          if (isLandscape) {
             state.x += touch.clientX - lastTouch.clientX;
           } else {
             state.y += touch.clientY - lastTouch.clientY;
           }
-          props.onMove(state.x, state.y);
+          onMove(state.x, state.y);
         }
         state.lastTouch = touch;
       }
@@ -67,15 +66,15 @@ export function Slider(props: SliderProps) {
       touchmove.unsubscribe();
       touchend.unsubscribe();
     };
-  }, [state, props.isLandscape, ref.current]);
+  }, [state, isLandscape, ref.current]);
 
   return (
     <div
       ref={ref}
-      style={props.style}
       onMouseDown={() => {
         state.hover = true;
       }}
+      {...props}
     />
   );
 }

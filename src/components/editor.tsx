@@ -1,8 +1,10 @@
 import { parse } from '@babel/parser';
 import * as t from '@babel/types';
 import { Root } from '@hackforplay/react-ast-mutator-components';
+import classNames from 'classnames';
 import * as React from 'react';
 import { code$, kana$ } from '../sandbox-api';
+import style from '../styles/editor.scss';
 import { useObservable } from '../utils';
 import { Slider } from './Slider';
 
@@ -47,20 +49,15 @@ export function Editor(props: EditorProps) {
   const hideHint = React.useCallback(() => setHint(false), []);
 
   if (error) {
-    return <span style={{ color: 'red' }}>{error.message}</span>;
+    return <span className={style.error}>{error.message}</span>;
   }
 
   return (
     <>
       <div
+        className={style.editor}
         style={{
-          position: 'relative',
-          flex: 0,
-          flexBasis: !props.open ? 0 : props.isLandscape ? width : height,
-          transition: 'flex-basis 100ms',
-          overflow: 'hidden',
-          backgroundColor: 'rgb(255,255,255)',
-          pointerEvents: 'initial'
+          flexBasis: !props.open ? 0 : props.isLandscape ? width : height
         }}
       >
         {ast ? (
@@ -84,21 +81,7 @@ export function Editor(props: EditorProps) {
           />
         ) : null}
         {hint ? (
-          <div
-            style={{
-              backgroundColor: 'black',
-              color: 'white',
-              opacity: hint ? 0.5 : 0,
-              position: 'absolute',
-              bottom: 0,
-              width: '100%',
-              padding: 10,
-              cursor: 'pointer',
-              userSelect: 'none',
-              zIndex: 2
-            }}
-            onClick={hideHint}
-          >
+          <div className={style.hint} onClick={hideHint}>
             <img
               src="https://i.gyazo.com/9af05e7848bb0e172d4035b87fbd6f25.gif"
               alt="色のついた文字をクリックすると、入力できるよ"
@@ -118,12 +101,7 @@ export function Editor(props: EditorProps) {
             setHeight(initHeight - movementY);
           }
         }}
-        style={{
-          flex: 0,
-          flexBasis: props.open ? '1rem' : 0,
-          backgroundColor: 'rgb(200,200,200)',
-          pointerEvents: 'initial'
-        }}
+        className={classNames(style.slider, props.open && style.open)}
       />
     </>
   );

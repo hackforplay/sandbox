@@ -1,0 +1,33 @@
+.editor {
+  position: relative;
+  flex: 0;
+  overflow: hidden;
+  background-color: rgb(255, 255, 255);
+  pointer-events: initial;
+
+  .hint {
+    background-color: black;
+    color: white;
+    opacity: 0.5;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 10px;
+    cursor: pointer;
+    user-select: none;
+    z-index: 2;
+  }
+}
+
+.error {
+  color: red;
+}
+
+.slider {
+  background-color: rgb(200, 200, 200);
+  pointer-events: initial;
+  flex-basis: 0;
+  &.open {
+    flex-basis: 1rem;
+  }
+}

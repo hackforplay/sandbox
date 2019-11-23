@@ -9,7 +9,7 @@ export type PressKey = ' ' | 'ArrowRight' | 'all';
 
 let _openGestureView = (press: PressKey) => {};
 export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') => {
-  if (isTouchEnabled) {
+  if (!isTouchEnabled) {
     _openGestureView(press);
   }
 };

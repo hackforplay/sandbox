@@ -3,13 +3,16 @@ import { fromEvent } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
 import style from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
-import { useEvent } from '../utils';
+import { useEvent, isTouchEnabled } from '../utils';
 
 export type PressKey = ' ' | 'ArrowRight' | 'all';
 
 let _openGestureView = (press: PressKey) => {};
-export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') =>
-  _openGestureView(press);
+export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') => {
+  if (isTouchEnabled) {
+    _openGestureView(press);
+  }
+};
 
 const keydown$ = (key: PressKey) =>
   fromEvent<KeyboardEvent>(window, 'keydown', {

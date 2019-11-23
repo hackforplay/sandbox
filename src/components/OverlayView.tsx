@@ -1,7 +1,7 @@
 import { log } from '@hackforplay/log';
 import classNames from 'classnames';
 import * as React from 'react';
-import { audioContextReady, code$, pause$ } from '../sandbox-api';
+import { code$, pause$ } from '../sandbox-api';
 import style from '../styles/overlay-view.scss';
 import utils from '../styles/utils.scss';
 import { useObservable } from '../utils';
@@ -14,17 +14,8 @@ interface OverlayViewProps {
   setEditorOpened: (open: boolean) => void;
 }
 
-const alreadyDoneGesture = 'already-done-gesture';
-
 export function OverlayView(props: OverlayViewProps) {
-  const [needUserAction, setNeedUserAction] = React.useState(
-    () => sessionStorage.getItem(alreadyDoneGesture) === null
-  );
-  React.useEffect(() => {
-    audioContextReady.then(() => {
-      sessionStorage.setItem(alreadyDoneGesture, 'done');
-    });
-  }, []);
+  const [needUserAction, setNeedUserAction] = React.useState(true);
 
   const paused = useObservable(pause$, true);
   const onClick = React.useCallback(() => {

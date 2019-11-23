@@ -1,9 +1,11 @@
 import * as React from 'react';
-import style from '../styles/touch-animation.scss';
+import style from '../styles/pause.scss';
 
-export interface TouchAnimationProps {}
+export interface PauseProps {
+  onClick?: () => void;
+}
 
-export function TouchAnimation(props: TouchAnimationProps) {
+export function Pause(props: PauseProps) {
   const [frame, setFrame] = React.useState(0);
   React.useEffect(() => {
     const handle = window.setTimeout(() => {
@@ -15,7 +17,7 @@ export function TouchAnimation(props: TouchAnimationProps) {
   }, [frame]);
 
   return (
-    <div className={style.touch}>
+    <div className={style.touch} onClick={props.onClick}>
       <img
         src={require('../resources/touch_app1.svg')}
         alt="Touch"

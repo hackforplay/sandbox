@@ -1,10 +1,10 @@
 import { log } from '@hackforplay/log';
 import * as React from 'react';
-import { code$, pause$ } from '../sandbox-api';
-import view from '../styles/overlay-view.scss';
+import { audioContextReady, code$, pause$ } from '../sandbox-api';
 import utils from '../styles/utils.scss';
 import { useObservable } from '../utils';
 import { Editor } from './Editor';
+import { Pause } from './Pause';
 
 interface OverlayViewProps {
   isLandscape: boolean;
@@ -12,8 +12,31 @@ interface OverlayViewProps {
   setEditorOpened: (open: boolean) => void;
 }
 
+const alreadyDoneGesture = 'already-done-gesture';
+
 export function OverlayView(props: OverlayViewProps) {
-  const paused = useObservable(pause$, pause$.value);
+  const [needUserAction, setNeedUserAction] = React.useState(
+    () => sessionStorage.getItem(alreadyDoneGesture) === null
+  );
+  React.useEffect(() => {
+    audioContextReady.then(() => {
+      sessionStorage.setItem(alreadyDoneGesture, 'done');
+    });
+  }, []);
+
+  const paused = useObservable(pause$, true);
+  const onClick = React.useCallback(() => {
+    setNeedUserAction(false);
+    if (props.isEditorOpened) {
+      props.setEditorOpened(false); // close editor view
+      try {
+        eval && eval(code$.value);
+      } catch (e) {
+        log('error', (e && e.message) || e, 'マドウショ');
+        console.error(e);
+      }
+    }
+  }, [props.isEditorOpened]);
 
   return (
     <div
@@ -32,27 +55,7 @@ export function OverlayView(props: OverlayViewProps) {
       className={utils.noselect}
     >
       <Editor open={props.isEditorOpened} isLandscape={props.isLandscape} />
-      {paused ? (
-        <div
-          className={view.wrapper}
-          onClick={() => {
-            if (props.isEditorOpened) {
-              pause$.next(false); // PAUSE を解除する
-              props.setEditorOpened(false);
-              if (props.isEditorOpened) {
-                try {
-                  eval && eval(code$.value);
-                } catch (e) {
-                  log('error', (e && e.message) || e, 'マドウショ');
-                  console.error(e);
-                }
-              }
-            }
-          }}
-        >
-          <span className={view.resume}>▶︎</span>
-        </div>
-      ) : null}
+      {needUserAction || paused ? <Pause onClick={onClick} /> : null}
     </div>
   );
 }

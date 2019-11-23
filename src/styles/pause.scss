@@ -1,0 +1,23 @@
+.touch {
+  flex: 1;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  pointer-events: initial;
+  cursor: pointer;
+
+  & > img {
+    width: 64px;
+    height: 64px;
+  }
+
+  & > .off {
+    display: none;
+  }
+
+  & > .on {
+    position: absolute;
+  }
+}

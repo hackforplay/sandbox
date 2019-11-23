@@ -1,23 +1,15 @@
 import * as React from 'react';
 import { fromEvent } from 'rxjs';
 import { filter, first } from 'rxjs/operators';
-import { audioContextReady } from '../sandbox-api';
 import style from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
-import { isTouchEnabled, useEvent } from '../utils';
-import { TouchAnimation } from './TouchAnimation';
+import { useEvent } from '../utils';
 
 export type PressKey = ' ' | 'ArrowRight' | 'all';
 
 let _openGestureView = (press: PressKey) => {};
 export const internalHowToPlayDispatcher = (press: PressKey = 'ArrowRight') =>
   _openGestureView(press);
-
-const alreadyDoneGesture = 'already-done-gesture';
-
-const touchend$ = isTouchEnabled
-  ? fromEvent(window, 'touchend').pipe(first())
-  : fromEvent(window, 'mousedown').pipe(first());
 
 const keydown$ = (key: PressKey) =>
   fromEvent<KeyboardEvent>(window, 'keydown', {
@@ -28,7 +20,6 @@ const keydown$ = (key: PressKey) =>
   );
 
 export function GestureView() {
-  const [showTouch, setShowTouch] = React.useState(true);
   const [showKeyboard, setShowKeyboard] = React.useState<PressKey>();
   React.useEffect(() => {
     _openGestureView = setShowKeyboard;
@@ -37,30 +28,10 @@ export function GestureView() {
     };
   }, []);
   const close = React.useCallback(() => {
-    setShowTouch(false);
     setShowKeyboard(undefined);
   }, []);
 
-  React.useEffect(() => {
-    audioContextReady.then(() => {
-      if (sessionStorage.getItem(alreadyDoneGesture) !== null) {
-        setShowTouch(false); // Skip waiting gesture (without how-to-play button pressed)
-      }
-    });
-    const subscription = touchend$.subscribe(() => {
-      sessionStorage.setItem(alreadyDoneGesture, 'done');
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
-  return showTouch ? (
-    <div className={style.root}>
-      <div className={style.blank} />
-      <div className={style.pane}>
-        <TouchAnimation />
-      </div>
-    </div>
-  ) : showKeyboard ? (
+  return showKeyboard ? (
     <div className={style.root}>
       <div className={style.blank} />
       <div className={style.pane}>

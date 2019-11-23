@@ -4,7 +4,8 @@ import { filter, first } from 'rxjs/operators';
 import { audioContextReady } from '../sandbox-api';
 import style from '../styles/gesture-view.scss';
 import { useLocale } from '../useLocale';
-import { hasBlur$, isTouchEnabled, useEvent, useObservable } from '../utils';
+import { isTouchEnabled, useEvent } from '../utils';
+import { TouchAnimation } from './TouchAnimation';
 
 export type PressKey = ' ' | 'ArrowRight' | 'all';
 
@@ -40,8 +41,6 @@ export function GestureView() {
     setShowKeyboard(undefined);
   }, []);
 
-  const notFocused = useObservable(hasBlur$, !document.hasFocus());
-
   React.useEffect(() => {
     audioContextReady.then(() => {
       if (sessionStorage.getItem(alreadyDoneGesture) !== null) {
@@ -54,11 +53,11 @@ export function GestureView() {
     return () => subscription.unsubscribe();
   }, []);
 
-  return showTouch || notFocused ? (
+  return showTouch ? (
     <div className={style.root}>
       <div className={style.blank} />
       <div className={style.pane}>
-        <TouchAnimation onRequestClose={close} />
+        <TouchAnimation />
       </div>
     </div>
   ) : showKeyboard ? (
@@ -121,48 +120,6 @@ function Keyboard(props: KeyboardProps) {
         alt=""
         draggable={false}
       />
-    </div>
-  );
-}
-
-interface TouchAnimationProps {
-  onRequestClose: () => void;
-}
-
-function TouchAnimation(props: TouchAnimationProps) {
-  const [t] = useLocale();
-  React.useEffect(() => {
-    const subscription = touchend$.subscribe(() => {
-      props.onRequestClose();
-    });
-    return () => subscription.unsubscribe();
-  }, []);
-
-  const [frame, setFrame] = React.useState(0);
-  React.useEffect(() => {
-    const handle = window.setTimeout(() => {
-      setFrame(frame + 1);
-    }, 600);
-    return () => {
-      window.clearTimeout(handle);
-    };
-  }, [frame]);
-
-  return (
-    <div className={style.touch}>
-      <img
-        src={require('../resources/touch_app1.svg')}
-        alt="Touch"
-        className={frame % 2 ? style.on : style.off}
-      />
-      <img
-        src={require('../resources/touch_app2.svg')}
-        alt="Touch"
-        className={frame % 2 ? style.off : style.on}
-      />
-      <div className={style.click}>
-        {isTouchEnabled ? t['Touch to start'] : t['Click here']}
-      </div>
     </div>
   );
 }

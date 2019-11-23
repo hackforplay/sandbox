@@ -6,7 +6,6 @@ export type LocaleKeys =
   | 'Move'
   | 'Press Attack key'
   | 'Touch to start'
-  | 'Click here'
   | 'Full Screen'
   | 'Reload'
   | 'How to Play'
@@ -22,7 +21,6 @@ const localeMap: {
     Move: 'Move',
     'Press Attack key': 'Press Attack key',
     'Touch to start': 'Touch to start',
-    'Click here': 'Click here',
     'Full Screen': 'Full Screen',
     Reload: 'Reload',
     'How to Play': 'How to Play',
@@ -34,7 +32,6 @@ const localeMap: {
     Move: 'いどう',
     'Press Attack key': '「こうげき」のキーを おしてください',
     'Touch to start': 'タッチしてください',
-    'Click here': 'ここをクリックしてください',
     'Full Screen': 'フルスクリーン',
     Reload: 'さいよみこみ',
     'How to Play': 'そうさせつめい',

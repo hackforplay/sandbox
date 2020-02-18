@@ -191,7 +191,7 @@ export function LogItem({ log, offsetTime, onClick }: LogItemProps) {
           textOverflow: 'ellipsis',
           whiteSpace: 'nowrap'
         }}
-        title={when}
+        title={message + '\n' + when}
       >
         {message || ''}
       </span>

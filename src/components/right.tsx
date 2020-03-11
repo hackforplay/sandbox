@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import * as React from 'react';
-import { input$ } from '../sandbox-api';
+import { code$, input$ } from '../sandbox-api';
 import style from '../styles/app.scss';
 import balloon from '../styles/balloon.scss';
 import emphasize from '../styles/emphasize.scss';
@@ -25,20 +25,32 @@ export function Right({ setEditorOpened, isEditorOpened }: RightProps) {
   _dispatcher = setIsEmphasized;
   const [t] = useLocale();
 
+  const [hasCode, setHasCode] = React.useState(false);
+  React.useEffect(() => {
+    const subscription = code$.subscribe({
+      next(code) {
+        setHasCode(!!code);
+      }
+    });
+    return subscription.unsubscribe;
+  }, []);
+
   return (
     <div className={classNames(style.right, utils.noselect)}>
       <div className={style.container}>
-        <img
-          src={require('../resources/enchantbook.png')}
-          draggable={false}
-          className={classNames(style.book, isEmphasized && emphasize.root)}
-          height={60}
-          onClick={() => {
-            setEditorOpened(!isEditorOpened);
-            setIsEmphasized(false);
-          }}
-          alt=""
-        />
+        {hasCode ? (
+          <img
+            src={require('../resources/enchantbook.png')}
+            draggable={false}
+            className={classNames(style.book, isEmphasized && emphasize.root)}
+            height={60}
+            onClick={() => {
+              setEditorOpened(!isEditorOpened);
+              setIsEmphasized(false);
+            }}
+            alt=""
+          />
+        ) : null}
         {isEmphasized ? (
           <div className={classNames(style.balloon, balloon.balloon)}>
             {t["Let's edit program!"]}

@@ -43,7 +43,7 @@ export function Editor(props: EditorProps) {
       }
     });
 
-    return subscription.unsubscribe;
+    return () => subscription.unsubscribe();
   }, []);
 
   const [hint, setHint] = React.useState(true);

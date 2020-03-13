@@ -32,7 +32,7 @@ export function Right({ setEditorOpened, isEditorOpened }: RightProps) {
         setHasCode(!!code);
       }
     });
-    return subscription.unsubscribe;
+    return () => subscription.unsubscribe();
   }, []);
 
   return (

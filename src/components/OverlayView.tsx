@@ -15,11 +15,8 @@ interface OverlayViewProps {
 }
 
 export function OverlayView(props: OverlayViewProps) {
-  const [needUserAction, setNeedUserAction] = React.useState(true);
-
   const paused = useObservable(pause$, true);
   const onClick = React.useCallback(() => {
-    setNeedUserAction(false);
     if (props.isEditorOpened) {
       props.setEditorOpened(false); // close editor view
       try {
@@ -40,7 +37,7 @@ export function OverlayView(props: OverlayViewProps) {
       )}
     >
       <Editor open={props.isEditorOpened} isLandscape={props.isLandscape} />
-      {needUserAction || paused ? <Pause onClick={onClick} /> : null}
+      {paused ? <Pause onClick={onClick} /> : null}
     </div>
   );
 }

@@ -5,6 +5,10 @@ import { internalEmphasizeDispatcher } from './components/Right';
 import { connected as c, sendMessage } from './connector';
 
 export const code$ = new BehaviorSubject('');
+if (process.env.NODE_ENV === 'development') {
+  code$.next('let x = 1;\n');
+}
+
 export const pause$ = new BehaviorSubject(!document.hasFocus());
 
 export interface IButtonInput {

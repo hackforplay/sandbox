@@ -19,6 +19,7 @@ export function Slider({ isLandscape, onMove, ...props }: SliderProps) {
     if (!ref.current) return;
     const mousemove = fromEvent<MouseEvent>(window, 'mousemove').subscribe(
       e => {
+        console.log('hover', state.hover);
         if (state.hover) {
           if (isLandscape) {
             state.x += e.movementX;
@@ -73,6 +74,7 @@ export function Slider({ isLandscape, onMove, ...props }: SliderProps) {
       ref={ref}
       onMouseDown={() => {
         state.hover = true;
+        console.info('mousedown');
       }}
       {...props}
     />

@@ -37,6 +37,7 @@ export function Editor(props: EditorProps) {
             sourceType: 'module'
           });
           setAst(ast);
+          setError(undefined);
         } catch (error) {
           setError(error);
         }
@@ -49,10 +50,6 @@ export function Editor(props: EditorProps) {
   const [hint, setHint] = React.useState(true);
   const hideHint = React.useCallback(() => setHint(false), []);
 
-  if (error) {
-    return <span className={style.error}>{error.message}</span>;
-  }
-
   return (
     <>
       <div
@@ -62,24 +59,27 @@ export function Editor(props: EditorProps) {
         }}
       >
         {ast ? (
-          <Root
-            node={ast}
-            kana={kana.members}
-            style={{
-              height: '100%',
-              padding: 8,
-              zIndex: 1
-            }}
-            onUpdate={({ prev, next }) => {
-              const current = code$.getValue();
-              const updated =
-                current.slice(0, prev.start) +
-                next.value +
-                current.slice(prev.end);
-              // subscribe せずに、 Hack.code の値だけを変更する
-              (code$ as any)._value = updated;
-            }}
-          />
+          <div className={style.wrapper}>
+            <Root
+              node={ast}
+              kana={kana.members}
+              style={{
+                height: '100%',
+                padding: 8,
+                boxSizing: 'border-box',
+                zIndex: 1
+              }}
+              onUpdate={({ prev, next }) => {
+                const current = code$.getValue();
+                const updated =
+                  current.slice(0, prev.start) +
+                  next.value +
+                  current.slice(prev.end);
+                // subscribe せずに、 Hack.code の値だけを変更する
+                (code$ as any)._value = updated;
+              }}
+            />
+          </div>
         ) : null}
         {hint ? (
           <div className={style.hint} onClick={hideHint}>
@@ -92,6 +92,8 @@ export function Editor(props: EditorProps) {
             />
           </div>
         ) : null}
+        {error ? <span className={style.error}>{error.message}</span> : null}
+        <CodingArea />
       </div>
       <Slider
         isLandscape={props.isLandscape}
@@ -104,6 +106,45 @@ export function Editor(props: EditorProps) {
         }}
         className={classNames(style.slider, props.open && style.open)}
       />
+    </>
+  );
+}
+
+function CodingArea() {
+  const code = useObservable(code$, '');
+
+  // テキストコーディングモード
+  const [coding, setCoding] = React.useState(false);
+  const toggleCoding = React.useCallback(() => setCoding(!coding), [coding]);
+
+  // インタラクティブにコードを編集する
+  const onChange = React.useCallback(
+    (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+      code$.next(event.target.value);
+    },
+    []
+  );
+
+  // 高さを変えられる
+  const [height, setHeight] = React.useState(300);
+
+  return (
+    <>
+      <Slider
+        isLandscape={false}
+        onMove={(movementX, movementY) => {
+          setHeight(300 - movementY);
+        }}
+        className={classNames(style.slider, coding && style.open)}
+      />
+      {coding ? (
+        <div style={{ flex: 0, height }}>
+          <textarea value={code} onChange={onChange} />
+        </div>
+      ) : null}
+      <button className={style.code} onClick={toggleCoding}>
+        code
+      </button>
     </>
   );
 }

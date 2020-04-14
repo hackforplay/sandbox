@@ -11,9 +11,14 @@
       function gtag() {
         dataLayer.push(arguments);
       }
-      gtag('js', new Date());
-
-      gtag('config', 'UA-113487422-6');
+      // チュートリアルの場合のみトラッキングする
+      if (
+        document.referrer ===
+        'https://www.hackforplay.xyz/works/I4OleAc2rUoJWdWvwJF2'
+      ) {
+        gtag('js', new Date());
+        gtag('config', 'UA-113487422-6');
+      }
     </script>
 
     <meta charset="UTF-8" />

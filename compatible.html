@@ -8,9 +8,10 @@
     ></script>
     <script>
       window.dataLayer = window.dataLayer || [];
-      function gtag() {
+      // minify されても名前が変わらないようにする
+      window.gtag = function gtag() {
         dataLayer.push(arguments);
-      }
+      };
       // チュートリアルの場合のみトラッキングする
       if (
         document &&

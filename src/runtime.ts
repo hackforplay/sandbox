@@ -1,7 +1,7 @@
 const { define } = require('./require');
 
 const d = (name: string, exports: any) =>
-  define(name, function(_1: any, _2: any, module: any) {
+  define(name, function (_1: any, _2: any, module: any) {
     module.exports = exports;
   });
 

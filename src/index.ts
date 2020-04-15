@@ -16,7 +16,7 @@ requirejs.config({
 
 // game などを読み込めるようにする
 (window as any)['feeles'] = sandboxApi; // 互換性保持のため
-define('sandbox-api', function(require: any, exports: any, module: any) {
+define('sandbox-api', function (require: any, exports: any, module: any) {
   module.exports = sandboxApi;
 });
 

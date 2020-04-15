@@ -11,7 +11,7 @@ export function Slider({ isLandscape, onMove, ...props }: SliderProps) {
     x: 0,
     y: 0,
     hover: false,
-    lastTouch: null as (React.Touch | null)
+    lastTouch: null as React.Touch | null
   });
   const ref = React.useRef<HTMLDivElement>(null);
 

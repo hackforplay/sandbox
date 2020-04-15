@@ -1,10 +1,10 @@
 import { log } from '@hackforplay/log';
 import classNames from 'classnames';
 import * as React from 'react';
-import { code$, pause$ } from '../sandbox-api';
+import { audioContextReady, code$, pause$ } from '../sandbox-api';
 import style from '../styles/overlay-view.scss';
 import utils from '../styles/utils.scss';
-import { useObservable } from '../utils';
+import { useObservable, usePromise } from '../utils';
 import { Editor } from './Editor';
 import { Pause } from './Pause';
 
@@ -28,6 +28,9 @@ export function OverlayView(props: OverlayViewProps) {
     }
   }, [props.isEditorOpened]);
 
+  // audioContext が生成されるまではゲームが開始されない
+  const [ready] = usePromise(audioContextReady);
+
   return (
     <div
       className={classNames(
@@ -37,7 +40,7 @@ export function OverlayView(props: OverlayViewProps) {
       )}
     >
       <Editor open={props.isEditorOpened} isLandscape={props.isLandscape} />
-      {paused ? <Pause onClick={onClick} /> : null}
+      {paused || !ready ? <Pause onClick={onClick} /> : null}
     </div>
   );
 }

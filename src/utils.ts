@@ -72,3 +72,14 @@ merge(
     debounceTime(100) // for stability
   )
   .subscribe(hasBlur$);
+
+export const usePromise = <T>(promise: Promise<T>) => {
+  const [value, setValue] = useState<T>();
+  const [error, setError] = useState<Error>();
+
+  useEffect(() => {
+    promise.then(setValue).catch(setError);
+  }, []);
+
+  return [value, error] as const;
+};

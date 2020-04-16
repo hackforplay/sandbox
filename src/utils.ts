@@ -83,3 +83,23 @@ export const usePromise = <T>(promise: Promise<T>) => {
 
   return [value, error] as const;
 };
+
+const timings = {} as { [name: string]: number | undefined };
+export function trackTime(name: string, phase: 'start' | 'end') {
+  try {
+    if (phase === 'start') {
+      timings[name] = timings[name] || window.performance?.now();
+    } else {
+      const start = timings[name];
+      const end = window.performance?.now();
+      if (!start || !end) return; // 計測できなかった
+      window.gtag?.('event', 'timing_complete', {
+        name,
+        value: end - start
+      });
+      delete timings[name]; // 重複を避ける
+    }
+  } catch (error) {
+    console.warn(error);
+  }
+}

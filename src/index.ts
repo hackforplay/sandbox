@@ -7,6 +7,7 @@ import { message$, sendMessage } from './connector';
 import { patchForEnchantJs } from './patch-for-enchant-js';
 import './runtime';
 import * as sandboxApi from './sandbox-api';
+import { trackTime } from './utils';
 
 const { requirejs, define } = require('./require');
 
@@ -104,11 +105,13 @@ const domReady = new Promise(resolve => {
 
 Promise.all([entryPointIsReady, sandboxApi.audioContextReady, domReady]).then(
   ([entryPoints]) => {
+    trackTime('require_js', 'start');
     requirejs(entryPoints, () => {
       const enchant = (window as any).enchant;
       if (enchant) {
         patchForEnchantJs(enchant);
       }
+      trackTime('require_js', 'end');
     });
   }
 );
@@ -126,3 +129,8 @@ sandboxApi.fetchText &&
       } catch (error) {}
     })
     .catch(() => {});
+
+trackTime('entry_point', 'start');
+entryPointIsReady.then(() => trackTime('entry_point', 'end'));
+trackTime('dom_ready', 'start');
+domReady.then(() => trackTime('dom_ready', 'end'));

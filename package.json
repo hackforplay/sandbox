@@ -20,7 +20,7 @@
     "postcss-modules": "^1.4.1",
     "prettier": "^2.0.0",
     "sass": "^1.23.3",
-    "typescript": "^3.4.5"
+    "typescript": "^3.8.3"
   },
   "dependencies": {
     "@babel/parser": "^7.4.4",

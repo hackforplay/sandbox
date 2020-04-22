@@ -3,7 +3,16 @@
     "public": "dist",
     "headers": [
       {
-        "source": "**/*.js",
+        "source": "**/*.{html,js,css}",
+        "headers": [
+          {
+            "key": "Cache-Control",
+            "value": "public, max-age=3600"
+          }
+        ]
+      },
+      {
+        "source": "**/*.{png,svg}",
         "headers": [
           {
             "key": "Cache-Control",

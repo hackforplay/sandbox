@@ -15,8 +15,10 @@
       // チュートリアルの場合のみトラッキングする
       if (
         document &&
-        document.referrer ===
-          'https://www.hackforplay.xyz/works/I4OleAc2rUoJWdWvwJF2'
+        [
+          'https://www.hackforplay.xyz/works/I4OleAc2rUoJWdWvwJF2', // 後方互換性
+          'https://www.hackforplay.xyz/works/E0TFzuJeGoO75Fp1QNU0'
+        ].indexOf(document.referrer) > -1
       ) {
         gtag('js', new Date());
         gtag('config', 'UA-113487422-6');

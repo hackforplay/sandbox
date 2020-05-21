@@ -26,14 +26,14 @@ export function Left({ rootRef }: LeftProps) {
     if (document.fullscreenElement) {
       document
         .exitFullscreen()
-        .then(() => forceUpdate({}))
-        .catch(console.error);
+        ?.then(() => forceUpdate({}))
+        ?.catch(console.error);
     } else {
       if (rootRef.current) {
         rootRef.current
           .requestFullscreen()
-          .then(() => forceUpdate({}))
-          .catch(console.error);
+          ?.then(() => forceUpdate({}))
+          ?.catch(console.error);
       }
     }
   }, []);

@@ -51,7 +51,7 @@ export function Right({ setEditorOpened, isEditorOpened }: RightProps) {
             alt=""
           />
         ) : null}
-        {isEmphasized ? (
+        {hasCode && isEmphasized ? (
           <div className={classNames(style.balloon, balloon.balloon)}>
             {t["Let's edit program!"]}
           </div>

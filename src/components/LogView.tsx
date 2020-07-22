@@ -1,5 +1,6 @@
 import { createLogger, ILogBody } from '@hackforplay/log';
 import * as React from 'react';
+import logView from '../styles/log-view.scss';
 
 type R<T, A> = React.Reducer<T, A>;
 
@@ -81,6 +82,7 @@ export function LogView() {
 
   return (
     <div
+      className={logView.root}
       style={{
         position: 'absolute',
         bottom: 0,

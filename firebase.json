@@ -12,7 +12,7 @@
         ]
       },
       {
-        "source": "**/*.{png,svg}",
+        "source": "**/*.{png,svg,ttf}",
         "headers": [
           {
             "key": "Cache-Control",

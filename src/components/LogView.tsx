@@ -89,7 +89,8 @@ export function LogView() {
         backgroundColor: 'rgba(0,0,0,0.5)',
         color: 'rgb(255,255,255)',
         width: '100%',
-        fontSize: expanded ? '1rem' : '0.75rem'
+        fontSize: expanded ? '1rem' : '0.75rem',
+        zIndex: 101
       }}
     >
       {expanded ? (

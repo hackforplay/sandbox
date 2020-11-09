@@ -66,7 +66,7 @@ $sideBarMinWidth: 86px;
 
 .right {
   @extend %sideBar;
-  z-index: 3;
+  z-index: 1000;
   align-items: flex-end;
 
   .container {

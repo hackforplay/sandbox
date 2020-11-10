@@ -1,7 +1,6 @@
-import { log } from '@hackforplay/log';
 import classNames from 'classnames';
 import * as React from 'react';
-import { audioContextReady, code$, pause$ } from '../sandbox-api';
+import { audioContextReady, pause$ } from '../sandbox-api';
 import style from '../styles/overlay-view.scss';
 import utils from '../styles/utils.scss';
 import { useObservable, usePromise } from '../utils';
@@ -16,17 +15,6 @@ interface OverlayViewProps {
 
 export function OverlayView(props: OverlayViewProps) {
   const paused = useObservable(pause$, true);
-  const onClick = React.useCallback(() => {
-    if (props.isEditorOpened) {
-      props.setEditorOpened(false); // close editor view
-      try {
-        eval && eval(code$.value);
-      } catch (e) {
-        log('error', (e && e.message) || e, 'マドウショ');
-        console.error(e);
-      }
-    }
-  }, [props.isEditorOpened]);
 
   // audioContext が生成されるまではゲームが開始されない
   const [ready] = usePromise(audioContextReady);
@@ -40,7 +28,9 @@ export function OverlayView(props: OverlayViewProps) {
       )}
     >
       <Editor open={props.isEditorOpened} isLandscape={props.isLandscape} />
-      {paused || !ready ? <Pause onClick={onClick} /> : null}
+      {paused || !ready ? (
+        <Pause onClick={() => props.setEditorOpened(false)} />
+      ) : null}
     </div>
   );
 }

@@ -1,7 +1,8 @@
+import { log } from '@hackforplay/log';
 import classNames from 'classnames';
 import { orientation } from 'o9n';
 import * as React from 'react';
-import { pause$ } from '../sandbox-api';
+import { code$, pause$ } from '../sandbox-api';
 import style from '../styles/app.scss';
 import utils from '../styles/utils.scss';
 import { hasBlur$, isTouchEnabled, useEvent } from '../utils';
@@ -31,6 +32,16 @@ export function App(props: AppProps) {
   const setEditorOpened = (open: boolean) => {
     pause$.next(open); // Pause when editor is open
     _setEditorOpened(open);
+
+    if (!open) {
+      // 閉じられたとき
+      try {
+        eval && eval(code$.value);
+      } catch (e) {
+        log('error', (e && e.message) || e, 'マドウショ');
+        console.error(e);
+      }
+    }
   };
 
   React.useEffect(() => {

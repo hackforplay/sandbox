@@ -19,21 +19,23 @@ export function Left({ rootRef }: LeftProps) {
   const [, forceUpdate] = React.useState({});
 
   const fullScreenEnabled = 'fullscreenElement' in window.document;
-  const isFullScreen =
-    fullScreenEnabled && Boolean(window.document.fullscreenElement);
+
+  const [isFullScreen, setIsFullScreen] = React.useState(false);
+  React.useEffect(() => {
+    const handler = setInterval(() => {
+      setIsFullScreen(Boolean(window.document.fullscreenElement));
+    }, 250);
+    return () => {
+      clearInterval(handler);
+    };
+  }, []);
 
   const toggleFullScreen = React.useCallback(() => {
     if (document.fullscreenElement) {
-      document
-        .exitFullscreen()
-        ?.then(() => forceUpdate({}))
-        ?.catch(console.error);
+      document.exitFullscreen()?.catch(console.error);
     } else {
       if (rootRef.current) {
-        rootRef.current
-          .requestFullscreen()
-          ?.then(() => forceUpdate({}))
-          ?.catch(console.error);
+        rootRef.current.requestFullscreen()?.catch(console.error);
       }
     }
   }, []);

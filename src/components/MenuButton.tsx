@@ -38,7 +38,7 @@ export function MenuButton(props: MenuButtonProps) {
           overflow: 'hidden',
           padding: 8,
           paddingTop: 0,
-          fontSize: 'x-small'
+          fontSize: 'small'
         }}
       >
         {props.label}

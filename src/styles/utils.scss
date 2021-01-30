@@ -6,6 +6,8 @@
   -ms-user-select: $value; /* Internet Explorer/Edge */
   user-select: $value; /* Non-prefixed version, currently
                           supported by Chrome, Opera and Firefox */
+
+  touch-action: none;
 }
 
 .noselect {

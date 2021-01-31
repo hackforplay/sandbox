@@ -37,6 +37,6 @@
     "react-dom": "^16.13.1",
     "regenerator-runtime": "^0.13.5",
     "resize-observer-polyfill": "^1.5.1",
-    "rxjs": "^6.5.2"
+    "rxjs": "^6.6.3"
   }
 }

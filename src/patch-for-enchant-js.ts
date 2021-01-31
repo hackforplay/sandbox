@@ -26,77 +26,79 @@ export function patchForEnchantJs(enchant: any) {
   observer.observe(game._element.parentNode);
 
   // stop world
-  game.rootScene.addEventListener(enchant.Event.CHILD_ADDED, function handler(
-    event: any
-  ) {
-    const group = event.node;
-    if (group.name === 'World') {
-      game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
-      let pauseByGame = Boolean(group._stop);
-      group.stop = () => (pauseByGame = true);
-      group.resume = () => (pauseByGame = false);
-      Object.defineProperty(group, '_stop', {
-        enumerable: true,
-        get() {
-          return Boolean(pause$.value || pauseByGame);
-        },
-        set(value: boolean) {
-          pauseByGame = value;
-        }
-      });
+  game.rootScene.addEventListener(
+    enchant.Event.CHILD_ADDED,
+    function handler(event: any) {
+      const group = event.node;
+      if (group.name === 'World') {
+        game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
+        let pauseByGame = Boolean(group._stop);
+        group.stop = () => (pauseByGame = true);
+        group.resume = () => (pauseByGame = false);
+        Object.defineProperty(group, '_stop', {
+          enumerable: true,
+          get() {
+            return Boolean(pause$.value || pauseByGame);
+          },
+          set(value: boolean) {
+            pauseByGame = value;
+          }
+        });
+      }
     }
-  });
+  );
 
   // disable Hack.focusOnClick
   Hack && (Hack.focusOnClick = false);
 
   // use dom button instead of virtual pads
-  game.rootScene.addEventListener(enchant.Event.CHILD_ADDED, function handler(
-    event: any
-  ) {
-    const group = event.node;
-    if (group.name === 'ControllerGroup') {
-      game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
-      // remove pad
-      game.on('awake', () => {
-        for (const node of [...group.childNodes]) {
-          node.remove();
-        }
-      });
+  game.rootScene.addEventListener(
+    enchant.Event.CHILD_ADDED,
+    function handler(event: any) {
+      const group = event.node;
+      if (group.name === 'ControllerGroup') {
+        game.rootScene.removeEventListener(enchant.Event.CHILD_ADDED, handler);
+        // remove pad
+        game.on('awake', () => {
+          for (const node of [...group.childNodes]) {
+            node.remove();
+          }
+        });
 
-      // observe input$
-      const previousInput = { ...input$.value };
-      let lastUpdateAge = -1;
-      input$.subscribe({
-        next(input) {
-          const age = game.rootScene.age + 1;
+        // observe input$
+        const previousInput = { ...input$.value };
+        let lastUpdateAge = -1;
+        input$.subscribe({
+          next(input) {
+            const age = game.rootScene.age + 1;
 
-          for (let button of keys(input)) {
-            if (previousInput[button] !== input[button]) {
-              if (input[button]) {
-                // synchronize frame speed
-                if (game.rootScene.age > lastUpdateAge) {
-                  game.changeButtonState(button, true);
-                  previousInput[button] = true;
-                  lastUpdateAge = age;
-                }
-              } else {
-                // synchronize frame speed
-                game.on('enterframe', function handler() {
-                  if (game.rootScene.age > age) {
-                    game.removeEventListener('enterframe', handler);
-                    game.changeButtonState(button, false);
+            for (let button of keys(input)) {
+              if (previousInput[button] !== input[button]) {
+                if (input[button]) {
+                  // synchronize frame speed
+                  if (game.rootScene.age > lastUpdateAge) {
+                    game.changeButtonState(button, true);
+                    previousInput[button] = true;
+                    lastUpdateAge = age;
                   }
-                });
-                previousInput[button] = false;
-                lastUpdateAge = age + 1;
+                } else {
+                  // synchronize frame speed
+                  game.on('enterframe', function handler() {
+                    if (game.rootScene.age > age) {
+                      game.removeEventListener('enterframe', handler);
+                      game.changeButtonState(button, false);
+                    }
+                  });
+                  previousInput[button] = false;
+                  lastUpdateAge = age + 1;
+                }
               }
             }
           }
-        }
-      });
+        });
+      }
     }
-  });
+  );
 
   // resume AudioContext from user gesture and skip "TOUCH TO START" scene
   if (enchant.ENV.USE_TOUCH_TO_START_SCENE) {

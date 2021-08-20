@@ -46,6 +46,7 @@ $sideBarMinWidth: 86px;
 
 %sideBar {
   min-width: $sideBarMinWidth;
+  width: $sideBarMinWidth; // 魔導書の中のボタンが押せなくなるバグの対応
   overflow: visible;
   display: flex;
   flex-direction: column;

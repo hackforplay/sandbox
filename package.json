@@ -16,7 +16,7 @@
   "devDependencies": {
     "@types/node": "^13.13.40",
     "firebase-tools": "^8.20.0",
-    "parcel": "1.12.3",
+    "parcel": "^2.6.2",
     "postcss-modules": "^1.5.0",
     "prettier": "^2.2.1",
     "sass": "^1.32.5",

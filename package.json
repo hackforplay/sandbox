@@ -23,9 +23,9 @@
     "typescript": "^3.9.7"
   },
   "dependencies": {
-    "@babel/parser": "^7.9.6",
-    "@babel/runtime": "^7.9.6",
-    "@babel/types": "^7.9.6",
+    "@babel/parser": "^7.18.6",
+    "@babel/runtime": "^7.18.6",
+    "@babel/types": "^7.18.7",
     "@hackforplay/log": "^1.3.5",
     "@hackforplay/react-ast-mutator-components": "^1.4.0",
     "@types/classnames": "^2.2.11",

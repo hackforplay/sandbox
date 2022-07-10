@@ -2,7 +2,6 @@
   "name": "sandbox",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
   "scripts": {
     "clean": "rm -rf ./dist",
     "lint": "npx prettier -l 'src/**/*.(ts|tsx)'",
@@ -14,9 +13,11 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
+    "@parcel/transformer-sass": "^2.6.2",
     "@types/node": "^13.13.40",
+    "buffer": "^6.0.3",
     "firebase-tools": "^8.20.0",
-    "parcel": "1.12.3",
+    "parcel": "^2.6.2",
     "postcss-modules": "^1.5.0",
     "prettier": "^2.2.1",
     "sass": "^1.32.5",
@@ -38,5 +39,8 @@
     "regenerator-runtime": "^0.13.7",
     "resize-observer-polyfill": "^1.5.1",
     "rxjs": "^6.6.3"
+  },
+  "@parcel/transformer-css": {
+    "cssModules": true
   }
 }

@@ -52,7 +52,7 @@ export function App(props: AppProps) {
   }, [isEditorOpened]);
 
   return (
-    <div className={style.root} ref={rootRef}>
+    <div className={classNames(style.root, utils.noselect)} ref={rootRef}>
       <div className={style.landscapeWrapper}>
         {isLandscape ? <Left rootRef={rootRef} /> : null}
         <Game />

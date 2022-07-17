@@ -2,6 +2,7 @@
   "name": "sandbox",
   "version": "1.0.0",
   "description": "",
+  "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "clean": "rm -rf ./dist",
     "lint": "npx prettier -l 'src/**/*.(ts|tsx)'",

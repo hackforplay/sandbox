@@ -104,7 +104,11 @@ export function Editor(props: EditorProps) {
             setHeight(initHeight - movementY);
           }
         }}
-        className={classNames(style.slider, props.open && style.open)}
+        className={classNames(
+          style.slider,
+          props.open && style.open,
+          props.isLandscape && style.landscape
+        )}
       />
     </>
   );

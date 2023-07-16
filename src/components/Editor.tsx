@@ -138,7 +138,7 @@ function CodingArea() {
         className={classNames(style.slider, coding && style.open)}
       />
       {coding ? (
-        <div style={{ flex: 0, height }}>
+        <div style={{ flex: `0 0 ${height}px` }}>
           <textarea value={code} onChange={onChange} />
         </div>
       ) : null}

@@ -53,4 +53,8 @@
   &.open {
     flex-basis: 1rem;
   }
+  cursor: ns-resize;
+  &.landscape {
+    cursor: ew-resize;
+  }
 }

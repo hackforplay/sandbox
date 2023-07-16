@@ -104,7 +104,11 @@ export function Editor(props: EditorProps) {
             setHeight(initHeight - movementY);
           }
         }}
-        className={classNames(style.slider, props.open && style.open)}
+        className={classNames(
+          style.slider,
+          props.open && style.open,
+          props.isLandscape && style.landscape
+        )}
       />
     </>
   );
@@ -138,7 +142,7 @@ function CodingArea() {
         className={classNames(style.slider, coding && style.open)}
       />
       {coding ? (
-        <div style={{ flex: 0, height }}>
+        <div style={{ flex: `0 0 ${height}px` }}>
           <textarea value={code} onChange={onChange} />
         </div>
       ) : null}

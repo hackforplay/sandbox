@@ -1,7 +1,10 @@
 import { fromEvent } from 'rxjs';
 import { filter, first, map, share } from 'rxjs/operators';
 
-const getUniqueId = (id => () => 'FEELES_UNIQ_ID-' + ++id)(0);
+const getUniqueId = (
+  id => () =>
+    'FEELES_UNIQ_ID-' + ++id
+)(0);
 
 const { port1, port2 } = new MessageChannel();
 

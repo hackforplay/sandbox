@@ -28,8 +28,10 @@ export const input$ = new BehaviorSubject<IButtonInput>({
 
 export const env: Feeles['env'] = { VERSION_UUID: '', USER_UUID: '' };
 export const connected: Feeles['connected'] = c;
-export const emphasizeCode: Feeles['emphasizeCode'] = internalEmphasizeDispatcher;
-export const showHowToPlay: Feeles['showHowToPlay'] = internalHowToPlayDispatcher;
+export const emphasizeCode: Feeles['emphasizeCode'] =
+  internalEmphasizeDispatcher;
+export const showHowToPlay: Feeles['showHowToPlay'] =
+  internalHowToPlayDispatcher;
 
 export interface KanaConfig {
   members: {
@@ -143,15 +145,12 @@ export const install: Feeles['install'] = name =>
 export const ipcRenderer: Feeles['ipcRenderer'] = null;
 
 export const setTimeout: Feeles['setTimeout'] = window.setTimeout.bind(window);
-export const clearTimeout: Feeles['clearTimeout'] = window.clearTimeout.bind(
-  window
-);
-export const setInterval: Feeles['setInterval'] = window.setInterval.bind(
-  window
-);
-export const clearInterval: Feeles['clearInterval'] = window.clearInterval.bind(
-  window
-);
+export const clearTimeout: Feeles['clearTimeout'] =
+  window.clearTimeout.bind(window);
+export const setInterval: Feeles['setInterval'] =
+  window.setInterval.bind(window);
+export const clearInterval: Feeles['clearInterval'] =
+  window.clearInterval.bind(window);
 
 // Feeles の onMessage を dispatch する
 export const dispatchOnMessage: Feeles['dispatchOnMessage'] = data =>

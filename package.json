@@ -5,8 +5,9 @@
   "browserslist": "> 0.5%, last 2 versions, not dead",
   "scripts": {
     "clean": "rm -rf ./dist",
-    "lint": "npx prettier -l 'src/**/*.(ts|tsx)'",
-    "test": "npm run lint && tsc --outDir lib",
+    "format": "prettier -w .",
+    "lint": "npx prettier -l .",
+    "test": "npm run lint && tsc --noEmit",
     "start": "npx parcel compatible.html",
     "build": "npx parcel build compatible.html",
     "deploy": "npm run clean && npm run build && npx firebase deploy"
